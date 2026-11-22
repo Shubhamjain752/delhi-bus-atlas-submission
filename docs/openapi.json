@@ -1,0 +1,1835 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Delhi Bus Atlas",
+    "description": "Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.",
+    "version": "0.5.2"
+  },
+  "paths": {
+    "/status": {
+      "get": {
+        "summary": "Status",
+        "description": "Inspect timetable version, observational coverage and live-feed freshness.",
+        "operationId": "status_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stops": {
+      "get": {
+        "tags": [
+          "Journey planning"
+        ],
+        "summary": "Stops",
+        "description": "Find boarding platforms by name or identifier.",
+        "operationId": "stops_stops_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150,
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 30,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopMatches"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/journeys": {
+      "get": {
+        "tags": [
+          "Journey planning"
+        ],
+        "summary": "Journeys",
+        "description": "Plan from a stop ID, stop name or latitude,longitude. Optionally compare another hour on the same date.",
+        "operationId": "journeys_journeys_get",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Origin as latitude,longitude, stop ID, or stop name.",
+              "examples": [
+                "28.71815,77.06380"
+              ],
+              "title": "From"
+            },
+            "description": "Origin as latitude,longitude, stop ID, or stop name."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Destination in the same formats.",
+              "examples": [
+                "28.70700,77.17890"
+              ],
+              "title": "To"
+            },
+            "description": "Destination in the same formats."
+          },
+          {
+            "name": "depart",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "ISO 8601 departure. A timezone-free value uses Delhi time. Defaults to now.",
+              "examples": [
+                "2026-10-15T08:45"
+              ],
+              "title": "Depart"
+            },
+            "description": "ISO 8601 departure. A timezone-free value uses Delhi time. Defaults to now."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 6,
+              "minimum": 1,
+              "default": 3,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "max_transfers",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1,
+              "minimum": 0,
+              "default": 1,
+              "title": "Max Transfers"
+            }
+          },
+          {
+            "name": "compare_hour",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 23,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Compare Hour"
+            }
+          },
+          {
+            "name": "replay",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "const": "nov21",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Use feeds received by the requested November capture clock.",
+              "title": "Replay"
+            },
+            "description": "Use feeds received by the requested November capture clock."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JourneyResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/arrivals": {
+      "get": {
+        "tags": [
+          "Journey planning"
+        ],
+        "summary": "Arrivals",
+        "description": "Estimate the next service on a route for someone already at the selected platform.",
+        "operationId": "arrivals_arrivals_get",
+        "parameters": [
+          {
+            "name": "stop",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "GTFS boarding platform ID.",
+              "examples": [
+                "1525"
+              ],
+              "title": "Stop"
+            },
+            "description": "GTFS boarding platform ID."
+          },
+          {
+            "name": "route",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "route_id from the journey bus leg.",
+              "examples": [
+                "1407"
+              ],
+              "title": "Route"
+            },
+            "description": "route_id from the journey bus leg."
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Platform arrival time. Defaults to now.",
+              "title": "At"
+            },
+            "description": "Platform arrival time. Defaults to now."
+          },
+          {
+            "name": "replay",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "const": "nov21",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Replay the recorded November feed at the specified time.",
+              "title": "Replay"
+            },
+            "description": "Replay the recorded November feed at the specified time."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlatformResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validation": {
+      "get": {
+        "tags": [
+          "Evaluation"
+        ],
+        "summary": "Validation",
+        "description": "Read a measured holdout or the matched-coordinate Google Maps and GPS comparisons.",
+        "operationId": "validation_validation_get",
+        "parameters": [
+          {
+            "name": "day_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "weekday",
+                "weekend",
+                "journeys",
+                "matched",
+                "waits",
+                "wait_confirmation",
+                "speed",
+                "vehicles",
+                "near_miss",
+                "near_miss_router",
+                "near_miss_confirmation",
+                "month_boarding",
+                "month_tickets",
+                "fleet_boarding",
+                "fleet_platform",
+                "fleet_short_links",
+                "fleet_provider_clocks",
+                "anonymous_route_observation",
+                "anonymous_route_observation_confirmation",
+                "provider_clock_arrivals"
+              ],
+              "type": "string",
+              "default": "weekday",
+              "title": "Day Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/field-trials/results": {
+      "get": {
+        "tags": [
+          "Evaluation"
+        ],
+        "summary": "Prospective Results",
+        "description": "Return the frozen trip forecasts and any dated, GPS-supported passenger simulations.",
+        "operationId": "prospective_results_field_trials_results_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BoardingAlert": {
+        "properties": {
+          "service_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Service Date",
+            "description": "GTFS operating date of this vehicle's stop forecast, in Delhi."
+          },
+          "gps_age_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gps Age Seconds",
+            "description": "Seconds since the latest matching vehicle fix available at the request. Null when no fresh, dated physical run could be corroborated."
+          },
+          "vehicle_approaching": {
+            "type": "boolean",
+            "title": "Vehicle Approaching",
+            "description": "Two consecutive GPS observations moved toward the platform on its incoming published shape. The most recent observation was at most 60 seconds old at the request."
+          },
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "live_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Run Id"
+          },
+          "platform": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "alighting_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "predicted_departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Predicted Departure"
+          },
+          "ready_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Ready At",
+            "description": "Requested departure plus verified walking time to this platform."
+          },
+          "seconds_before_ready": {
+            "type": "integer",
+            "maximum": 60.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Seconds Before Ready"
+          },
+          "access_walk_seconds": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Access Walk Seconds"
+          },
+          "source": {
+            "type": "string",
+            "const": "live",
+            "title": "Source"
+          },
+          "catchable": {
+            "type": "boolean",
+            "const": false,
+            "title": "Catchable"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "conditional_itinerary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConditionalItinerary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fallback_itinerary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Itinerary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Feasible option boarding later at the same platform, if the conditional service has left."
+          }
+        },
+        "type": "object",
+        "required": [
+          "service_date",
+          "gps_age_seconds",
+          "vehicle_approaching",
+          "route_id",
+          "route",
+          "trip_id",
+          "platform",
+          "alighting_stop",
+          "predicted_departure",
+          "ready_at",
+          "seconds_before_ready",
+          "access_walk_seconds",
+          "source",
+          "catchable",
+          "message"
+        ],
+        "title": "BoardingAlert"
+      },
+      "Bus": {
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds"
+          },
+          "geometry": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Geometry",
+            "description": "Ordered [latitude, longitude] pairs in WGS84."
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "mode": {
+            "type": "string",
+            "const": "bus",
+            "title": "Mode"
+          },
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route",
+            "description": "Route label shown to the rider."
+          },
+          "agency": {
+            "type": "string",
+            "title": "Agency"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "live_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Run Id",
+            "description": "Opaque vehicle-run identifier when multiple corroborated vehicles share this scheduled trip."
+          },
+          "geometry_source": {
+            "type": "string",
+            "enum": [
+              "gtfs_shape",
+              "ordered_stops"
+            ],
+            "title": "Geometry Source"
+          },
+          "model_sources": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Model Sources",
+            "description": "Count of route intervals by timing source."
+          },
+          "stop_count": {
+            "type": "integer",
+            "title": "Stop Count",
+            "description": "Served stops after boarding through alighting, inclusive."
+          },
+          "stops": {
+            "items": {
+              "$ref": "#/components/schemas/Place"
+            },
+            "type": "array",
+            "title": "Stops"
+          },
+          "skipped_stops": {
+            "items": {
+              "$ref": "#/components/schemas/Place"
+            },
+            "type": "array",
+            "title": "Skipped Stops"
+          },
+          "calls": {
+            "items": {
+              "$ref": "#/components/schemas/StopCall"
+            },
+            "type": "array",
+            "title": "Calls"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "departure",
+          "arrival",
+          "seconds",
+          "geometry",
+          "source",
+          "mode",
+          "route_id",
+          "route",
+          "agency",
+          "trip_id",
+          "geometry_source",
+          "model_sources",
+          "stop_count",
+          "stops",
+          "skipped_stops",
+          "calls"
+        ],
+        "title": "Bus"
+      },
+      "Comparison": {
+        "properties": {
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "fastest_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fastest Seconds"
+          },
+          "arrival": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrival"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "departure",
+          "fastest_seconds",
+          "arrival",
+          "warnings"
+        ],
+        "title": "Comparison"
+      },
+      "ConditionalItinerary": {
+        "properties": {
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure",
+            "description": "Requested time to leave the origin."
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival",
+            "description": "Estimated arrival at the destination after the final walk."
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "title": "Duration Seconds",
+            "description": "Sum of walk, wait and ride seconds."
+          },
+          "transfers": {
+            "type": "integer",
+            "title": "Transfers"
+          },
+          "walk_seconds": {
+            "type": "integer",
+            "title": "Walk Seconds"
+          },
+          "access_walk_seconds": {
+            "type": "integer",
+            "title": "Access Walk Seconds",
+            "description": "Origin to first boarding platform. Zero when already there."
+          },
+          "transfer_walk_seconds": {
+            "type": "integer",
+            "title": "Transfer Walk Seconds"
+          },
+          "egress_walk_seconds": {
+            "type": "integer",
+            "title": "Egress Walk Seconds",
+            "description": "Final alighting platform to destination."
+          },
+          "wait_seconds": {
+            "type": "integer",
+            "title": "Wait Seconds"
+          },
+          "ride_seconds": {
+            "type": "integer",
+            "title": "Ride Seconds"
+          },
+          "legs": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Walk"
+                },
+                {
+                  "$ref": "#/components/schemas/Wait"
+                },
+                {
+                  "$ref": "#/components/schemas/Bus"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "mode",
+                "mapping": {
+                  "bus": "#/components/schemas/Bus",
+                  "wait": "#/components/schemas/Wait",
+                  "walk": "#/components/schemas/Walk"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Legs"
+          },
+          "boarding_status": {
+            "type": "string",
+            "const": "only_if_bus_is_present",
+            "title": "Boarding Status"
+          },
+          "shift_seconds": {
+            "type": "integer",
+            "maximum": 60.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Shift Seconds"
+          },
+          "assumption": {
+            "type": "string",
+            "title": "Assumption"
+          }
+        },
+        "type": "object",
+        "required": [
+          "departure",
+          "arrival",
+          "duration_seconds",
+          "transfers",
+          "walk_seconds",
+          "access_walk_seconds",
+          "transfer_walk_seconds",
+          "egress_walk_seconds",
+          "wait_seconds",
+          "ride_seconds",
+          "legs",
+          "boarding_status",
+          "shift_seconds",
+          "assumption"
+        ],
+        "title": "ConditionalItinerary"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Itinerary": {
+        "properties": {
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure",
+            "description": "Requested time to leave the origin."
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival",
+            "description": "Estimated arrival at the destination after the final walk."
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "title": "Duration Seconds",
+            "description": "Sum of walk, wait and ride seconds."
+          },
+          "transfers": {
+            "type": "integer",
+            "title": "Transfers"
+          },
+          "walk_seconds": {
+            "type": "integer",
+            "title": "Walk Seconds"
+          },
+          "access_walk_seconds": {
+            "type": "integer",
+            "title": "Access Walk Seconds",
+            "description": "Origin to first boarding platform. Zero when already there."
+          },
+          "transfer_walk_seconds": {
+            "type": "integer",
+            "title": "Transfer Walk Seconds"
+          },
+          "egress_walk_seconds": {
+            "type": "integer",
+            "title": "Egress Walk Seconds",
+            "description": "Final alighting platform to destination."
+          },
+          "wait_seconds": {
+            "type": "integer",
+            "title": "Wait Seconds"
+          },
+          "ride_seconds": {
+            "type": "integer",
+            "title": "Ride Seconds"
+          },
+          "legs": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Walk"
+                },
+                {
+                  "$ref": "#/components/schemas/Wait"
+                },
+                {
+                  "$ref": "#/components/schemas/Bus"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "mode",
+                "mapping": {
+                  "bus": "#/components/schemas/Bus",
+                  "wait": "#/components/schemas/Wait",
+                  "walk": "#/components/schemas/Walk"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Legs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "departure",
+          "arrival",
+          "duration_seconds",
+          "transfers",
+          "walk_seconds",
+          "access_walk_seconds",
+          "transfer_walk_seconds",
+          "egress_walk_seconds",
+          "wait_seconds",
+          "ride_seconds",
+          "legs"
+        ],
+        "title": "Itinerary"
+      },
+      "JourneyResult": {
+        "properties": {
+          "origin": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "replay": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReplayInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "issued_asof": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Issued Asof",
+            "description": "Cutoff for receiving observations used in this forecast or replay."
+          },
+          "journeys": {
+            "items": {
+              "$ref": "#/components/schemas/Itinerary"
+            },
+            "type": "array",
+            "title": "Journeys",
+            "description": "Ranked alternatives. Empty if no usable path was found within the search limits."
+          },
+          "walking_alternative": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WalkingAlternative"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "boarding_alerts": {
+            "items": {
+              "$ref": "#/components/schemas/BoardingAlert"
+            },
+            "type": "array",
+            "title": "Boarding Alerts",
+            "description": "Direct services whose fresh live estimate just precedes the rider’s platform arrival. These are excluded from feasible itineraries."
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/SearchLimits"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Comparison"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "origin",
+          "destination",
+          "departure",
+          "issued_asof",
+          "journeys",
+          "warnings",
+          "limits",
+          "source"
+        ],
+        "title": "JourneyResult"
+      },
+      "Place": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Official GTFS platform ID, or null for a map pin."
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "lat",
+          "lon"
+        ],
+        "title": "Place"
+      },
+      "PlatformResponse": {
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At",
+            "description": "Time the passenger is assumed to be at this platform."
+          },
+          "arrival": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrival"
+          },
+          "wait_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wait Seconds"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "observed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed At",
+            "description": "Upstream GPS event used for this estimate, if any."
+          },
+          "observed_stop": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Place"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          },
+          "possible_boarding": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PossibleBoarding"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "replay": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReplayInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "route_observation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RouteObservation"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Separately observed movement at the preceding stop. The vehicle has no matched timetable trip."
+          }
+        },
+        "type": "object",
+        "required": [
+          "platform",
+          "route_id",
+          "route",
+          "at",
+          "arrival",
+          "wait_seconds",
+          "source",
+          "observed_at",
+          "observed_stop",
+          "note"
+        ],
+        "title": "PlatformResponse"
+      },
+      "PossibleBoarding": {
+        "properties": {
+          "service_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Service Date",
+            "description": "GTFS operating date of this vehicle's stop forecast, in Delhi."
+          },
+          "gps_age_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gps Age Seconds",
+            "description": "Seconds since the latest matching vehicle fix available at the request. Null when no fresh, dated physical run could be corroborated."
+          },
+          "vehicle_approaching": {
+            "type": "boolean",
+            "title": "Vehicle Approaching",
+            "description": "Two consecutive GPS observations moved toward the platform on its incoming published shape. The most recent observation was at most 60 seconds old at the request."
+          },
+          "predicted_departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Predicted Departure"
+          },
+          "seconds_before_ready": {
+            "type": "integer",
+            "title": "Seconds Before Ready"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "fallback_wait_seconds": {
+            "type": "integer",
+            "title": "Fallback Wait Seconds"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "service_date",
+          "gps_age_seconds",
+          "vehicle_approaching",
+          "predicted_departure",
+          "seconds_before_ready",
+          "route",
+          "trip_id",
+          "fallback_wait_seconds",
+          "note"
+        ],
+        "title": "PossibleBoarding"
+      },
+      "ReplayInfo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "const": "nov21",
+            "title": "Id"
+          },
+          "received_files": {
+            "type": "integer",
+            "title": "Received Files"
+          },
+          "last_receipt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Receipt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "received_files",
+          "last_receipt"
+        ],
+        "title": "ReplayInfo"
+      },
+      "RouteObservation": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "observed_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At"
+          },
+          "age_seconds": {
+            "type": "integer",
+            "maximum": 60.0,
+            "minimum": 0.0,
+            "title": "Age Seconds",
+            "description": "Vehicle GPS age at the request."
+          },
+          "service_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Service Date"
+          },
+          "direction": {
+            "type": "string",
+            "const": "toward_platform",
+            "title": "Direction"
+          },
+          "trip_assignment": {
+            "type": "string",
+            "const": "unmatched_start_clock",
+            "title": "Trip Assignment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "route",
+          "observed_stop",
+          "observed_at",
+          "received_at",
+          "age_seconds",
+          "service_date",
+          "direction",
+          "trip_assignment"
+        ],
+        "title": "RouteObservation"
+      },
+      "SearchLimits": {
+        "properties": {
+          "max_transfers": {
+            "type": "integer",
+            "title": "Max Transfers"
+          },
+          "horizon_seconds": {
+            "type": "integer",
+            "title": "Horizon Seconds"
+          },
+          "max_walk_m": {
+            "type": "integer",
+            "title": "Max Walk M"
+          },
+          "transfer_walk_m": {
+            "type": "integer",
+            "title": "Transfer Walk M"
+          },
+          "transfer_buffer_seconds": {
+            "type": "integer",
+            "title": "Transfer Buffer Seconds"
+          },
+          "endpoint_stops_considered": {
+            "type": "integer",
+            "title": "Endpoint Stops Considered"
+          },
+          "max_transfer_candidates": {
+            "type": "integer",
+            "title": "Max Transfer Candidates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "max_transfers",
+          "horizon_seconds",
+          "max_walk_m",
+          "transfer_walk_m",
+          "transfer_buffer_seconds",
+          "endpoint_stops_considered",
+          "max_transfer_candidates"
+        ],
+        "title": "SearchLimits"
+      },
+      "StopCall": {
+        "properties": {
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "Timing source at this call. A timetable or inferred call can follow a live anchor."
+          },
+          "preceding_segment_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preceding Segment Seconds",
+            "description": "Previous served stop departure to this arrival. Null at boarding."
+          },
+          "path_distance_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path Distance M",
+            "description": "Distance along the aligned GTFS shape. Null when unavailable."
+          },
+          "estimated_speed_kmh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Speed Kmh",
+            "description": "Shape distance divided by predicted segment time. Null for an unreliable or missing distance or interval."
+          }
+        },
+        "type": "object",
+        "required": [
+          "stop_id",
+          "arrival",
+          "departure",
+          "source",
+          "preceding_segment_seconds",
+          "path_distance_m",
+          "estimated_speed_kmh"
+        ],
+        "title": "StopCall"
+      },
+      "StopMatches": {
+        "properties": {
+          "stops": {
+            "items": {
+              "$ref": "#/components/schemas/Place"
+            },
+            "type": "array",
+            "title": "Stops"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stops"
+        ],
+        "title": "StopMatches"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "Wait": {
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds"
+          },
+          "geometry": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Geometry",
+            "description": "Ordered [latitude, longitude] pairs in WGS84."
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "mode": {
+            "type": "string",
+            "const": "wait",
+            "title": "Mode"
+          },
+          "transfer_buffer_seconds": {
+            "type": "integer",
+            "title": "Transfer Buffer Seconds",
+            "description": "Minimum change allowance already included in this wait."
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "departure",
+          "arrival",
+          "seconds",
+          "geometry",
+          "source",
+          "mode",
+          "transfer_buffer_seconds"
+        ],
+        "title": "Wait"
+      },
+      "Walk": {
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds"
+          },
+          "geometry": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Geometry",
+            "description": "Ordered [latitude, longitude] pairs in WGS84."
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "mode": {
+            "type": "string",
+            "const": "walk",
+            "title": "Mode"
+          },
+          "distance_m": {
+            "type": "integer",
+            "title": "Distance M"
+          },
+          "origin_snap_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Snap M"
+          },
+          "destination_snap_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Snap M"
+          },
+          "includes_arterial_without_mapped_sidewalk": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Includes Arterial Without Mapped Sidewalk"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "departure",
+          "arrival",
+          "seconds",
+          "geometry",
+          "source",
+          "mode",
+          "distance_m"
+        ],
+        "title": "Walk"
+      },
+      "WalkingAlternative": {
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrival"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds"
+          },
+          "geometry": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Geometry",
+            "description": "Ordered [latitude, longitude] pairs in WGS84."
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "mode": {
+            "type": "string",
+            "const": "walk",
+            "title": "Mode"
+          },
+          "distance_m": {
+            "type": "integer",
+            "title": "Distance M"
+          },
+          "origin_snap_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Snap M"
+          },
+          "destination_snap_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Snap M"
+          },
+          "includes_arterial_without_mapped_sidewalk": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Includes Arterial Without Mapped Sidewalk"
+          },
+          "assumed_pace_m_s": {
+            "type": "number",
+            "title": "Assumed Pace M S"
+          },
+          "time_saved_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Saved Seconds"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "faster_than_bus",
+              "no_bus_within_limits"
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "departure",
+          "arrival",
+          "seconds",
+          "geometry",
+          "source",
+          "mode",
+          "distance_m",
+          "assumed_pace_m_s",
+          "time_saved_seconds",
+          "reason"
+        ],
+        "title": "WalkingAlternative"
+      }
+    }
+  }
+}

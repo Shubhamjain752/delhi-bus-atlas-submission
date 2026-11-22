@@ -1,0 +1,41 @@
+{
+  "attribution": "\u00a9 OpenStreetMap contributors, extract by Geofabrik",
+  "license": "ODbL 1.0",
+  "license_url": "https://www.openstreetmap.org/copyright",
+  "source": "https://download.geofabrik.de/asia/india/northern-zone/northern-zone-261101.osm.pbf",
+  "input_md5": "66d5470f8fe1bce0b8820e8b99000c6b",
+  "clip_bounds_swne": [
+    28.25,
+    76.78,
+    28.96,
+    77.55
+  ],
+  "nodes": 1155725,
+  "edges": 1276782,
+  "connector_barriers": 136300,
+  "edge_counts_by_highway": {
+    "service": 161646,
+    "tertiary": 107615,
+    "secondary": 5652,
+    "residential": 801100,
+    "path": 18690,
+    "living_street": 21971,
+    "primary": 1104,
+    "pedestrian": 1326,
+    "unclassified": 43277,
+    "footway": 47551,
+    "tertiary_link": 1707,
+    "trunk": 71,
+    "secondary_link": 65,
+    "track": 62565,
+    "steps": 1672,
+    "trunk_link": 64,
+    "cycleway": 682,
+    "primary_link": 18,
+    "road": 6
+  },
+  "walk_speed_m_s": 1.25,
+  "steps_time_multiplier": 1.5,
+  "mapped_signal_wait_seconds": 20,
+  "max_snap_metres": 65
+}

@@ -1,0 +1,16 @@
+#summary button{background:transparent;border:0;color:#373a91;font-weight:700;width:auto;margin:0;padding:7px 4px;text-decoration:underline;text-underline-offset:3px}
+#summary tr.selected{background:#f1f2fc}#case-title{margin-bottom:4px}#pair{margin-top:0}
+#case-times tr:last-child{background:#edf5f0;font-weight:650}#previous{border-left:3px solid #b4bdcc;padding-left:12px}
+#load-status:empty{display:none}
+.month-filter{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.month-filter select{font:inherit;padding:6px 26px 6px 8px;color:#1c2b42;border:1px solid #a5b0be;border-radius:5px;background:white}
+.month-filter select:focus-visible{outline:3px solid #7778ce;outline-offset:2px}
+#month-check{scroll-margin-top:10px}#month-dates{margin:5px 0 10px}#month-examples{padding-left:20px}
+#month-results tbody tr:first-child{background:#f0f2f9;font-weight:650}
+#month-examples li{margin:6px 0}
+#fleet-route{font:inherit;padding:6px 8px;border:1px solid #a5b0be;border-radius:5px;max-width:100%}
+#fleet-route:focus-visible{outline:3px solid #7778ce;outline-offset:2px}
+#fleet-comparison tbody tr:first-child{background:#f0f2f9;font-weight:650}
+#fleet-check details{margin:14px 0}
+#fleet-status:empty{display:none}
+#fleet-route-list li,#fleet-examples li{margin:8px 0}

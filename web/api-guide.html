@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Journey API · Delhi Bus Atlas</title>
+  <link rel="stylesheet" href="/api-guide.css">
+  <script src="/api-guide.js" defer></script>
+</head>
+<body>
+<header><div><a class="brand" href="/">Delhi Bus Atlas</a><nav aria-label="Resources"><a href="/">Journey planner</a><a href="/openapi.json">OpenAPI JSON</a></nav></div></header>
+<main>
+  <h1>Journey API</h1>
+  <p class="intro">Give the planner two locations and a departure time. It returns catchable bus options with the walk, platform wait, ride and arrival at your destination.</p>
+  <section aria-labelledby="try"><h2 id="try"><code>GET /journeys</code></h2>
+    <form id="example">
+      <label>From<input name="from" required value="28.71815,77.06380"></label>
+      <label>To<input name="to" required value="28.70700,77.17890"></label>
+      <label>Leave at · Delhi time<input name="depart" type="datetime-local" required value="2026-10-15T08:45"></label>
+      <button>Run request</button>
+    </form>
+    <p class="hint">Enter latitude,longitude or a GTFS stop ID. The starting pins are near Rohini Sector 22 and Azadpur. This example uses October GPS replay.</p>
+    <div class="request"><code id="path"></code><a id="raw" href="/journeys?from=28.71815,77.06380&amp;to=28.70700,77.17890&amp;depart=2026-10-15T08:45&amp;limit=3">Open JSON ↗</a></div>
+    <p id="response-status" role="status"></p>
+    <div id="output" hidden>
+      <h3>Returned options</h3>
+      <div class="scroll"><table><thead><tr><th>Bus route</th><th>Arrive</th><th>Total</th><th>Walk</th><th>Wait</th><th>Ride</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <details><summary>Full JSON response</summary><pre id="json"></pre></details>
+    </div>
+  </section>
+  <section><h2>Read a route</h2>
+    <dl>
+      <dt>Locations and departure</dt><dd><code>from</code> and <code>to</code> also accept stop names. Use <a href="/stops?q=Kashmere&amp;limit=8">/stops</a> to resolve names with multiple platforms. Omit <code>depart</code> for current service or specify an ISO 8601 timestamp. Times without an offset use India Standard Time.</dd>
+      <dt>Alternatives</dt><dd>Each <code>journeys[]</code> entry gives destination arrival and total seconds. Walk, wait and ride add up to that total. <code>max_transfers=0</code> restricts the search to direct services. The default permits one change. Use <code>compare_hour=13</code> to check 13:00 on the same date.</dd>
+      <dt>Walk and wait</dt><dd>Access, transfer and egress walks each have a seconds field, including zero at the platform. Wait runs from reaching the platform until the predicted boarding departure. A transfer wait includes the 90-second minimum change allowance once. To check a route for someone already at the platform, try <a href="/arrivals?stop=1525&amp;route=1407&amp;at=2026-10-15T08:05">a GPS-based arrival at Jag Jivan Ram Hospital</a>. Its prediction can use a bus seen upstream whose ultimate destination is unconfirmed.</dd>
+      <dt>When the bus may still be boarding</dt><dd>When a live departure falls up to one minute before the rider reaches the platform, check <code>boarding_alerts[]</code> for a <code>conditional_itinerary</code> and a <code>fallback_itinerary</code>. Display both arrival times. The rider should choose the possible bus only if they can see it taking passengers. For a 31–60 second gap, keep the ordinary journey selected. The full judge package includes the dated 502UP replay.</dd>
+      <dt>Walking the whole way</dt><dd>A separate <code>walking_alternative</code> can appear when a mapped pedestrian path within 2 km beats the bus or the search finds no bus. It carries the walking geometry, estimated time and any warning about an unconfirmed sidewalk.</dd>
+      <dt>Stops and timing</dt><dd>Each bus leg has boarding and alighting platforms, route, trip, stop calls and a timing source. Each call gives arrival and departure. Where the published shape aligns, the API returns route metres and estimated average km/h from the previous served stop. A null speed means there is insufficient evidence.</dd>
+      <dt>Vehicle evidence</dt><dd>Use <code>gps_age_seconds</code> and <code>vehicle_approaching</code> to tell riders when a conditional bus was last located and whether it was moving toward their platform. A platform response can also include <code>route_observation</code> for a bus seen upstream whose timetable trip could not be identified. Show its observed stop and time separately from the next bus’s ETA.</dd>
+      <dt>Map coordinates</dt><dd>Leg geometry is a list of <code>[latitude, longitude]</code> pairs. A bus with <code>geometry_source: ordered_stops</code> has only a schematic line between platforms.</dd>
+      <dt>Empty responses</dt><dd>A valid search with no feasible path returns HTTP 200, an empty <code>journeys</code> array and a reason in <code>warnings</code>. An invalid date, unknown stop or out-of-range coordinate returns HTTP 422 with <code>detail</code>.</dd>
+    </dl>
+  </section>
+  <section><h2>Timing evidence</h2>
+    <p>Inspect <a href="/status">feed freshness and GPS coverage</a>. Live stop predictions, recent observed bus travel, historical GPS and the timetable can all occur in one journey. The response identifies its sources per leg and per stop call.</p>
+    <p>Read <a href="/field-trials/results">the pre-departure forecasts and GPS trial results in JSON</a> or <a href="/field-trials.html">compare the journeys on screen</a>. Each result identifies the walking assumption and which bus stops GPS could verify.</p>
+    <p><a href="/validation?day_type=weekday">Weekday GPS errors</a> · <a href="/validation?day_type=weekend">Weekend GPS errors</a> · <a href="/docs">Interactive API reference</a></p>
+  </section>
+</main></body></html>

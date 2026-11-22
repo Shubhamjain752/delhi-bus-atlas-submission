@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#182348">
+  <title>Delhi Bus Atlas · Journey planner</title>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/vendor/leaflet/leaflet.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#planner">Skip to journey planner</a>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="ico-bus" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="15" rx="3"/><path d="M5 11h14M8 18.5v2m8-2v2M8.5 14.5h1m5 0h1M9 6.5h6"/></symbol>
+    <symbol id="ico-swap" viewBox="0 0 24 24"><path d="M8 19V5m-4 4 4-4 4 4m4-4v14m4-4-4 4-4-4"/></symbol>
+    <symbol id="ico-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+    <symbol id="ico-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 6.5v6l3.5 2"/></symbol>
+    <symbol id="ico-next" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="ico-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="ico-walk" viewBox="0 0 24 24"><circle cx="14" cy="4.5" r="1.5"/><path d="m8 12 2-4 3-1 2 4 3 2m-10 8 3.4-6.7 1-5m-1.4 6 3.1 2.3 2 3.5"/></symbol>
+    <symbol id="ico-fit" viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="ico-map" viewBox="0 0 24 24"><path d="m3.5 6 5.5-2 6 2 5.5-2v14L15 20l-6-2-5.5 2Zm5.5-2v14m6-12v14"/></symbol>
+    <symbol id="ico-restore" viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.8 7M4 5v6h6m2-3v5l3 1.5"/></symbol>
+    <symbol id="ico-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-9v.1"/></symbol>
+  </defs></svg>
+  <header class="topbar">
+    <div class="identity"><span class="brand-mark" aria-hidden="true"><svg><use href="#ico-bus"/></svg></span><span>Delhi Bus <strong>Atlas</strong></span></div>
+    <div class="header-view"><svg class="ico"><use href="#ico-map"/></svg> Journey planner</div>
+    <a class="api-link" href="/api-guide">API guide <span aria-hidden="true">↗</span></a>
+    <div class="status-wrap">
+      <button type="button" class="feed-status" id="feed-toggle" aria-controls="feed-panel" aria-expanded="false"><span class="status-dot"></span><span id="feed-text">Data status</span><span id="feed-short">Data status</span><svg class="ico"><use href="#ico-chevron"/></svg></button>
+      <div id="feed-panel" class="status-popover" hidden></div>
+    </div>
+  </header>
+  <main class="layout">
+    <aside class="rail">
+      <section class="search-section" id="planner" aria-labelledby="planner-title">
+        <h1 id="planner-title">Plan your journey</h1>
+        <form id="journey-form" novalidate>
+          <p id="point-help" class="point-help">Search a bus stop, enter coordinates like 28.63, 77.22, or use a pin to choose on the map.</p>
+          <div class="point-picker">
+            <div class="points">
+              <div class="point-row">
+                <span class="point-symbol start" aria-hidden="true"></span>
+                <div class="point-input">
+                  <label for="origin">From</label>
+                  <input id="origin" placeholder="Stop name or lat, lon" role="combobox" aria-expanded="false" aria-controls="origin-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Kashmere Gate City Bus Terminal" required>
+                </div>
+                <button class="square pick" id="origin-map" type="button" title="Pick origin on map" aria-label="Pick origin on map" aria-pressed="false"><svg class="ico"><use href="#ico-pin"/></svg></button>
+                <ul id="origin-list" class="suggestions" role="listbox" aria-label="Origin stops" hidden></ul>
+              </div>
+              <div class="point-row">
+                <span class="point-symbol end" aria-hidden="true"></span>
+                <div class="point-input">
+                  <label for="destination">To</label>
+                  <input id="destination" placeholder="Stop name or lat, lon" role="combobox" aria-expanded="false" aria-controls="destination-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Nehru Place Terminal" required>
+                </div>
+                <button class="square pick" id="destination-map" type="button" title="Pick destination on map" aria-label="Pick destination on map" aria-pressed="false"><svg class="ico"><use href="#ico-pin"/></svg></button>
+                <ul id="destination-list" class="suggestions" role="listbox" aria-label="Destination stops" hidden></ul>
+              </div>
+            </div>
+            <button class="square swap" id="swap" type="button" aria-label="Swap origin and destination" title="Swap stops"><svg class="ico"><use href="#ico-swap"/></svg></button>
+          </div>
+          <div class="departure-label"><label for="depart">Leave at</label><span id="time-zone">India Standard Time · UTC+05:30</span></div>
+          <div class="departure-row">
+            <input id="depart" type="datetime-local" aria-describedby="time-zone" value="2026-10-15T08:45" required>
+            <button class="small-btn" id="now" type="button">Now</button>
+          </div>
+          <div class="replay-line"><button type="button" class="text-btn" id="replay"><svg class="ico"><use href="#ico-restore"/></svg>Use the October example</button><span id="replay-active" hidden>Selected</span></div>
+          <button class="submit" type="submit"><svg class="ico"><use href="#ico-bus"/></svg><span>Find journeys</span><svg class="ico"><use href="#ico-next"/></svg></button>
+        </form>
+      </section>
+      <section id="options" class="options-section" aria-labelledby="options-title" tabindex="-1">
+        <div class="section-title"><h2 id="options-title">Journey options</h2><span id="option-count" hidden></span></div>
+        <p id="result-context" class="result-context" hidden></p>
+        <div id="message" role="status" aria-live="polite"></div>
+        <section id="boarding-options" aria-label="Possible boarding and later bus" hidden></section>
+        <div id="boarding-alerts" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div id="walking-option" hidden></div>
+        <div id="alternatives"></div>
+        <div id="details" tabindex="-1"></div>
+        <details id="notes" class="notes" hidden><summary>Planning notes</summary><ul></ul></details>
+      </section>
+    </aside>
+    <section class="map-shell" id="map-section" aria-label="Journey map">
+      <div id="map" aria-label="Interactive Delhi bus route map"></div>
+      <div id="map-prompt" class="map-prompt" role="status" hidden><span></span><button id="cancel-pick" type="button">Cancel</button></div>
+      <div class="map-label"><svg class="ico"><use href="#ico-map"/></svg><span>Delhi route map</span></div>
+      <div id="route-summary" class="route-summary" hidden></div>
+      <div id="map-unavailable" class="map-unavailable" hidden></div>
+      <div class="map-keys" id="map-keys" aria-label="Map legend"><span><i class="key-bus"></i>Bus</span><span><i class="key-walk"></i>Walk</span></div>
+      <button type="button" id="mobile-results" aria-controls="options" hidden></button>
+      <button class="fit-map square" type="button" id="fit-map" title="Fit journey on map" aria-label="Fit journey on map"><svg class="ico"><use href="#ico-fit"/></svg></button>
+    </section>
+  </main>
+</body>
+</html>

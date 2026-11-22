@@ -1,0 +1,207 @@
+{
+  "train": [
+    "2026-10-12",
+    "2026-10-13"
+  ],
+  "holdout": "2026-10-15",
+  "requested_routes": 160,
+  "selected_gtfs_routes": 160,
+  "windows_ist": [
+    [
+      "08:00:00",
+      "09:30:00"
+    ],
+    [
+      "12:00:00",
+      "13:30:00"
+    ],
+    [
+      "17:00:00",
+      "18:30:00"
+    ]
+  ],
+  "coverage": {
+    "2026-10-12": {
+      "selected_raw_pings": 2591565,
+      "passages": 96028,
+      "segments": 72445,
+      "routes_with_segments": 160
+    },
+    "2026-10-13": {
+      "selected_raw_pings": 2772451,
+      "passages": 103609,
+      "segments": 78493,
+      "routes_with_segments": 160
+    },
+    "2026-10-15": {
+      "selected_raw_pings": 2765159,
+      "passages": 106866,
+      "segments": 82581,
+      "routes_with_segments": 160
+    }
+  },
+  "historical_pairs": 7558,
+  "holdout_metrics": {
+    "timetable": {
+      "n": 82581,
+      "mae_s": 55.82,
+      "p90_absolute_error_s": 122.0,
+      "signed_bias_s": -22.93
+    },
+    "historical": {
+      "n": 82581,
+      "mae_s": 38.19,
+      "p90_absolute_error_s": 85.0,
+      "signed_bias_s": -10.86
+    },
+    "historical_recent": {
+      "n": 82581,
+      "mae_s": 36.37,
+      "p90_absolute_error_s": 80.0,
+      "signed_bias_s": -9.9
+    },
+    "sources": {
+      "gps_historical_recent": 53040,
+      "gps_historical": 29541
+    },
+    "hour_ist": {
+      "07": {
+        "n": 48,
+        "mae_s": 45.92,
+        "p90_absolute_error_s": 73.5,
+        "signed_bias_s": -2.21
+      },
+      "08": {
+        "n": 21131,
+        "mae_s": 29.35,
+        "p90_absolute_error_s": 60.0,
+        "signed_bias_s": -0.22
+      },
+      "09": {
+        "n": 9490,
+        "mae_s": 28.21,
+        "p90_absolute_error_s": 58.0,
+        "signed_bias_s": -7.17
+      },
+      "11": {
+        "n": 11,
+        "mae_s": 18.82,
+        "p90_absolute_error_s": 34.0,
+        "signed_bias_s": -4.45
+      },
+      "12": {
+        "n": 16326,
+        "mae_s": 43.59,
+        "p90_absolute_error_s": 102.0,
+        "signed_bias_s": -17.85
+      },
+      "13": {
+        "n": 5168,
+        "mae_s": 40.98,
+        "p90_absolute_error_s": 91.0,
+        "signed_bias_s": -15.31
+      },
+      "16": {
+        "n": 8,
+        "mae_s": 41.5,
+        "p90_absolute_error_s": 97.6,
+        "signed_bias_s": -21.5
+      },
+      "17": {
+        "n": 21966,
+        "mae_s": 38.06,
+        "p90_absolute_error_s": 85.0,
+        "signed_bias_s": -8.93
+      },
+      "18": {
+        "n": 8433,
+        "mae_s": 41.88,
+        "p90_absolute_error_s": 99.0,
+        "signed_bias_s": -21.04
+      }
+    },
+    "downstream_stops": {
+      "3": {
+        "timetable": {
+          "n": 55633,
+          "mae_s": 125.33,
+          "p90_absolute_error_s": 280.0,
+          "signed_bias_s": -59.78
+        },
+        "historical": {
+          "n": 55633,
+          "mae_s": 80.97,
+          "p90_absolute_error_s": 183.0,
+          "signed_bias_s": -26.96
+        },
+        "historical_recent": {
+          "n": 55633,
+          "mae_s": 76.15,
+          "p90_absolute_error_s": 172.0,
+          "signed_bias_s": -24.67
+        },
+        "catchability_360s": {
+          "evaluated": 55633,
+          "predicted_catchable": 19685,
+          "predicted_catchable_but_bus_was_early": 3590,
+          "false_catch_share_of_recommendations": 0.1824,
+          "missed_feasible_options": 5476
+        }
+      },
+      "5": {
+        "timetable": {
+          "n": 38360,
+          "mae_s": 183.5,
+          "p90_absolute_error_s": 405.0,
+          "signed_bias_s": -97.13
+        },
+        "historical": {
+          "n": 38360,
+          "mae_s": 115.67,
+          "p90_absolute_error_s": 262.0,
+          "signed_bias_s": -43.31
+        },
+        "historical_recent": {
+          "n": 38360,
+          "mae_s": 108.46,
+          "p90_absolute_error_s": 245.0,
+          "signed_bias_s": -40.05
+        },
+        "catchability_360s": {
+          "evaluated": 38360,
+          "predicted_catchable": 33623,
+          "predicted_catchable_but_bus_was_early": 1779,
+          "false_catch_share_of_recommendations": 0.0529,
+          "missed_feasible_options": 1404
+        }
+      },
+      "10": {
+        "timetable": {
+          "n": 15634,
+          "mae_s": 306.69,
+          "p90_absolute_error_s": 703.0,
+          "signed_bias_s": -191.11
+        },
+        "historical": {
+          "n": 15634,
+          "mae_s": 186.57,
+          "p90_absolute_error_s": 430.0,
+          "signed_bias_s": -78.17
+        },
+        "historical_recent": {
+          "n": 15634,
+          "mae_s": 177.23,
+          "p90_absolute_error_s": 403.0,
+          "signed_bias_s": -75.82
+        },
+        "catchability_360s": {
+          "evaluated": 15634,
+          "predicted_catchable": 15634,
+          "predicted_catchable_but_bus_was_early": 0,
+          "false_catch_share_of_recommendations": 0.0,
+          "missed_feasible_options": 0
+        }
+      }
+    }
+  }
+}

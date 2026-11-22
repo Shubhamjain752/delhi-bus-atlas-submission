@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Observed journeys · Delhi Bus Atlas</title>
+  <link rel="stylesheet" href="/api-guide.css">
+  <link rel="stylesheet" href="/field-checks.css">
+  <script src="/field-checks.js" defer></script>
+  <script src="/month-check.js" defer></script>
+  <script src="/fleet-check.js" defer></script>
+</head>
+<body>
+  <header><div><a class="brand" href="/">Delhi Bus Atlas</a><nav aria-label="Resources"><a href="/">Journey planner</a><a href="/api-guide">API guide</a></nav></div></header>
+  <main>
+    <h1>Observed journeys</h1>
+    <p><a href="/field-trials.html">Whole-journey trials with walking, waiting and bus changes</a></p>
+    <p class="intro">Compare Delhi journey forecasts with archived bus GPS. The three overnight journeys below use the same coordinates and departure minute in Atlas and Google Maps on 21 November 2026. All clocks are in Delhi time. <a href="#fleet-check">All-route October results ↓</a> <a id="month-jump" href="#month-check" hidden>Earlier four-window study ↓</a></p>
+    <p id="load-status" role="status">Loading the recorded journeys…</p>
+    <section hidden id="comparisons" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">Arrival at the destination</h2>
+      <div class="scroll"><table><thead><tr><th>Route</th><th>Query</th><th>Atlas</th><th>Google</th><th>Bus GPS</th></tr></thead><tbody id="summary"></tbody></table></div>
+      <p class="hint">Google displays minutes. GPS records when the vehicle first appears within 45 metres of the platform. Inspect a route to see boarding times and walking assumptions.</p>
+    </section>
+    <section hidden id="case" aria-labelledby="case-title">
+      <h2 id="case-title"></h2><p id="pair"></p>
+      <div class="scroll"><table><thead><tr><th>Source</th><th>Boarding stop</th><th>Final arrival</th><th>From query</th></tr></thead><tbody id="case-times"></tbody></table></div>
+      <p id="finding"></p><p id="previous" hidden></p><p id="walking" hidden></p>
+      <p id="boarding-replay" hidden><a href="/?replay=502">Compare the two 502UP journeys on the map ↗</a></p>
+      <p><a id="google">Google Maps itinerary ↗</a> · <a href="/validation?day_type=matched">Case data (JSON)</a></p>
+    </section>
+    <section id="fleet-check" aria-labelledby="fleet-title">
+      <h2 id="fleet-title">How often did the planner suggest a bus that had left?</h2>
+      <p id="fleet-status" role="status">Loading the October fleet results…</p>
+      <div id="fleet-report" hidden>
+        <p id="fleet-coverage"></p>
+        <label class="month-filter" for="fleet-period">Compare boarding rules for
+          <select id="fleet-period" aria-controls="fleet-platform fleet-comparison fleet-defaults fleet-period-summary">
+            <option value="holdout">24–31 October · all hours</option>
+            <option value="holdout_overnight">24–31 October · midnight to 06:00</option>
+            <option value="development">1–23 October · all hours</option>
+            <option value="overnight">All dates · midnight to 06:00</option>
+            <option value="all">All dates · all hours</option>
+          </select>
+        </label>
+        <p id="fleet-period-summary" aria-live="polite"></p>
+        <p id="fleet-service-days" class="hint"></p>
+        <h3>What did the GPS rule say at the stop?</h3>
+        <p>The platform check runs on every matched case. Later GPS provides the outcome in the columns. A vehicle can qualify as approaching here and still have no suitable onward journey.</p>
+        <div class="scroll"><table id="fleet-platform" aria-label="GPS rule classifications before journey search">
+          <thead><tr><th scope="col">At query time</th><th scope="col">Total</th><th scope="col">Approaching</th><th scope="col">Already gone</th><th scope="col">Timing uncertain</th><th scope="col">Insufficient GPS</th></tr></thead><tbody></tbody>
+        </table></div>
+        <details><summary>Does a fresher approach signal mean fewer errors?</summary>
+          <p>Signals issued on 24–31 October. Age is the time from the latest vehicle observation to the rider’s query. Each percentage uses all positive approach signals in its age group, including unresolved cases.</p>
+          <div class="scroll"><table id="fleet-age" aria-label="Held-out positive approaches by age of latest GPS">
+            <thead><tr><th scope="col">GPS age</th><th scope="col">Signals</th><th scope="col">Approaching</th><th scope="col">Already gone</th><th scope="col">Unresolved</th><th scope="col">Confirmed gone / signals</th></tr></thead><tbody></tbody>
+          </table></div>
+        </details>
+        <h3>What did the journey planner offer?</h3>
+        <p>The two versions searched the same sample of complete itineraries. A conditional option requires a suitable fallback.</p>
+        <div class="scroll"><table id="fleet-comparison" aria-label="Boarding offers compared on the same rider decisions">
+          <thead><tr><th scope="col">GPS outcome</th><th scope="col">Earlier planner</th><th scope="col">Revised planner</th><th scope="col">Offers removed</th><th scope="col">Offers added</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <p id="fleet-results-note"></p>
+        <h3>Which bus would the rider see first?</h3>
+        <p>The simulated rider starts at the stop. A conditional bus can appear below the ordinary journey. Only the first choice is counted in the comparison below.</p>
+        <div class="scroll"><table id="fleet-defaults" aria-label="Conditional bus shown as first choice">
+          <thead><tr><th scope="col">GPS outcome</th><th scope="col">Earlier first choice</th><th scope="col">Revised first choice</th><th scope="col">Revised secondary option</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <p class="hint">Earlier October studies used some of the same dates. The last eight days were set aside when building this revision. GPS can show where a vehicle went. It cannot tell whether its doors opened or a passenger boarded.</p>
+        <details><summary>Results by hour, including after midnight</summary>
+          <p class="hint">All 31 dates, grouped by the rider’s Delhi clock. Each hour includes the following 59 minutes.</p>
+          <div class="scroll"><table id="fleet-hours" aria-label="All dates by hour of day">
+            <thead><tr><th scope="col">Hour (IST)</th><th scope="col">Screened cases</th><th scope="col">Replayed</th><th scope="col">Offers</th><th scope="col">Approaching</th><th scope="col">Already gone</th><th scope="col">Unresolved</th></tr></thead><tbody></tbody>
+          </table></div>
+          <p id="fleet-502"></p>
+        </details>
+        <details><summary>Find a route and check its coverage</summary>
+          <label class="month-filter" for="fleet-route">Route name or GTFS route ID
+            <input type="search" id="fleet-route" placeholder="e.g. 502UP or 1996" aria-controls="fleet-route-list"></label>
+          <p id="fleet-route-message" class="hint" role="status"></p>
+          <ul id="fleet-route-list"></ul>
+        </details>
+        <details><summary>Remaining failures and limits</summary>
+          <p id="fleet-limitations"></p>
+          <p id="fleet-error-routes"></p>
+          <ul id="fleet-examples"></ul>
+          <p class="hint"><a href="/validation?day_type=fleet_short_links">Short routes and terminal arrivals (JSON)</a> · <a href="/validation?day_type=fleet_provider_clocks">Provider trip clocks and timetable matching (JSON)</a></p>
+          <p class="hint">On 22 October at 00:59, two 419UP route patterns disagreed about service to DIPSAR. The earlier platform forecast said 51 seconds. Later GPS recorded no visit in the next 20 minutes. <a href="/validation?day_type=provider_clock_arrivals">Six platform queries</a> · <a href="/validation?day_type=anonymous_route_observation">Route-observation study</a> · <a href="/validation?day_type=anonymous_route_observation_confirmation">Confirmation results</a></p>
+        </details>
+        <p class="hint"><a href="/validation?day_type=fleet_boarding">Download route, hour and paired outcome counts (JSON)</a></p>
+      </div>
+    </section>
+    <section id="month-check" aria-labelledby="month-title" hidden>
+      <h2 id="month-title">Did the departure check prevent false boarding suggestions?</h2>
+      <p id="month-finding"></p>
+      <label class="month-filter" for="month-population">Show results for
+        <select id="month-population" aria-controls="month-results month-dates">
+          <option value="fresh">Unused dates after model training</option>
+          <option value="all">All processed dates</option>
+        </select>
+      </label>
+      <p id="month-dates" class="hint" aria-live="polite"></p>
+      <div class="scroll"><table id="month-results" aria-label="GPS outcomes for the earlier and revised boarding rules" aria-describedby="month-dates">
+        <thead><tr><th scope="col">GPS outcome</th><th scope="col">Earlier rule</th><th scope="col">Revised rule</th><th scope="col">Withheld</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <p class="hint">“Already gone” counts confirmed false suggestions. “Timing uncertain” means GPS found the bus near the stop but could not resolve its departure. “Insufficient GPS” means the trace could not confirm the stop visit.</p>
+      <p id="month-coverage"></p>
+      <p id="month-gaps" class="hint" hidden></p>
+      <details><summary>Coverage, repeat vehicles and example journeys</summary>
+        <p id="month-sampling"></p><p id="month-limitations"></p>
+        <p id="month-502" hidden></p>
+        <ul id="month-examples"></ul>
+      </details>
+      <p class="hint"><a href="/validation?day_type=month_boarding">Complete October report (JSON)</a></p>
+    </section>
+    <section id="peak-check" aria-labelledby="peak-title" hidden>
+      <h2 id="peak-title">Would the bus still be approaching at rush hour?</h2>
+      <div id="peak-router" hidden>
+        <h3>What the journey planner offered on 23 and 26 October</h3>
+        <p id="peak-router-offers"></p><p id="peak-router-outcomes"></p>
+        <p class="hint">The router used stop predictions reconstructed from the October GPS archive. Original stop predictions were unavailable, and later GPS cannot show whether the doors were open. <a href="/validation?day_type=near_miss_router">Journey-router replay data (JSON)</a></p>
+      </div>
+      <div id="peak-confirmation" hidden>
+        <h3>Checking the revised planner on 29 October</h3>
+        <p>This date was held out while the rule was developed. The revised planner can withhold an option when GPS received by the query time confirms that the same bus has passed the boarding stop.</p>
+        <p id="confirmation-offers"></p><p id="confirmation-suppressed"></p>
+        <p class="hint">Later GPS was used to check each outcome. It cannot establish whether a rider could board. <a href="/validation?day_type=near_miss_confirmation">29 October confirmation data (JSON)</a></p>
+      </div>
+      <div id="peak-timetable" hidden>
+        <h3>Timetable comparison for 23 and 26 October</h3>
+        <p>Atlas reconstructed stop forecasts from GPS in two Delhi peak periods. Original peak-hour TripUpdates were unavailable. The table covers departures forecast up to 30 seconds before the rider’s platform time when the scheduled fallback on the same route would reach the next stop at least five minutes later.</p>
+        <div class="scroll"><table><thead><tr><th scope="col">GPS outcome</th><th scope="col">08:00–09:30</th><th scope="col">17:00–18:30</th></tr></thead><tbody id="peak-rows"></tbody></table></div>
+        <p class="hint">The percentage counts only buses GPS classified as approaching or already gone. GPS cannot confirm whether the doors were open. <a href="/validation?day_type=near_miss">Peak-hour case data (JSON)</a></p>
+      </div>
+    </section>
+    <section><h2>How the clocks were checked</h2>
+      <p>Atlas replayed only the feeds received by each query minute. GPS positions collected afterward establish where that bus went. Google’s transit results were read shortly after departure, with the original departure time selected. A GPS passage alone cannot establish when doors opened or whether a passenger boarded.</p>
+      <p>The three cases were selected for usable GPS traces. Two exposed issues that informed this build. The vehicle-matching test excludes these runs. The October holdout measures stop-to-stop running time, and a separate platform test measures waiting. <a href="/validation?day_type=vehicles">Vehicle matching on other runs</a> · <a href="/validation?day_type=speed">GPS speed and running-time evidence</a> · <a href="/validation?day_type=waits">Platform waiting evidence</a></p>
+    </section>
+  </main>
+</body>
+</html>

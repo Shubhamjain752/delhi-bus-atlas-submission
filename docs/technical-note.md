@@ -1,0 +1,37 @@
+# How Delhi Bus Atlas computes a journey
+
+## Service and geometry
+
+The timetable in the supplied official ZIP identifies itself as DTC v32. The source contains 6,862 distinct stops, 2,574 route records and 80,357 trips. The local index groups services into 3,498 ordered stop-and-timing patterns. This ZIP's counts differ from the attached metadata PDF, which describes 10,559 stops, 2,403 routes and 89,393 trips. The application uses the records present in the ZIP. Its SHA-256 is `8eb05d9c21e7a6b42d7b49de45cb095b70ddee5b8f7716859330c9784c322f05`.
+
+The trip calendar determines which runs can be boarded. The returned path follows the selected direction's published shape and ordered stops. Where a shape cannot be aligned plausibly, the API marks the geometry as `ordered_stops`. Those straight links give a schematic view. They do not establish the streets actually traversed. New bus routes, allowable vehicle widths and fleet allocation belong to the separate feeder-route design problem.
+
+## Passenger routing
+
+1. Resolve the endpoints to GTFS platforms or coordinates. Search nearby serviced stops in both directions. Validate access and egress paths with a pedestrian A* search. Opposite-side transfers need a reachable walking path. Short approaches from an input pin to the mapped path are estimates.
+2. For every candidate boarding, evaluate the predicted departure after the rider's walk. Follow that bus through its stopping pattern using the estimated running times, or individual fresh stop predictions where available. Distinguish the ride, wait and walk in the result.
+3. For a change, add the walking time and a minimum 90-second change allowance. Search the second bus again with that ready time. A late inbound bus can invalidate a connection. Count the allowance inside the waiting budget once.
+4. Rank feasible alternatives by arrival and walking time. The search considers direct and one-transfer combinations, a four-hour horizon and bounded candidate sets. It is a native time-dependent transit search with pruning. It does not claim full Pareto enumeration. A complete proof of network-wide optimality would require relaxing those limits or validating against an exhaustive oracle.
+
+The pedestrian profile and signal assumptions are documented with measured pin attachment statistics. A route that cannot connect through mapped topology produces an explicit coverage warning. Endpoints given as named stops may have more than one platform with the same name. Use a specific ID or map pin for reproducible comparisons. [Walking model](walking.md)
+
+## Travel-time estimation
+
+The historical model learns elapsed times on directed stop pairs from GPS sequences. It keeps real signal delays and stop dwell within the observed passage intervals. Training and validation dates are separate. At prediction time, a recent completed traversal can update a historical estimate only if its receipt and observation times permit it. An archived replay evaluates all downstream predictions with the same issue clock. Sparse pairs use a route-level estimate or a timetable fallback. The ETA report defines the sample, filters, errors and catchability test. Evaluation
+
+The live adapter treats agency vehicle positions and third-party stop predictions as separate inputs. A fresh vehicle dot by itself does not determine the next bus's arrival. The official adapter estimates segment times after successive positions corroborate movement between adjacent stops on one run. The public adapter validates predicted stop calls against static service and rejects conflicting trips. Data that age out cannot provide a live time. The itinerary returns its evidence per leg, independently of the network-level feed indicator.
+
+## Interpretation
+
+The held-out GPS evaluation measures conditional bus travel from a known stop passage. It does not observe the passenger's front door, whether they boarded, missed connections, or the time they spent crossing a road. Google Maps comparisons test whole-journey plausibility for specified coordinates and departures. The walking and transfer components have functional and topological tests; a field timing study remains necessary for a passenger-level accuracy claim.
+
+The passenger interface also offers a separate route-level platform board. Successive public or official vehicle positions can update the running estimate on a directed segment. A recent upstream passage can establish a platform ETA even when the bus's final destination is uncertain. The archive tests the board against the next observed platform entry. Three later operational replays use the same coordinates and departure minutes against Google Maps and tracked vehicles. They expose the effect of a mis-timed boarding and of two buses assigned to one timetable trip. Coordinate speed and traffic evidence · Platform wait evaluation · Matched November cases
+
+The architecture draws on stop-level prediction practice at Tokyo Toei, TfL and New York MTA, time-dependent transit routing and earlier Delhi GPS studies. [Toei estimation method](https://tobus.jp/sp/blsys/disclaimer?ln=ja) · [TfL Countdown predictions](https://content.tfl.gov.uk/live-bus-arrivals-api.pdf) · [MTA Bus Time](https://bustime-classic.mta.info/wiki/Technology) · [RAPTOR research](https://www.microsoft.com/en-us/research/publication/round-based-public-transit-routing/) · [Delhi ETA study](https://arxiv.org/abs/1906.09925)
+
+## Accuracy work in order of rider impact
+
+1. **Expand validation of physical bus identity.** The revised planner separates corroborated vehicles sharing a dated scheduled trip and keeps each bus's boarding and alighting predictions together. The first short independent capture comparison covers four overnight route labels. Test the same rules across rush hours, depots, trip reassignments and vehicles running together. Measure how often the algorithm suppresses a legitimate bus as well as how often it assigns the wrong one. Identity validation
+2. **Calibrate boarding uncertainty against actual stop calls.** The 502UP replay and the October peak-hour study test a 30-second conditional boarding window. Peak outcomes use GPS proximity and reconstructed forecasts. Door events and archived peak-hour stop predictions would allow a direct boarding test. Estimate early and late quantiles by forecast horizon, stop and source, using days separate from evaluation. Report the fraction of riders advised to board a bus already gone, the chance of missing a connection and the delay from missing it. A calibrated range can then support a realistic connection choice.
+3. **Separate dwell from road delay.** Train on matched arrival and departure events where consecutive pings or door events support them. Distinguish signal delay, stop dwell and movement between stops. The raw speed field disagrees with coordinate-derived speed on many intervals. Adding nearby-segment speeds cut next-stop MAE by only 0.11 seconds on the 22 October confirmation sample. Improving boarding predictions has greater measured potential.
+4. **Run a prospective passenger test.** Sample central and peripheral routes, peak and off-peak hours, direct trips and transfers. Save Atlas and Google predictions before the bus arrives. Record actual time reaching the platform, boarding, alighting and reaching the destination. Include missed buses and failed searches in the denominator. Report median error, P90 error and availability by leg and by journey. This supplies the missing observations for walking, dwell and transfers.

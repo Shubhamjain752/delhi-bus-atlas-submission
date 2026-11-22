@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Whole-journey trials · Delhi Bus Atlas</title>
+  <link rel="stylesheet" href="/api-guide.css">
+  <link rel="stylesheet" href="/field-trials.css">
+  <script src="/field-trials.js" defer></script>
+</head>
+<body>
+  <header><div><a class="brand" href="/">Delhi Bus Atlas</a><nav aria-label="Resources"><a href="/field-checks">Field checks</a><a href="/api-guide">API guide</a></nav></div></header>
+  <main>
+    <h1>Whole-journey trials</h1>
+    <p class="intro">Compare Atlas and Google Maps for the same Delhi departure. Each forecast uses the planner’s earliest displayed bus journey, including the walk and wait from the requested start time. All clocks are in Delhi time.</p>
+    <p>On the travel date, GPS can show when a bus passed each stop. The comparison models walking at 1.25 metres per second with no extra transfer allowance, then measures waiting from the modelled arrival at the stop. A passenger’s door-to-door time would require a separate rider record. Google displays its forecasts to the nearest minute.</p>
+    <div class="tools"><a href="/field-trials/results">Results as JSON</a><button type="button" id="refresh">Refresh results</button></div>
+    <p id="status" role="status">Loading journey trials…</p>
+    <div id="trials" aria-busy="true"></div>
+    <noscript>Enable JavaScript to display the comparison, or open the results as JSON.</noscript>
+  </main>
+</body>
+</html>
