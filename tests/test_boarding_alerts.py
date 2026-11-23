@@ -123,6 +123,26 @@ class BoardingAlerts(unittest.TestCase):
         self.router.eta = None
         self.assertEqual(self.query()["boarding_alerts"], [])
 
+    def test_earlier_departure_keeps_actual_clock_and_honors_service_restrictions(self):
+        class Walker:
+            @staticmethod
+            def route(a, b):
+                return {"seconds": 240, "distance_m": 300, "geometry": [a,b], "source": "osm"}
+        self.router.walking = Walker()
+        pin = "28.6001,77.22"
+        self.update(seconds=60)
+        record, = self.query(origin=pin)["earlier_boarding_options"]
+        self.assertEqual((record["trip_id"], record["departure_source"],record["seconds_before_walk_ready"]),
+                         ("early","live",180))
+        self.assertEqual(record["departure_at"],(self.at+timedelta(seconds=60)).isoformat())
+        with patch.object(self.live,"forecast_vehicle",return_value=("vehicle","early")), \
+             patch.object(self.live,"passed_platform",return_value=True):
+            self.assertFalse(self.query(origin=pin)["earlier_boarding_options"])
+        for restrictions in ({"skip":"C"}, {"skip":"B"}, {"cancel":True}):
+            with self.subTest(restrictions=restrictions):
+                self.update(seconds=60,**restrictions)
+                self.assertFalse(self.query(origin=pin)["earlier_boarding_options"])
+
     def test_walk_controls_exact_ready_time_and_warning_window(self):
         class Walker:
             @staticmethod

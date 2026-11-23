@@ -34,6 +34,8 @@ The three overnight GPS checks did not change. At Vasant Kunj, the predicted 604
 
 The Sunday 433 appeared near the boarding point between 15:01:16 and 15:01:49. At the pace used in the saved walking scenario the passenger would be ready at 15:04. Even the later GPS observation is 2 minutes 11 seconds before that. Google allowed five minutes to reach the stop, which increases the difference to 3 minutes 11 seconds. A one-minute margin cannot bridge either gap under this scoring rule. GPS did not record door state.
 
+The passenger view now also lists early departures for someone who can get to the boarding platform by another means. At 15:00, the latest operator update, received at 14:59:45, predicted **15:04:03** at AIIMS for the 433 subsequently observed around 15:01. The offline example independently estimates **15:03:11** for the next 433 at platform 2839. It displays the mapped walking arrival of **15:05:08** alongside that departure. The rider can choose a platform start without assuming a particular travel time by bike or cab.
+
 We also replayed forecasts that were **31–60 seconds** before platform readiness, using three days of October bus GPS and the submitted boarding policy. Each replay used only GPS information received by the decision time. Later fixes supplied the outcome. Candidates were deliberately chosen near the cut-off. A forecast was reconstructed from historical positions, and the rider’s ready time was simulated.
 
 | Peak-hour date | Opportunities | Approaching / already gone / unresolved with blanket grace | Conditional itineraries the planner actually offered |

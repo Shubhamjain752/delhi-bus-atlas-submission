@@ -118,7 +118,7 @@ async def lifespan(application):
         instance.close()
 
 
-app = FastAPI(title="Delhi Bus Atlas", version="0.7.0", lifespan=lifespan, docs_url=None,
+app = FastAPI(title="Delhi Bus Atlas", version="0.8.0", lifespan=lifespan, docs_url=None,
               description="Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. "
                           "See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.")
 

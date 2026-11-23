@@ -23,6 +23,8 @@ Direct buses are checked at every compatible stop within the walking limit. On a
 
 Atlas orders journeys by predicted arrival at the destination. The platform list also shows which line is due first and whether its estimate comes from this bus’s GPS, an operator prediction or past running times. [How often did Atlas pick the right line?](docs/first-direct-bus.md) · [API fields](docs/api.md)
 
+If a direct bus is due before you could walk to its stop, the app can show it separately. Compare the time the bus is due with your estimated walking arrival and decide whether you can get there sooner.
+
 ## Run the Delhi planner
 
 1. Install Python **3.12**. Download or clone this repository.

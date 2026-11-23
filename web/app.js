@@ -49,9 +49,9 @@ function timeText(value) {
 function exactTime(value) {
   return value && Number.isFinite(new Date(value).valueOf())?exactFormat.format(new Date(value)):"—";
 }
-function arrivalText(start,end) {
+function arrivalText(start,end,withSeconds=false) {
   const day=value=>Math.floor((Date.parse(value)+330*60000)/86400000);
-  return timeText(end)+(day(end)>day(start)?" (+1 day)":"");
+  return (withSeconds?exactTime(end):timeText(end))+(day(end)>day(start)?" (+1 day)":"");
 }
 function timeRange(start,end) {
   if (timeText(start)!==timeText(end) || start===end) return timeText(start)+"–"+arrivalText(start,end);
@@ -468,8 +468,9 @@ function choices() {
   const atDestination=options.length===1 && sameLocation(options[0]);
   const hasWalk=!!ui.data?.walking_alternative;
   const hasNearby=!!ui.data?.direct_from_nearby_platforms?.length;
-  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding && !hasNearby;
-  $("mobile-results").textContent=hasNearby && !options.length && !hasWalk?"View nearby buses ↓":
+  const hasEarly=!!ui.data?.earlier_boarding_options?.length;
+  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding && !hasNearby && !hasEarly;
+  $("mobile-results").textContent=(hasNearby || hasEarly) && !options.length && !hasWalk?"View departures ↓":
     ui.boarding?"View bus options ↓":hasWalk?(options.length?"View options ↓":"View walk ↓"):
     atDestination?"View result ↓":"View "+options.length+" journey"+(options.length!==1?"s":"")+" ↓";
   $("option-count").hidden=!options.length || atDestination || !!ui.boarding;
@@ -785,6 +786,48 @@ function serviceRows(services,reference) {
   }
   return list;
 }
+function planFromStopButton(stop) {
+  return button("Plan from this stop","text-btn",()=>{
+    setPoint("origin",stop);
+    $("depart").focus();
+    $("depart").scrollIntoView({block:"center",behavior:reducedMotion?"instant":"smooth"});
+    showMessage("Set the time you expect to be at "+stop.name+", then choose Find journeys.");
+  });
+}
+function earlierBoardingChoices() {
+  const panel=$("earlier-departures"), list=$("earlier-departure-list");
+  const services=ui.data?.earlier_boarding_options || [];
+  list.replaceChildren();
+  panel.open=false;
+  panel.hidden=!services.length;
+  if (!services.length) return;
+  list.append(element("p","boarding-context","These direct buses are due before your walk ends. Consider one if you can get to its boarding stop in time."));
+  const groups=new Map();
+  for (const service of services) {
+    const id=service.boarding_stop.id;
+    if (!groups.has(id)) groups.set(id,[]);
+    groups.get(id).push(service);
+  }
+  for (const departures of groups.values()) {
+    const first=departures[0], stop=first.boarding_stop;
+    const showSeconds=departures.some(service=>service.seconds_before_walk_ready<60);
+    const group=element("div","nearby-stop");
+    group.append(element("strong",null,stop.name),
+      element("p","leg-source","Walking "+distanceText(first.access_walk_distance_m)+
+        " gets you here around "+arrivalText(ui.data.departure,first.walk_ready_at,showSeconds)+"."));
+    const rows=element("ul","platform-services");
+    for (const service of departures) {
+      const row=element("li");
+      row.append(element("strong",null,service.route+" · due "+arrivalText(ui.data.departure,service.departure_at,showSeconds)),
+        element("small",null,"Get off at "+service.alighting_stop.name+" at "+arrivalText(ui.data.departure,service.alight_at)+
+          (service.egress_walk_seconds?" · "+duration(service.egress_walk_seconds)+" walk to destination":"")),
+        element("small","leg-source",boardingBasis(service.departure_source)));
+      rows.append(row);
+    }
+    group.append(rows,planFromStopButton(stop));
+    list.append(group);
+  }
+}
 function nearbyDirectChoices() {
   const panel=$("nearby-direct");
   const options=ui.data?.direct_from_nearby_platforms || [];
@@ -812,12 +855,7 @@ function nearbyDirectChoices() {
         serviceRows(services.slice(3),ui.data.departure));
       group.append(more);
     }
-    group.append(button("Plan from this stop","text-btn",()=>{
-      setPoint("origin",stop);
-      $("depart").focus();
-      $("depart").scrollIntoView({block:"center",behavior:reducedMotion?"instant":"smooth"});
-      showMessage("Set the time you expect to be at "+stop.name+", then choose Find journeys.");
-    }));
+    group.append(planFromStopButton(stop));
     panel.append(group);
   }
 }
@@ -973,7 +1011,7 @@ async function searchJourney(submittedByRider=false) {
   const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30"};
   if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
   ui.data=null; ui.submitted=null; ui.boarding=null;
-  choices();walkingChoice();boardingChoices();nearbyDirectChoices();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
+  choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
   $("options").setAttribute("aria-busy","true");
   $("journey-form").querySelector(".submit").disabled=true;
   showMessage("Finding catchable buses and walking connections…");
@@ -982,7 +1020,7 @@ async function searchJourney(submittedByRider=false) {
     if (ticket!==ui.request) return;
     ui.data=data;ui.submitted=params;ui.selected=0;
     ui.boarding=actionableBoarding(data.boarding_alerts);
-    choices();walkingChoice();boardingChoices();nearbyDirectChoices();
+    choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();
     if (showConditionalFirst(ui.boarding)) selectBoarding("conditional_itinerary");
     else if (ui.boarding && sameBoardingJourney(data.journeys?.[0],ui.boarding.fallback_itinerary)) selectBoarding("fallback_itinerary");
     else if (!data.journeys?.length && data.walking_alternative) selectWalk();
@@ -990,6 +1028,8 @@ async function searchJourney(submittedByRider=false) {
     showWarnings(data.warnings);showBoardingAlerts(data.boarding_alerts);resultContext(params.depart);
     if (!data.journeys?.length && !ui.boarding && data.direct_from_nearby_platforms?.length) {
       showMessage("The planner could not map a complete bus journey from your start. Nearby departures are listed below.");
+    } else if (!data.journeys?.length && !ui.boarding && data.earlier_boarding_options?.length) {
+      showMessage("The earlier departures below require reaching the boarding stop sooner than the estimated walk.");
     } else if (!data.journeys?.length && !ui.boarding) {
       const note=data.warnings?.[0];
       showMessage((note || "No bus journey found.")+(data.walking_alternative?"":" Try a different departure or a nearby stop."));

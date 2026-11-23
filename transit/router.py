@@ -9,7 +9,7 @@ from bisect import bisect_left
 from collections import Counter, defaultdict
 from contextlib import closing
 from dataclasses import dataclass, replace
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from functools import cached_property, lru_cache
 from inspect import signature
 
@@ -72,6 +72,7 @@ class Ride:
     sources: list
     board_source: list
     skipped: frozenset
+    service_date: date
     live_run_id: str | None = None
     forecast_calls: frozenset | None = None
     position_anchor: tuple | None = None
@@ -241,6 +242,7 @@ class _Query:
         self.transfer_walk = max(0,int(options.get("transfer_walk_m",220)))
         self.walk_cache, self.timelines, self.itineraries = {}, {}, {}
         self.platform_services = {}
+        self.earlier_boardings = {}
         self.eta = options.get("eta", router.eta)
         exclusions=getattr(self.eta,"trip_exclusions",None)
         self.exclusions=exclusions(int(self.asof.timestamp())) if exclusions else {}
@@ -369,7 +371,7 @@ class _Query:
             board_sources.append("live" if live is not None else
                                  "upstream_gps" if position is not None and i > position[0] else
                                  "schedule" if not i else source)
-        result = Ride(pid,p.trips[k],arrivals,departures,sources,board_sources,skipped,
+        result = Ride(pid,p.trips[k],arrivals,departures,sources,board_sources,skipped,day,
                       instance.live_run_id if instance else None, frozenset(forecast_calls) if instance else None,
                       position)
         self.timelines[key] = result
@@ -382,7 +384,7 @@ class _Query:
             if ride is not None:
                 yield ride
 
-    def next_rides(self, pid, i, ready):
+    def next_rides(self, pid, i, ready, *, before_walk_ready=None):
         p = self.r.patterns[pid]
         choices = []
         for offset,day,active in self.days:
@@ -436,6 +438,9 @@ class _Query:
                 for ride in self.trip_timelines(pid,k,day,offset,boarding_index=board_index):
                     if ride.serves(i) and ready <= ride.departures[i] <= self.horizon:
                         choices.append(ride)
+        if before_walk_ready is not None:
+            choices = [ride for ride in choices if ride.departures[i] < before_walk_ready
+                       and not self.observed_downstream(ride.service_date,ride,i)]
         ordered=sorted(choices,key=lambda ride:ride.departures[i])
         if any(ride.live_run_id for ride in ordered):
             # One vehicle may overtake another, or only forecast part of the route.
@@ -503,11 +508,41 @@ class _Query:
                     unverified.append((distance, pid, i, exits))
                     continue
                 ready = self.start + approach["seconds"]
+                self.collect_earlier_boardings(pid, i, approach, exits)
                 for ride in self.next_rides(pid, i, ready):
                     for j, walk in exits:
                         if ride.serves(j):
                             self.save(approach, [(ride, i, j)], None, walk)
         return unverified
+
+    def collect_earlier_boardings(self, pid, i, approach, exits):
+        """A departure visible from the platform that the mapped access walk misses."""
+        walk_ready = self.start + approach["seconds"]
+        earliest = max(self.start + 1, math.ceil((self.asof-self.midnight).total_seconds()))
+        if earliest >= walk_ready or not exits:
+            return
+        pattern = self.r.patterns[pid]
+        board = pattern.stops[i]
+        for ride in self.next_rides(pid, i, earliest, before_walk_ready=walk_ready):
+            departure = ride.departures[i]
+            for j, walk in exits:
+                finish = ride.arrivals[j] + walk["seconds"]
+                if not ride.serves(j) or ride.arrivals[j] <= departure or finish > self.horizon:
+                    continue
+                # At each boarding pole show the next direct departure for each
+                # line. Choose the best verified exit for that departure.
+                key = board, self.r.routes[pattern.route][0]
+                rank = departure, finish, walk["seconds"], pattern.route, ride.trip, j
+                if key in self.earlier_boardings and self.earlier_boardings[key][0] <= rank:
+                    continue
+                self.earlier_boardings[key] = rank, {
+                    **self.service_times(ride,i,j),
+                    "boarding_stop":self.r.stops[board], "alighting_stop":self.r.stops[pattern.stops[j]],
+                    "service_date":ride.service_date.isoformat(),
+                    "access_walk_seconds":approach["seconds"], "access_walk_distance_m":approach["distance_m"],
+                    "walk_ready_at":self.stamp(walk_ready), "seconds_before_walk_ready":walk_ready-departure,
+                    "egress_walk_seconds":walk["seconds"],
+                }
 
     def nearby_platform_options(self, unverified):
         """Display a stop departure separately when the approach on foot is unknown."""
@@ -634,6 +669,7 @@ class _Query:
                 p = self.r.patterns[pid]
                 if p.pickups[i] or i == len(p.stops)-1 or (not self.transfers and pid not in destinations):
                     continue
+                self.collect_earlier_boardings(pid, i, w, [(j,walk) for j,walk in destinations.get(pid,()) if j>i])
                 for ride in self.next_rides(pid,i,self.start+w["seconds"]):
                     for j,walk in destinations.get(pid,()):
                         if j>i and ride.serves(j):
@@ -792,6 +828,8 @@ class _Query:
     def result(self, plans, warnings, alerts=None, platform_options=None):
         return {"origin":self.origin,"destination":self.destination,"departure":self.depart.isoformat(),
                 "journeys":plans,"boarding_alerts":alerts or [], "direct_from_nearby_platforms":platform_options or [],
+                "earlier_boarding_options":[option for _, option in
+                    sorted(self.earlier_boardings.values(),key=lambda item:item[0])],
                 "warnings":warnings,"limits":{"max_transfers":self.transfers,
                 "horizon_seconds":self.horizon-self.start,"max_walk_m":self.max_walk,
                 "transfer_walk_m":self.transfer_walk,"transfer_buffer_seconds":self.buffer,

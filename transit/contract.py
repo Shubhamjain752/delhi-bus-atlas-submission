@@ -191,6 +191,17 @@ class NearbyDirectDeparture(PlatformService):
     egress_walk_seconds: int = Field(ge=0, description="Mapped walk from the alighting platform to the destination.")
 
 
+class EarlierBoardingOption(PlatformService):
+    boarding_stop: Place
+    alighting_stop: Place
+    service_date: date
+    access_walk_seconds: int = Field(gt=0)
+    access_walk_distance_m: int = Field(ge=0)
+    walk_ready_at: AwareDatetime = Field(description="Requested departure plus the mapped walking time to this stop.")
+    seconds_before_walk_ready: int = Field(gt=0,description="How much earlier the rider must arrive to meet this forecast.")
+    egress_walk_seconds: int = Field(ge=0)
+
+
 class JourneyResult(BaseModel):
     origin: Place
     replay: ReplayInfo | None = None
@@ -201,6 +212,7 @@ class JourneyResult(BaseModel):
     walking_alternative: WalkingAlternative | None = None
     direct_from_nearby_platforms: list[NearbyDirectDeparture] = Field(default_factory=list, description="Direct services from nearby platforms when the walk to board cannot be verified within the search limit. Times start at the boarding platform. These services are separate from the ranked door-to-door journeys.")
     boarding_alerts: list[BoardingAlert] = Field(default_factory=list, description="Direct services whose fresh live estimate just precedes the rider’s platform arrival. These are excluded from feasible itineraries.")
+    earlier_boarding_options: list[EarlierBoardingOption] = Field(default_factory=list, description="Upcoming direct departures before the mapped walk to board can finish. One upcoming departure per platform and line. Board only if you can reach that exact stop by its predicted departure; the planner does not time an alternative first mile.")
     warnings: list[str]
     limits: SearchLimits
     source: str

@@ -109,6 +109,35 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(item["alight_at"],"2026-10-15T08:10:00+05:30")
         self.assertNotIn("walk_seconds", item)
         self.assertNotIn("duration_seconds", item)
+
+    def test_departure_before_access_walk_is_a_separate_stop_option(self):
+        class Walking:
+            @staticmethod
+            def route(a,b):
+                return {"distance_m":300,"seconds":240,"source":"osm","geometry":[a,b]}
+        self.router.walking = Walking()
+        origin = "28.6005,77.20"
+        result = self.router.journeys(origin,"B",self.query,max_transfers=0)
+        option, = result["earlier_boarding_options"]
+        self.assertEqual((option["trip_id"],option["boarding_stop"]["id"],option["alighting_stop"]["id"]),
+                         ("first","A","B"))
+        self.assertEqual(option["departure_at"], "2026-10-15T08:00:00+05:30")
+        self.assertEqual(option["walk_ready_at"], "2026-10-15T08:01:00+05:30")
+        self.assertEqual((option["access_walk_distance_m"],option["access_walk_seconds"],
+                          option["seconds_before_walk_ready"],option["egress_walk_seconds"]),(300,240,60,0))
+        self.assertNotIn("duration_seconds",option)
+        self.assertNotIn("first",[l.get("trip_id") for j in result["journeys"] for l in j["legs"]])
+        # A bus at the exact walking-ready clock belongs to feasible journeys.
+        exact = self.query.replace(minute=56)
+        self.assertFalse(self.router.journeys(origin,"B",exact)["earlier_boarding_options"])
+        self.assertFalse(self.router.journeys("A","B",self.query)["earlier_boarding_options"])
+        self.assertFalse(self.router.journeys(origin,"B",self.query,asof=self.query.replace(hour=8,minute=1))
+                         ["earlier_boarding_options"])
+        self.assertFalse(self.router.journeys(origin,"B",self.query.replace(hour=8,minute=0))
+                         ["earlier_boarding_options"])
+        night = self.query.replace(day=16,hour=0,minute=3)
+        overnight, = self.router.journeys(origin,"B",night,max_transfers=0)["earlier_boarding_options"]
+        self.assertEqual((overnight["trip_id"],overnight["service_date"]),("overnight","2026-10-15"))
         self.assertFalse(self.router.journeys("28.605,77.20","B",self.query)["direct_from_nearby_platforms"])
         self.assertFalse(self.router.journeys("28.6005,77.20","B",self.query.replace(day=17))["direct_from_nearby_platforms"])
 

@@ -3,7 +3,7 @@
   "info": {
     "title": "Delhi Bus Atlas",
     "description": "Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.",
-    "version": "0.7.0"
+    "version": "0.8.0"
   },
   "paths": {
     "/status": {
@@ -899,6 +899,102 @@
         ],
         "title": "ConditionalItinerary"
       },
+      "EarlierBoardingOption": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "departure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure At"
+          },
+          "alight_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Alight At"
+          },
+          "departure_source": {
+            "type": "string",
+            "title": "Departure Source"
+          },
+          "boarding_position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardingPosition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "boarding_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "alighting_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "service_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Service Date"
+          },
+          "access_walk_seconds": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Access Walk Seconds"
+          },
+          "access_walk_distance_m": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Access Walk Distance M"
+          },
+          "walk_ready_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Walk Ready At",
+            "description": "Requested departure plus the mapped walking time to this stop."
+          },
+          "seconds_before_walk_ready": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Seconds Before Walk Ready",
+            "description": "How much earlier the rider must arrive to meet this forecast."
+          },
+          "egress_walk_seconds": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Egress Walk Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "route",
+          "trip_id",
+          "departure_at",
+          "alight_at",
+          "departure_source",
+          "boarding_stop",
+          "alighting_stop",
+          "service_date",
+          "access_walk_seconds",
+          "access_walk_distance_m",
+          "walk_ready_at",
+          "seconds_before_walk_ready",
+          "egress_walk_seconds"
+        ],
+        "title": "EarlierBoardingOption"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1065,6 +1161,14 @@
             "type": "array",
             "title": "Boarding Alerts",
             "description": "Direct services whose fresh live estimate just precedes the rider’s platform arrival. These are excluded from feasible itineraries."
+          },
+          "earlier_boarding_options": {
+            "items": {
+              "$ref": "#/components/schemas/EarlierBoardingOption"
+            },
+            "type": "array",
+            "title": "Earlier Boarding Options",
+            "description": "Upcoming direct departures before the mapped walk to board can finish. One upcoming departure per platform and line. Board only if you can reach that exact stop by its predicted departure; the planner does not time an alternative first mile."
           },
           "warnings": {
             "items": {

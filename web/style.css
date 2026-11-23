@@ -231,6 +231,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-
 #boarding-alerts .ico {width:15px; height:15px}
 #boarding-alerts p {margin:4px 0 0; font-size:13px; color:#553d30; line-height:1.45}
 #boarding-options {margin:0 0 14px}
+#earlier-departures {margin:12px 0; padding:11px 14px; border:1px solid var(--line); border-radius:8px}
+#earlier-departures > summary {cursor:pointer; font-size:14px; font-weight:650; color:var(--ink)}
+#earlier-departure-list {margin-top:9px}
 #nearby-direct {margin:14px 0; padding:12px 14px; border:1px solid var(--line); border-radius:8px}
 #nearby-direct h3 {font-size:16px}
 .nearby-stop + .nearby-stop {border-top:1px solid var(--line); margin-top:12px; padding-top:12px}
