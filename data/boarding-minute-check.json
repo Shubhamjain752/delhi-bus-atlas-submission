@@ -1,0 +1,80 @@
+{
+  "scope": "31\u201360 s before platform readiness. Named forecast reconstructed from past GPS; later GPS labels vehicle approach or exit. Rider boarding is unobserved.",
+  "router_sha256": "bd0ae2f3214015a43ced2ee1b1f17c619c4a17cf6d8c982f74dd064ba975f960",
+  "dates": {
+    "2026-10-29": {
+      "opportunities": 164,
+      "routes": 39,
+      "unconditional_60s": {
+        "gone": 86,
+        "unverified": 42,
+        "uncertain": 31,
+        "approaching": 5
+      },
+      "guarded_60s_conditional_offers": {
+        "unverified": 1
+      },
+      "unmatched": {
+        "no_active_trip_at_start_minute": 64,
+        "multiple_recent_vehicles_claim_clock": 29,
+        "ordered_stop_pattern_mismatch": 1
+      },
+      "matched_to_active_trip": {
+        "unverified": 20,
+        "uncertain": 12,
+        "gone": 35,
+        "approaching": 3
+      }
+    },
+    "2026-10-22": {
+      "opportunities": 195,
+      "routes": 39,
+      "unconditional_60s": {
+        "gone": 115,
+        "uncertain": 28,
+        "unverified": 43,
+        "approaching": 9
+      },
+      "guarded_60s_conditional_offers": {
+        "gone": 1
+      },
+      "unmatched": {
+        "no_active_trip_at_start_minute": 79,
+        "multiple_recent_vehicles_claim_clock": 22,
+        "ordered_stop_pattern_mismatch": 4
+      },
+      "matched_to_active_trip": {
+        "gone": 54,
+        "uncertain": 17,
+        "unverified": 16,
+        "approaching": 3
+      }
+    },
+    "2026-10-26": {
+      "opportunities": 191,
+      "routes": 40,
+      "unconditional_60s": {
+        "gone": 108,
+        "uncertain": 34,
+        "unverified": 44,
+        "approaching": 5
+      },
+      "guarded_60s_conditional_offers": {
+        "uncertain": 1,
+        "gone": 2,
+        "unverified": 4
+      },
+      "unmatched": {
+        "no_active_trip_at_start_minute": 97,
+        "ordered_stop_pattern_mismatch": 7,
+        "multiple_recent_vehicles_claim_clock": 21
+      },
+      "matched_to_active_trip": {
+        "gone": 41,
+        "uncertain": 12,
+        "unverified": 12,
+        "approaching": 1
+      }
+    }
+  }
+}

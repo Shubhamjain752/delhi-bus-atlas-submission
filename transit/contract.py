@@ -78,6 +78,8 @@ class Walk(Leg):
     origin_snap_m: float | None = None
     destination_snap_m: float | None = None
     includes_arterial_without_mapped_sidewalk: bool | None = None
+    uses_steps: bool | None = Field(default=None, description="The mapped walking path includes steps.")
+    inferred_crossing_access_m: int | None = Field(default=None, ge=0, description="Metres of estimated street-level access to a mapped pedestrian crossing. These links have not been checked on foot.")
 
 
 class WalkingAlternative(Walk):
@@ -89,6 +91,15 @@ class WalkingAlternative(Walk):
 class Wait(Leg):
     mode: Literal["wait"]
     transfer_buffer_seconds: int = Field(description="Minimum change allowance already included in this wait.")
+
+
+class PlatformService(BaseModel):
+    route_id: str
+    route: str
+    trip_id: str
+    departure_at: AwareDatetime
+    alight_at: AwareDatetime
+    departure_source: str
 
 
 class Bus(Leg):
@@ -104,6 +115,7 @@ class Bus(Leg):
     stops: list[Place]
     skipped_stops: list[Place]
     calls: list[StopCall]
+    same_platform_services: list[PlatformService] = Field(default_factory=list, description="Other direct lines serving the same boarding and alighting platforms. One eligible departure per line within 30 minutes of the passenger’s ready time.")
 
 
 class Itinerary(BaseModel):
@@ -126,7 +138,8 @@ class SearchLimits(BaseModel):
     max_walk_m: int
     transfer_walk_m: int
     transfer_buffer_seconds: int
-    endpoint_stops_considered: int
+    endpoint_stops_considered: int = Field(description="Maximum number of nearby endpoint platforms considered for transfer journeys.")
+    direct_endpoints: Literal["all_in_walking_radius"] | None = Field(default=None, description="Direct-service searches consider connecting stops throughout the walking radius.")
     max_transfer_candidates: int
 
 
@@ -161,6 +174,15 @@ class BoardingAlert(BoardingEvidence):
     fallback_itinerary: Itinerary | None = Field(default=None, description="Feasible option boarding later at the same platform, if the conditional service has left.")
 
 
+class NearbyDirectDeparture(PlatformService):
+    boarding_stop: Place
+    alighting_stop: Place
+    departure_at: AwareDatetime = Field(description="Departure at the named platform, conditional on the passenger already being there.")
+    alight_at: AwareDatetime = Field(description="Estimated time at the alighting platform.")
+    straight_line_to_board_m: int = Field(ge=0, description="Separation of the starting pin and platform. Walking distance and time to board are unknown.")
+    egress_walk_seconds: int = Field(ge=0, description="Mapped walk from the alighting platform to the destination.")
+
+
 class JourneyResult(BaseModel):
     origin: Place
     replay: ReplayInfo | None = None
@@ -169,6 +191,7 @@ class JourneyResult(BaseModel):
     issued_asof: AwareDatetime = Field(description="Cutoff for receiving observations used in this forecast or replay.")
     journeys: list[Itinerary] = Field(description="Ranked alternatives. Empty if no usable path was found within the search limits.")
     walking_alternative: WalkingAlternative | None = None
+    direct_from_nearby_platforms: list[NearbyDirectDeparture] = Field(default_factory=list, description="Direct services from nearby platforms when the walk to board cannot be verified within the search limit. Times start at the boarding platform. These services are separate from the ranked door-to-door journeys.")
     boarding_alerts: list[BoardingAlert] = Field(default_factory=list, description="Direct services whose fresh live estimate just precedes the rider’s platform arrival. These are excluded from feasible itineraries.")
     warnings: list[str]
     limits: SearchLimits

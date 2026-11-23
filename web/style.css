@@ -231,6 +231,14 @@ button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-
 #boarding-alerts .ico {width:15px; height:15px}
 #boarding-alerts p {margin:4px 0 0; font-size:13px; color:#553d30; line-height:1.45}
 #boarding-options {margin:0 0 14px}
+#nearby-direct {margin:14px 0; padding:12px 14px; border:1px solid var(--line); border-radius:8px}
+#nearby-direct h3 {font-size:16px}
+.nearby-stop + .nearby-stop {border-top:1px solid var(--line); margin-top:12px; padding-top:12px}
+.platform-services {margin:6px 0; padding-left:15px}
+.platform-services li {font-size:13px; margin:4px 0}
+.platform-services li small {display:block}
+.service-list {margin:8px 0; font-size:13px}
+.service-list summary {cursor:pointer; color:var(--ink); font-weight:600}
 #boarding-options h3 {font-size:20px; line-height:1.2; letter-spacing:-.55px; color:var(--ink)}
 .boarding-context,.boarding-assumption {margin:5px 0 10px; font-size:13px; line-height:1.45; color:#485675}
 .boarding-guidance {margin:-4px 0 10px; font-size:13px; font-weight:600; color:#263650; line-height:1.4}

@@ -1,0 +1,424 @@
+{
+  "scope": "Exploratory replay. All direct options at the original saved limit, plus the other lines offered at the first revised direct option’s exact stops. The revised times were computed later.",
+  "method": "First witnessed qualifying run after the mapped walk, using the original inside-45-metre passage checks on the same dated bus. Missing or ambiguous cases stay unscored. Walking and boarding are unobserved.",
+  "cases": [
+    {
+      "case": "AIIMS to Lajpat Nagar",
+      "departure": "2026-11-22T15:00:00+05:30",
+      "before_departure_capture_sha256": "ffc3fc9f0e806af6f1da20484ea9f320d267b44cbeb754c88305afccd06ec874",
+      "saved_gps_result_sha256": "83ea65aa6a3af1f41794f08f44c199d668ba5d84936976c95f63b07a075ffcb0",
+      "snapshots": 346,
+      "options_checked": [
+        {
+          "version": "revised_replay",
+          "rank": 1,
+          "route": "711UP",
+          "route_ids": [
+            "2165"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 30,
+          "predicted_pin_arrival": "2026-11-22T15:19:16+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T16:58:22+05:30",
+            "2026-11-22T16:59:17+05:30"
+          ]
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "323UP",
+          "route_ids": [
+            "1814"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 134,
+          "predicted_pin_arrival": "2026-11-22T15:23:58+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "724AUP",
+          "route_ids": [
+            "2189"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 165,
+          "predicted_pin_arrival": "2026-11-22T15:24:29+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "460UP",
+          "route_ids": [
+            "1966"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 331,
+          "predicted_pin_arrival": "2026-11-22T15:24:53+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T16:06:15+05:30",
+            "2026-11-22T16:06:48+05:30"
+          ]
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "543ADOWN",
+          "route_ids": [
+            "2065"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 333,
+          "predicted_pin_arrival": "2026-11-22T15:24:46+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "392STLUP",
+          "route_ids": [
+            "3339"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 513,
+          "predicted_pin_arrival": "2026-11-22T15:30:17+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T15:33:49+05:30",
+            "2026-11-22T15:34:22+05:30"
+          ]
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "D-042UP",
+          "route_ids": [
+            "1347"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 880,
+          "predicted_pin_arrival": "2026-11-22T15:36:24+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T15:40:06+05:30",
+            "2026-11-22T15:40:39+05:30"
+          ]
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "479UP",
+          "route_ids": [
+            "1980"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 931,
+          "predicted_pin_arrival": "2026-11-22T15:34:32+05:30",
+          "gps_status": "complete_simulation",
+          "gps_board_interval": [
+            "2026-11-22T15:23:04+05:30",
+            "2026-11-22T15:23:37+05:30"
+          ],
+          "gps_alight_interval": [
+            "2026-11-22T15:31:08+05:30",
+            "2026-11-22T15:31:41+05:30"
+          ],
+          "modelled_destination_interval": [
+            "2026-11-22T15:37:44+05:30",
+            "2026-11-22T15:38:17+05:30"
+          ],
+          "wait_for_first_seen_seconds": 1092
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "611ADOWN",
+          "route_ids": [
+            "2118"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 1025,
+          "predicted_pin_arrival": "2026-11-22T15:38:50+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "392UP",
+          "route_ids": [
+            "1882"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 1034,
+          "predicted_pin_arrival": "2026-11-22T15:38:58+05:30",
+          "gps_status": "complete_simulation",
+          "gps_board_interval": [
+            "2026-11-22T15:11:42+05:30",
+            "2026-11-22T15:12:26+05:30"
+          ],
+          "gps_alight_interval": [
+            "2026-11-22T15:21:53+05:30",
+            "2026-11-22T15:23:11+05:30"
+          ],
+          "modelled_destination_interval": [
+            "2026-11-22T15:28:29+05:30",
+            "2026-11-22T15:29:47+05:30"
+          ],
+          "wait_for_first_seen_seconds": 416
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "433ASTL-KJDUP",
+          "route_ids": [
+            "3668"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 1184,
+          "predicted_pin_arrival": "2026-11-22T15:41:28+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "433AUP",
+          "route_ids": [
+            "1930"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 1191,
+          "predicted_pin_arrival": "2026-11-22T15:41:36+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T16:40:16+05:30",
+            "2026-11-22T16:40:27+05:30"
+          ]
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "DW-4DOWN",
+          "route_ids": [
+            "1376"
+          ],
+          "board": "2839",
+          "alight": "2363",
+          "ready_at_platform": "2026-11-22T15:05:08+05:30",
+          "access_seconds": 308,
+          "egress_seconds": 396,
+          "predicted_wait_seconds": 1715,
+          "predicted_pin_arrival": "2026-11-22T15:50:17+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        }
+      ]
+    },
+    {
+      "case": "Punjabi Bagh Terminal to Wazirpur Depot",
+      "departure": "2026-11-22T15:10:00+05:30",
+      "before_departure_capture_sha256": "dac35a3c290c82ad2a1ad24ef4b807838944d44ff1963b3a6e6065ae992e3603",
+      "saved_gps_result_sha256": "956788d05da56daed7f6fd8af4eed0b248140829164bd9eae96cec51a8b61409",
+      "snapshots": 286,
+      "options_checked": [
+        {
+          "version": "saved",
+          "rank": 1,
+          "route": "159UP",
+          "route_ids": [
+            "1616"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 63,
+          "predicted_pin_arrival": "2026-11-22T15:18:01+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T15:30:06+05:30",
+            "2026-11-22T15:30:39+05:30"
+          ]
+        },
+        {
+          "version": "saved",
+          "rank": 2,
+          "route": "978DOWN",
+          "route_ids": [
+            "2543"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 141,
+          "predicted_pin_arrival": "2026-11-22T15:18:52+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "revised_replay",
+          "rank": 1,
+          "route": "159UP",
+          "route_ids": [
+            "1616"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 63,
+          "predicted_pin_arrival": "2026-11-22T15:18:01+05:30",
+          "gps_status": "same_bus_alighting_not_witnessed",
+          "gps_board_interval": [
+            "2026-11-22T15:30:06+05:30",
+            "2026-11-22T15:30:39+05:30"
+          ]
+        },
+        {
+          "version": "revised_replay",
+          "rank": 2,
+          "route": "978DOWN",
+          "route_ids": [
+            "2543"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 141,
+          "predicted_pin_arrival": "2026-11-22T15:18:52+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "861AUP",
+          "route_ids": [
+            "2345"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 240,
+          "predicted_pin_arrival": "2026-11-22T15:21:34+05:30",
+          "gps_status": "complete_simulation",
+          "gps_board_interval": [
+            "2026-11-22T16:06:12+05:30",
+            "2026-11-22T16:06:56+05:30"
+          ],
+          "gps_alight_interval": [
+            "2026-11-22T16:13:42+05:30",
+            "2026-11-22T16:14:04+05:30"
+          ],
+          "modelled_destination_interval": [
+            "2026-11-22T16:13:42+05:30",
+            "2026-11-22T16:14:04+05:30"
+          ],
+          "wait_for_first_seen_seconds": 3394
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "442DOWN",
+          "route_ids": [
+            "1941"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 375,
+          "predicted_pin_arrival": "2026-11-22T15:22:48+05:30",
+          "gps_status": "complete_simulation",
+          "gps_board_interval": [
+            "2026-11-22T15:38:03+05:30",
+            "2026-11-22T15:38:36+05:30"
+          ],
+          "gps_alight_interval": [
+            "2026-11-22T15:44:59+05:30",
+            "2026-11-22T15:45:10+05:30"
+          ],
+          "modelled_destination_interval": [
+            "2026-11-22T15:44:59+05:30",
+            "2026-11-22T15:45:10+05:30"
+          ],
+          "wait_for_first_seen_seconds": 1700
+        },
+        {
+          "version": "same_stops_as_first_direct",
+          "rank": 1,
+          "route": "153DOWN",
+          "route_ids": [
+            "177"
+          ],
+          "board": "1234",
+          "alight": "1238",
+          "ready_at_platform": "2026-11-22T15:10:00+05:30",
+          "access_seconds": 0,
+          "egress_seconds": 0,
+          "predicted_wait_seconds": 1135,
+          "predicted_pin_arrival": "2026-11-22T15:36:33+05:30",
+          "gps_status": "no_later_witnessed_boarding"
+        }
+      ]
+    }
+  ]
+}

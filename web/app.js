@@ -64,6 +64,14 @@ function segmentTime(seconds) {
 function distanceText(metres) {
   return metres<1000?Math.round(metres)+" m":(metres/1000).toFixed(2)+" km";
 }
+function pedestrianAccessNote(walk) {
+  const notes=[];
+  if (walk.uses_steps) notes.push("This walk uses stairs.");
+  if (walk.inferred_crossing_access_m>0) {
+    notes.push("About "+distanceText(walk.inferred_crossing_access_m)+" of the approach to the crossing is estimated. Check the entrance on arrival.");
+  }
+  return notes.join(" ");
+}
 function localNow() {
   return new Date(Date.now()+330*60000).toISOString().slice(0,16);
 }
@@ -425,8 +433,10 @@ function choices() {
   const options=ui.data?.journeys || [];
   const atDestination=options.length===1 && sameLocation(options[0]);
   const hasWalk=!!ui.data?.walking_alternative;
-  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding;
-  $("mobile-results").textContent=ui.boarding?"View bus options ↓":hasWalk?(options.length?"View options ↓":"View walk ↓"):
+  const hasNearby=!!ui.data?.direct_from_nearby_platforms?.length;
+  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding && !hasNearby;
+  $("mobile-results").textContent=hasNearby && !options.length && !hasWalk?"View nearby buses ↓":
+    ui.boarding?"View bus options ↓":hasWalk?(options.length?"View options ↓":"View walk ↓"):
     atDestination?"View result ↓":"View "+options.length+" journey"+(options.length!==1?"s":"")+" ↓";
   $("option-count").hidden=!options.length || atDestination || !!ui.boarding;
   $("option-count").textContent=String(options.length);
@@ -454,10 +464,17 @@ function choices() {
       ", total wait "+duration(journey.wait_seconds));
     buses.forEach((leg,i) => chain.append(routeChip(leg,i)));
     if (!chain.children.length) chain.append(icon("walk"),"Walk");
-    bottom.append(chain,element("span","subtle",journey.transfers>0?journey.transfers+" transfer"+(journey.transfers===1?"":"s"):"Direct"));
+    let serviceType=journey.transfers>0?journey.transfers+" transfer"+(journey.transfers===1?"":"s"):"Direct";
+    if (!journey.transfers && options[0].transfers>0) {
+      const difference=journey.duration_seconds-options[0].duration_seconds;
+      serviceType=difference>0?"Direct · "+duration(difference)+" later":"Direct · same arrival";
+    }
+    bottom.append(chain,element("span","subtle",serviceType));
     choice.append(top,bottom);
     if (buses.length) choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
       " · "+duration(journey.wait_seconds)+" total wait"));
+    const others=buses[0]?.same_platform_services?.length;
+    if (others) choice.append(element("div","choice-boarding",others+" other direct "+(others===1?"line serves":"lines serve")+" both stops"));
     box.append(choice);
   });
 }
@@ -504,6 +521,8 @@ function selectWalk() {
   if (walk.includes_arterial_without_mapped_sidewalk) {
     panel.append(element("p","walk-footnote","Part of this walk follows a road with no mapped sidewalk."));
   }
+  const accessNote=pedestrianAccessNote(walk);
+  if (accessNote) panel.append(element("p","walk-footnote",accessNote));
   $("details").replaceChildren(panel);
 }
 function compareLink(container) {
@@ -678,7 +697,26 @@ function details(journey) {
     if (leg.includes_arterial_without_mapped_sidewalk) {
       body.append(element("p","leg-source","Part of this walk follows a road with no mapped sidewalk."));
     }
+    if (leg.mode==="walk") {
+      const accessNote=pedestrianAccessNote(leg);
+      if (accessNote) body.append(element("p","leg-source",accessNote));
+    }
     if (leg===firstBus && leg.from?.id && leg.route_id) body.append(platformArrival(leg));
+    if (leg===firstBus && !conditional && journey.access_walk_seconds>0) {
+      const margin=Math.round((Date.parse(leg.departure)-Date.parse(journey.departure))/1000)-journey.access_walk_seconds;
+      if (margin>=0 && margin<=60) {
+        body.append(element("p","boarding-assumption",margin===0
+          ?"The walk and bus are estimated to arrive at the same time. You may miss this bus."
+          :"Tight connection: the bus is due "+segmentTime(margin)+" after your estimated walk to this stop."));
+      }
+    }
+    if (leg.same_platform_services?.length) {
+      const sameStops=element("details","service-list");
+      sameStops.append(element("summary",null,"Other buses from this platform to "+leg.to.name),
+        element("p","leg-source","If another line arrives first, check its direction. These buses serve the same two stops. Times are estimates."),
+        serviceRows(leg.same_platform_services,journey.departure));
+      body.append(sameStops);
+    }
     const schedule=leg.mode==="bus" ? stopSchedule(leg,clock) : null;
     if (schedule) body.append(schedule);
     else if (leg.stop_count) body.append(element("p","leg-source",leg.stop_count+" stops"));
@@ -688,6 +726,53 @@ function details(journey) {
   panel.append(list);
   compareLink(panel);
   box.append(panel);
+}
+function serviceRows(services,reference) {
+  const list=element("ul","platform-services");
+  for (const service of services) {
+    const row=element("li",null);
+    row.append(element("strong",null,service.route+" · "+arrivalText(reference,service.departure_at)),
+      element("span",null," → "+(service.alighting_stop?service.alighting_stop.name+" ":"")+arrivalText(reference,service.alight_at)),
+      element("small","leg-source",sourceName(service.departure_source)));
+    list.append(row);
+  }
+  return list;
+}
+function nearbyDirectChoices() {
+  const panel=$("nearby-direct");
+  const options=ui.data?.direct_from_nearby_platforms || [];
+  panel.replaceChildren();
+  panel.hidden=options.length===0;
+  if (!options.length) return;
+
+  panel.append(element("h3",null,"Direct buses from nearby stops"),
+    element("p","boarding-context","We could not verify a walk to these boarding platforms within the search limit. Check which side of the road you can reach. The times below start at the bus stop."));
+  const groups=new Map();
+  for (const service of options) {
+    const id=service.boarding_stop.id;
+    if (!groups.has(id)) groups.set(id,[]);
+    groups.get(id).push(service);
+  }
+  for (const services of groups.values()) {
+    const {boarding_stop:stop,straight_line_to_board_m:separation}=services[0];
+    const group=element("div","nearby-stop");
+    group.append(element("strong",null,stop.name),
+      element("p","leg-source",distanceText(separation)+" straight-line distance from your start"));
+    group.append(serviceRows(services.slice(0,3),ui.data.departure));
+    if (services.length>3) {
+      const more=element("details","service-list");
+      more.append(element("summary",null,"Show "+(services.length-3)+" more departures"),
+        serviceRows(services.slice(3),ui.data.departure));
+      group.append(more);
+    }
+    group.append(button("Plan from this stop","text-btn",()=>{
+      setPoint("origin",stop);
+      $("depart").focus();
+      $("depart").scrollIntoView({block:"center",behavior:reducedMotion?"instant":"smooth"});
+      showMessage("Set the time you expect to be at "+stop.name+", then choose Find journeys.");
+    }));
+    panel.append(group);
+  }
 }
 function selectJourney(index) {
   ui.selected=index;
@@ -841,7 +926,7 @@ async function searchJourney(submittedByRider=false) {
   const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30"};
   if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
   ui.data=null; ui.submitted=null; ui.boarding=null;
-  choices();walkingChoice();boardingChoices();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
+  choices();walkingChoice();boardingChoices();nearbyDirectChoices();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
   $("options").setAttribute("aria-busy","true");
   $("journey-form").querySelector(".submit").disabled=true;
   showMessage("Finding catchable buses and walking connections…");
@@ -850,13 +935,15 @@ async function searchJourney(submittedByRider=false) {
     if (ticket!==ui.request) return;
     ui.data=data;ui.submitted=params;ui.selected=0;
     ui.boarding=actionableBoarding(data.boarding_alerts);
-    choices();walkingChoice();boardingChoices();
+    choices();walkingChoice();boardingChoices();nearbyDirectChoices();
     if (showConditionalFirst(ui.boarding)) selectBoarding("conditional_itinerary");
     else if (ui.boarding && sameBoardingJourney(data.journeys?.[0],ui.boarding.fallback_itinerary)) selectBoarding("fallback_itinerary");
     else if (!data.journeys?.length && data.walking_alternative) selectWalk();
     else selectJourney(0);
     showWarnings(data.warnings);showBoardingAlerts(data.boarding_alerts);resultContext(params.depart);
-    if (!data.journeys?.length && !ui.boarding) {
+    if (!data.journeys?.length && !ui.boarding && data.direct_from_nearby_platforms?.length) {
+      showMessage("The planner could not map a complete bus journey from your start. Nearby departures are listed below.");
+    } else if (!data.journeys?.length && !ui.boarding) {
       const note=data.warnings?.[0];
       showMessage((note || "No bus journey found.")+(data.walking_alternative?"":" Try a different departure or a nearby stop."));
     } else if (sameLocation(data.journeys?.[0])) {
@@ -905,6 +992,10 @@ function initialize() {
     setPoint("origin",{id:"2383",name:"MMTC / Adhchini Village"});
     setPoint("destination",{id:"2386",name:"T.B. Hospital"});
     $("depart").value="2026-11-21T01:18";
+  } else if (new URLSearchParams(location.search).get("example")==="aiims") {
+    setPoint("origin",{name:"Laxmi Bai Nagar, near AIIMS",lat:28.568914,lon:77.213693});
+    setPoint("destination",{name:"Block K, Lajpat Nagar II",lat:28.566610,lon:77.246373});
+    $("depart").value="2026-11-22T15:00";
   }
   for (const id of ["origin","destination"]) {
     enableStopSearch(id);

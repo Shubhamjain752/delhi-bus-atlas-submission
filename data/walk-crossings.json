@@ -1,0 +1,594 @@
+{
+  "source": "https://download.openstreetmap.fr/extracts/asia/india/national_capital_territory_of_delhi.osm.pbf",
+  "source_sha256": "d94b858e16be90416da4cd16cc21be07aa5dd53b167e909c813ee546c92ecb1a",
+  "source_replication_utc": "2026-11-23T00:26:51Z",
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+  "max_estimated_link_m": 40.0,
+  "candidate_crossings": 35,
+  "crossings": [
+    {
+      "osm_way": 516280589,
+      "approaches": [
+        {
+          "landing_node": 5040262153,
+          "landing": [
+            28.5438993,
+            77.2056663
+          ],
+          "steps_way": 516280588,
+          "steps_neighbour": [
+            28.5439087,
+            77.2054624
+          ],
+          "street_node": 6286891309,
+          "street": [
+            28.5439442,
+            77.2058414
+          ],
+          "street_neighbour": [
+            28.5439353,
+            77.2059088
+          ],
+          "street_way": 671330679,
+          "estimated_metres": 17.8
+        },
+        {
+          "landing_node": 5040262156,
+          "landing": [
+            28.5436236,
+            77.2053377
+          ],
+          "steps_way": 516280590,
+          "steps_neighbour": [
+            28.5436106,
+            77.2055026
+          ],
+          "street_node": 6469652562,
+          "street": [
+            28.5435883,
+            77.2053439
+          ],
+          "street_neighbour": [
+            28.5435426,
+            77.2052756
+          ],
+          "street_way": 689633976,
+          "estimated_metres": 4.0
+        }
+      ]
+    },
+    {
+      "osm_way": 662256257,
+      "approaches": [
+        {
+          "landing_node": 6200048956,
+          "landing": [
+            28.5740969,
+            77.2568599
+          ],
+          "steps_way": 662256256,
+          "steps_neighbour": [
+            28.5742407,
+            77.2567492
+          ],
+          "street_node": 6543707217,
+          "street": [
+            28.5743239,
+            77.2566713
+          ],
+          "street_neighbour": [
+            28.5742004,
+            77.256475
+          ],
+          "street_way": 696793465,
+          "estimated_metres": 31.2
+        },
+        {
+          "landing_node": 6200048957,
+          "landing": [
+            28.5742568,
+            77.2571164
+          ],
+          "steps_way": 662256259,
+          "steps_neighbour": [
+            28.5743955,
+            77.2570096
+          ],
+          "street_node": 4212134664,
+          "street": [
+            28.5741816,
+            77.2570541
+          ],
+          "street_neighbour": [
+            28.5745002,
+            77.2575825
+          ],
+          "street_way": 421454664,
+          "estimated_metres": 10.3
+        }
+      ]
+    },
+    {
+      "osm_way": 668809526,
+      "approaches": [
+        {
+          "landing_node": 6263093909,
+          "landing": [
+            28.5611909,
+            77.2074298
+          ],
+          "steps_way": 668809528,
+          "steps_neighbour": [
+            28.5609621,
+            77.2073755
+          ],
+          "street_node": 9757079886,
+          "street": [
+            28.5614243,
+            77.2075925
+          ],
+          "street_neighbour": [
+            28.5613694,
+            77.2077139
+          ],
+          "street_way": 1062054745,
+          "estimated_metres": 30.4
+        },
+        {
+          "landing_node": 6263093912,
+          "landing": [
+            28.561216,
+            77.2071832
+          ],
+          "steps_way": 668809529,
+          "steps_neighbour": [
+            28.5609981,
+            77.207137
+          ],
+          "street_node": 10216247289,
+          "street": [
+            28.561319,
+            77.2072573
+          ],
+          "street_neighbour": [
+            28.5614115,
+            77.2068122
+          ],
+          "street_way": 1117041445,
+          "estimated_metres": 13.5
+        }
+      ]
+    },
+    {
+      "osm_way": 682848213,
+      "approaches": [
+        {
+          "landing_node": 6395661673,
+          "landing": [
+            28.5689307,
+            77.2119575
+          ],
+          "steps_way": 682848214,
+          "steps_neighbour": [
+            28.5689344,
+            77.2117954
+          ],
+          "street_node": 10810639789,
+          "street": [
+            28.5689247,
+            77.2123397
+          ],
+          "street_neighbour": [
+            28.568867,
+            77.2123386
+          ],
+          "street_way": 265847412,
+          "estimated_metres": 37.3
+        },
+        {
+          "landing_node": 6395661667,
+          "landing": [
+            28.5693037,
+            77.2119783
+          ],
+          "steps_way": 682848210,
+          "steps_neighbour": [
+            28.5693055,
+            77.211831
+          ],
+          "street_node": 6541525892,
+          "street": [
+            28.5691156,
+            77.212052
+          ],
+          "street_neighbour": [
+            28.5692814,
+            77.2122038
+          ],
+          "street_way": 677074043,
+          "estimated_metres": 22.1
+        },
+        {
+          "landing_node": 6395661669,
+          "landing": [
+            28.569301,
+            77.2116604
+          ],
+          "steps_way": 682848216,
+          "steps_neighbour": [
+            28.5693055,
+            77.211831
+          ],
+          "street_node": 13701590601,
+          "street": [
+            28.5695894,
+            77.2116986
+          ],
+          "street_neighbour": [
+            28.5695836,
+            77.2118227
+          ],
+          "street_way": 763534651,
+          "estimated_metres": 32.3
+        }
+      ]
+    },
+    {
+      "osm_way": 759593467,
+      "approaches": [
+        {
+          "landing_node": 7095553845,
+          "landing": [
+            28.5471098,
+            77.2526495
+          ],
+          "steps_way": 759593464,
+          "steps_neighbour": [
+            28.5470407,
+            77.2524856
+          ],
+          "street_node": 6114674680,
+          "street": [
+            28.5471575,
+            77.2526677
+          ],
+          "street_neighbour": [
+            28.5469565,
+            77.2521436
+          ],
+          "street_way": 652169982,
+          "estimated_metres": 5.6
+        },
+        {
+          "landing_node": 7095553842,
+          "landing": [
+            28.5467223,
+            77.2525194
+          ],
+          "steps_way": 759593466,
+          "steps_neighbour": [
+            28.5467726,
+            77.2526358
+          ],
+          "street_node": 9867862426,
+          "street": [
+            28.5466606,
+            77.2526244
+          ],
+          "street_neighbour": [
+            28.5467406,
+            77.2527342
+          ],
+          "street_way": 706658094,
+          "estimated_metres": 12.3
+        }
+      ]
+    },
+    {
+      "osm_way": 763110791,
+      "approaches": [
+        {
+          "landing_node": 7131020280,
+          "landing": [
+            28.5013737,
+            77.291183
+          ],
+          "steps_way": 763110788,
+          "steps_neighbour": [
+            28.5013385,
+            77.291368
+          ],
+          "street_node": 9857364086,
+          "street": [
+            28.501439,
+            77.2910184
+          ],
+          "street_neighbour": [
+            28.5013281,
+            77.2909879
+          ],
+          "street_way": 1074710088,
+          "estimated_metres": 17.6
+        },
+        {
+          "landing_node": 7131020283,
+          "landing": [
+            28.5018153,
+            77.2913883
+          ],
+          "steps_way": 763110789,
+          "steps_neighbour": [
+            28.5016461,
+            77.2913617
+          ],
+          "street_node": 5957298061,
+          "street": [
+            28.501866,
+            77.2913074
+          ],
+          "street_neighbour": [
+            28.5021416,
+            77.291365
+          ],
+          "street_way": 630952899,
+          "estimated_metres": 9.7
+        }
+      ]
+    },
+    {
+      "osm_way": 767442800,
+      "approaches": [
+        {
+          "landing_node": 7165489967,
+          "landing": [
+            28.5834174,
+            77.2505848
+          ],
+          "steps_way": 767442802,
+          "steps_neighbour": [
+            28.5834961,
+            77.2505239
+          ],
+          "street_node": 7165489970,
+          "street": [
+            28.5836914,
+            77.2504987
+          ],
+          "street_neighbour": [
+            28.5837504,
+            77.2505747
+          ],
+          "street_way": 767442801,
+          "estimated_metres": 31.6
+        },
+        {
+          "landing_node": 7165489973,
+          "landing": [
+            28.5835757,
+            77.2508109
+          ],
+          "steps_way": 767442799,
+          "steps_neighbour": [
+            28.5836646,
+            77.2507465
+          ],
+          "street_node": 7165489972,
+          "street": [
+            28.5837504,
+            77.2505747
+          ],
+          "street_neighbour": [
+            28.5836914,
+            77.2504987
+          ],
+          "street_way": 767442801,
+          "estimated_metres": 30.2
+        }
+      ]
+    },
+    {
+      "osm_way": 1156938672,
+      "approaches": [
+        {
+          "landing_node": 10758838994,
+          "landing": [
+            28.5304252,
+            77.2190792
+          ],
+          "steps_way": 1156938671,
+          "steps_neighbour": [
+            28.5304719,
+            77.21931
+          ],
+          "street_node": 6438793178,
+          "street": [
+            28.5303807,
+            77.2193748
+          ],
+          "street_neighbour": [
+            28.5306639,
+            77.2193572
+          ],
+          "street_way": 686892263,
+          "estimated_metres": 29.3
+        },
+        {
+          "landing_node": 10758838993,
+          "landing": [
+            28.5301173,
+            77.2191798
+          ],
+          "steps_way": 1156938670,
+          "steps_neighbour": [
+            28.5301601,
+            77.2193917
+          ],
+          "street_node": 6618266063,
+          "street": [
+            28.5301145,
+            77.2191107
+          ],
+          "street_neighbour": [
+            28.5300544,
+            77.2188454
+          ],
+          "street_way": 704738093,
+          "estimated_metres": 6.8
+        }
+      ]
+    },
+    {
+      "osm_way": 1158477616,
+      "approaches": [
+        {
+          "landing_node": 10773599827,
+          "landing": [
+            28.5534559,
+            77.2054276
+          ],
+          "steps_way": 1158477618,
+          "steps_neighbour": [
+            28.5540553,
+            77.2057482
+          ],
+          "street_node": 6257609190,
+          "street": [
+            28.5535673,
+            77.2053873
+          ],
+          "street_neighbour": [
+            28.5536368,
+            77.2052608
+          ],
+          "street_way": 668224311,
+          "estimated_metres": 13.0
+        },
+        {
+          "landing_node": 10773599824,
+          "landing": [
+            28.5543409,
+            77.2055055
+          ],
+          "steps_way": 1158477617,
+          "steps_neighbour": [
+            28.5541889,
+            77.2054243
+          ],
+          "street_node": 2955431126,
+          "street": [
+            28.5541557,
+            77.2054907
+          ],
+          "street_neighbour": [
+            28.5541826,
+            77.205341
+          ],
+          "street_way": 1419914018,
+          "estimated_metres": 20.6
+        }
+      ]
+    },
+    {
+      "osm_way": 1159133945,
+      "approaches": [
+        {
+          "landing_node": 10779376977,
+          "landing": [
+            28.6840403,
+            77.1281109
+          ],
+          "steps_way": 1159133944,
+          "steps_neighbour": [
+            28.6840622,
+            77.1278982
+          ],
+          "street_node": 1825205292,
+          "street": [
+            28.6839324,
+            77.1283397
+          ],
+          "street_neighbour": [
+            28.6843596,
+            77.12838
+          ],
+          "street_way": 171501193,
+          "estimated_metres": 25.4
+        },
+        {
+          "landing_node": 10779376979,
+          "landing": [
+            28.6837567,
+            77.1280748
+          ],
+          "steps_way": 1159133946,
+          "steps_neighbour": [
+            28.6837787,
+            77.1278604
+          ],
+          "street_node": 1826143652,
+          "street": [
+            28.6836991,
+            77.1283368
+          ],
+          "street_neighbour": [
+            28.6833227,
+            77.1282785
+          ],
+          "street_way": 171612986,
+          "estimated_metres": 26.4
+        }
+      ]
+    },
+    {
+      "osm_way": 1279270079,
+      "approaches": [
+        {
+          "landing_node": 11875926246,
+          "landing": [
+            28.6223387,
+            77.1958748
+          ],
+          "steps_way": 1279270080,
+          "steps_neighbour": [
+            28.6222977,
+            77.1957867
+          ],
+          "street_node": 11876008828,
+          "street": [
+            28.6225154,
+            77.1958322
+          ],
+          "street_neighbour": [
+            28.6229733,
+            77.196945
+          ],
+          "street_way": 1279278439,
+          "estimated_metres": 20.1
+        },
+        {
+          "landing_node": 11875926238,
+          "landing": [
+            28.6219982,
+            77.1958416
+          ],
+          "steps_way": 1279270075,
+          "steps_neighbour": [
+            28.6220409,
+            77.1959315
+          ],
+          "street_node": 9843540637,
+          "street": [
+            28.6219363,
+            77.1961883
+          ],
+          "street_neighbour": [
+            28.6219113,
+            77.1961853
+          ],
+          "street_way": 1072960946,
+          "estimated_metres": 34.5
+        }
+      ]
+    }
+  ]
+}

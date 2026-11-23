@@ -76,6 +76,88 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(len(predicted["legs"][1]["geometry"]),3)
         self.assertEqual(self.router.search("clock")[0]["id"],"C")
 
+    def test_direct_bus_outside_transfer_shortlist(self):
+        def crowded(contents):
+            # More than a dozen closer platforms serve unrelated routes. The
+            # original boarding and exit stops stay within the walking radius.
+            for prefix, lon in (("X", 77.198), ("Y", 77.222)):
+                for n in range(13):
+                    stop = f"{prefix}{n}"
+                    contents["stops"].append([stop, stop, 28.6 + n * .00001, lon])
+                    trip = f"noise{stop}"
+                    contents["trips"].append(["r2", "s", trip, ""])
+                    contents["stop_times"].extend([[trip,stop,0,"05:00:00","05:00:00"],
+                                                   [trip,"C",1,"05:10:00","05:10:00"]])
+        directory = Path(self.temp.name) / "crowded"
+        directory.mkdir()
+        feed(directory / "data.zip", crowded)
+        class Walking:
+            @staticmethod
+            def route(a,b,max_distance_m=None):
+                return {"distance_m":150,"seconds":120,"source":"osm","geometry":[a,b]}
+        router = Router(directory / "data.zip", directory, Walking(), None)
+        result = router.journeys("28.6,77.198","28.6,77.222",self.query,max_transfers=0)
+        self.assertEqual([l["trip_id"] for l in result["journeys"][0]["legs"] if l["mode"]=="bus"],["first"])
+
+    def test_unmapped_approach_lists_platform_departure_without_claiming_a_walk(self):
+        query = self.router.journeys("28.6005,77.20","B",self.query)
+        self.assertFalse(query["journeys"])
+        item, = query["direct_from_nearby_platforms"]
+        self.assertEqual((item["route_id"], item["boarding_stop"]["id"], item["alighting_stop"]["id"]),
+                         ("r1", "A", "B"))
+        self.assertEqual(item["departure_at"],"2026-10-15T08:00:00+05:30")
+        self.assertEqual(item["alight_at"],"2026-10-15T08:10:00+05:30")
+        self.assertNotIn("walk_seconds", item)
+        self.assertNotIn("duration_seconds", item)
+        self.assertFalse(self.router.journeys("28.605,77.20","B",self.query)["direct_from_nearby_platforms"])
+        self.assertFalse(self.router.journeys("28.6005,77.20","B",self.query.replace(day=17))["direct_from_nearby_platforms"])
+
+    def test_staying_on_same_bus_beats_unnecessary_change_to_it(self):
+        def extend_second_route(contents):
+            for row in contents["stop_times"][1:]:
+                if row[0] == "early":
+                    row[2] += 1
+            contents["stop_times"].append(["early","A",0,"08:01:00","08:01:00"])
+        directory = Path(self.temp.name) / "through-service"
+        directory.mkdir()
+        feed(directory / "data.zip", extend_second_route)
+        router = Router(directory / "data.zip", directory, None, None)
+        plans = router.journeys("A","C",self.query)["journeys"]
+        trips = [[leg["trip_id"] for leg in plan["legs"] if leg["mode"] == "bus"] for plan in plans]
+        self.assertIn(["early"], trips)
+        self.assertNotIn(["first","early"], trips)
+
+    def test_alternative_lines_use_the_same_two_stops_and_original_ready_time(self):
+        def services(contents):
+            contents["stops"].append(["D","Change East",28.6001,77.22])
+            for route, trip, board_time, exit_stop in [
+                    ("other","next","08:02:00","B"), ("other","following","08:05:00","B"),
+                    ("past","gone","07:56:00","B"), ("wrong-side","wrong","08:03:00","D"),
+                    ("too-late","sparse","08:28:00","B")]:
+                if [route,route,"DTC"] not in contents["routes"]:
+                    contents["routes"].append([route,route,"DTC"])
+                contents["trips"].append([route,"s",trip,""])
+                contents["stop_times"].extend([[trip,"A",0,board_time,board_time],
+                                               [trip,exit_stop,1,"08:32:00","08:32:00"]])
+        directory = Path(self.temp.name) / "other-services"
+        directory.mkdir()
+        feed(directory / "data.zip", services)
+        router = Router(directory / "data.zip", directory, None, None)
+        result = router.journeys("A","B",self.query)
+        leg = next(leg for leg in result["journeys"][0]["legs"] if leg["mode"] == "bus")
+        self.assertEqual(leg["trip_id"], "first")
+        other, = leg["same_platform_services"]
+        self.assertEqual((other["route_id"],other["trip_id"]), ("other","next"))
+        self.assertEqual(other["departure_at"],"2026-10-15T08:02:00+05:30")
+        day = self.query.date()
+        class Cancelled(Model):
+            def trip_exclusions(self, asof):
+                return {(day,"next"):None}
+        router.eta = Cancelled()
+        revised = router.journeys("A","B",self.query)
+        leg = next(leg for leg in revised["journeys"][0]["legs"] if leg["mode"] == "bus")
+        self.assertEqual([s["trip_id"] for s in leg["same_platform_services"]], ["following"])
+
     def test_after_midnight_previous_service_and_exception(self):
         dt = datetime(2026,10,17,0,2,tzinfo=IST)
         journey = self.router.journeys("A","B",dt,max_transfers=0)["journeys"][0]

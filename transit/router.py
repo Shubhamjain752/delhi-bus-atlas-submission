@@ -21,6 +21,10 @@ WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", 
 ALL_STOPS_SERVED = frozenset()
 BOARDING_UNCERTAINTY_SECONDS = 60
 MINIMUM_ALERT_GAIN_SECONDS = 300
+TRANSFER_ENDPOINT_LIMIT = 12
+NEARBY_PLATFORM_SCREEN_M = 250
+NEARBY_PLATFORM_COUNT = 2
+DEPARTURE_BOARD_SECONDS = 30 * 60
 
 
 def normalized(text):
@@ -224,6 +228,7 @@ class _Query:
         self.max_walk = max(0,int(options.get("max_walk_m",1100)))
         self.transfer_walk = max(0,int(options.get("transfer_walk_m",220)))
         self.walk_cache, self.timelines, self.itineraries = {}, {}, {}
+        self.platform_services = {}
         self.eta = options.get("eta", router.eta)
         exclusions=getattr(self.eta,"trip_exclusions",None)
         self.exclusions=exclusions(int(self.asof.timestamp())) if exclusions else {}
@@ -266,7 +271,7 @@ class _Query:
         if place["id"] in self.r.at:
             nearby = [(0,place["id"])] + [e for e in nearby if e[1] != place["id"]]
         result = {}
-        for _,s in nearby[:12]:
+        for _,s in nearby[:TRANSFER_ENDPOINT_LIMIT]:
             stop = self.r.stops[s]
             w = self.walk(place,stop) if outgoing else self.walk(stop,place)
             if w and w["distance_m"] <= self.max_walk:
@@ -427,6 +432,140 @@ class _Query:
         if previous is None or cost < previous[0]:
             self.itineraries[signature] = cost,(access,rides,transfer,egress)
 
+    def remaining_direct_links(self, access, egress):
+        """Check direct stop pairs before pruning away either end for transfer search."""
+        ends = defaultdict(list)
+        for _, stop in self.r._nearby(coords(self.destination), self.max_walk):
+            for pid, j in self.r.at[stop]:
+                if not self.r.patterns[pid].drops[j]:
+                    ends[pid].append((j, stop))
+
+        unverified = []
+        for distance, stop in self.r._nearby(coords(self.origin), self.max_walk):
+            for pid, i in self.r.at[stop]:
+                pattern = self.r.patterns[pid]
+                if pattern.pickups[i]:
+                    continue
+                missing = [(j, end) for j, end in ends.get(pid, ())
+                           if j > i and not (stop in access and end in egress)]
+                if not missing:
+                    continue
+                approach = self.walk(self.origin, self.r.stops[stop])
+                verified = approach is not None and approach["distance_m"] <= self.max_walk
+                if not verified and (distance > NEARBY_PLATFORM_SCREEN_M or self.origin["id"] is not None):
+                    continue
+                exits = []
+                for j, end in missing:
+                    walk = self.walk(self.r.stops[end], self.destination)
+                    if walk is not None and walk["distance_m"] <= self.max_walk:
+                        exits.append((j, walk))
+                if not exits:
+                    continue
+                if not verified:
+                    unverified.append((distance, pid, i, exits))
+                    continue
+                ready = self.start + approach["seconds"]
+                for ride in self.next_rides(pid, i, ready):
+                    for j, walk in exits:
+                        if ride.serves(j):
+                            self.save(approach, [(ride, i, j)], None, walk)
+        return unverified
+
+    def nearby_platform_options(self, unverified):
+        """Display a stop departure separately when the approach on foot is unknown."""
+        boards = defaultdict(dict)
+        distances = {}
+        for distance, pid, i, exits in unverified:
+            pattern = self.r.patterns[pid]
+            if (pattern.route,) in self.itineraries:
+                continue
+            # Geometric distance only screens out departures that are already too soon
+            # at the usual walking pace. It supplies no passenger path or arrival time.
+            earliest = self.start + max(1, math.ceil(distance / 1.25))
+            for ride in self.next_rides(pid, i, earliest):
+                if ride.departures[i] > self.start + DEPARTURE_BOARD_SECONDS:
+                    continue
+                for j, walk in exits:
+                    if not ride.serves(j) or ride.arrivals[j] <= ride.departures[i]:
+                        continue
+                    finish = ride.arrivals[j] + walk["seconds"]
+                    if finish > self.horizon:
+                        continue
+                    platform = pattern.stops[i]
+                    distances[platform] = distance
+                    board = boards[platform]
+                    label = self.r.routes[pattern.route][0]
+                    rank = (ride.departures[i], finish, pattern.route)
+                    if label in board and board[label][0] <= rank:
+                        continue
+                    board[label] = rank, {
+                        **self.service_times(ride, i, j), "boarding_stop":self.r.stops[platform],
+                        "alighting_stop":self.r.stops[pattern.stops[j]],
+                        "straight_line_to_board_m":round(distance),
+                        "egress_walk_seconds":walk["seconds"],
+                    }
+        best = {}
+        for platform in sorted(boards, key=distances.get)[:NEARBY_PLATFORM_COUNT]:
+            for label, candidate in boards[platform].items():
+                best.setdefault(label, candidate)
+        return [option for _,option in sorted(best.values(), key=lambda item:item[0])]
+
+    def service_times(self, ride, i, j):
+        route = self.r.patterns[ride.pid].route
+        return {"route_id":route, "route":self.r.routes[route][0], "trip_id":ride.trip,
+                "departure_at":self.stamp(ride.departures[i]), "alight_at":self.stamp(ride.arrivals[j]),
+                "departure_source":ride.board_source[i]}
+
+    def same_platform_services(self, item):
+        """Other lines a passenger can board here and leave at the same exit stop."""
+        approach, [(chosen, first, last)], _, egress = item
+        pattern = self.r.patterns[chosen.pid]
+        board, exit_stop = pattern.stops[first], pattern.stops[last]
+        ready = self.start + approach["seconds"]
+        key = board, exit_stop, ready
+        if key not in self.platform_services:
+            exits = defaultdict(list)
+            for pid, j in self.r.at[exit_stop]:
+                if not self.r.patterns[pid].drops[j]:
+                    exits[pid].append(j)
+            by_line = {}
+            for pid, i in self.r.at[board]:
+                candidate = self.r.patterns[pid]
+                downstream = [j for j in exits.get(pid, ()) if j > i]
+                if candidate.pickups[i] or not downstream:
+                    continue
+                for ride in self.next_rides(pid, i, ready):
+                    if ride.departures[i] > ready + DEPARTURE_BOARD_SECONDS:
+                        continue
+                    for j in downstream:
+                        if not ride.serves(j) or ride.arrivals[j] <= ride.departures[i]:
+                            continue
+                        if ride.arrivals[j] + egress["seconds"] > self.horizon:
+                            continue
+                        rank = ride.departures[i], ride.arrivals[j], candidate.route
+                        label = self.r.routes[candidate.route][0]
+                        if label not in by_line or rank < by_line[label][0]:
+                            by_line[label] = rank, self.service_times(ride, i, j)
+            self.platform_services[key] = [s for _,s in sorted(by_line.values(), key=lambda x:x[0])]
+        selected_line = self.r.routes[pattern.route][0]
+        return [service for service in self.platform_services[key] if service["route"] != selected_line]
+
+    @staticmethod
+    def distinct_choices(ranked):
+        """Keep a change onto a through bus only if it reduces the passenger's walk."""
+        def final_call(rides):
+            ride, _, j = rides[-1]
+            # Trip IDs can recur on another day or on another live vehicle.
+            return ride.pid, ride.trip, ride.live_run_id, j, ride.arrivals[j]
+        through = {final_call(rides): cost for cost, (_, rides, _, _) in ranked if len(rides) == 1}
+        distinct = []
+        for cost, item in ranked:
+            rides = item[1]
+            direct_cost = through.get(final_call(rides))
+            if len(rides) == 1 or direct_cost is None or direct_cost > cost:
+                distinct.append((cost, item))
+        return distinct
+
     def run(self, origin, destination):
         self.origin, self.destination = origin,destination
         if coords(origin)==coords(destination) and (None in (origin["id"],destination["id"])
@@ -459,22 +598,25 @@ class _Query:
                                 first[p.stops[j]].append((ride.arrivals[j],pid,w,ride,i,j))
         if self.transfers:
             self.connect(first,destinations)
+        unverified = self.remaining_direct_links(access, egress)
         ranked = sorted(self.itineraries.values(),key=lambda v:v[0])
-        selected = ranked[:self.limit]
+        distinct = self.distinct_choices(ranked)
+        selected = distinct[:self.limit]
         if self.limit > 1 and selected and all(len(item[1][1]) > 1 for item in selected):
-            direct = next((item for item in ranked if len(item[1][1]) == 1),None)
+            direct = next((item for item in distinct if len(item[1][1]) == 1),None)
             if direct:
                 selected[-1] = direct
-        plans = [self.render(item) for _,item in selected]
+        plans = [self.render_feasible(item) for _,item in selected]
         warnings = []
-        if not access or not egress:
+        if not plans and (not access or not egress):
             warnings.append("No mapped walking connection to a serviced stop within the endpoint walking limit.")
         elif not plans:
             warnings.append("No catchable itinerary found within the search time, walking and transfer limits.")
         if any(re.search(r"SPL|SPECIAL",leg.get("route",""),re.I) for p in plans for leg in p["legs"]):
             warnings.append("Special service appears in these results. Confirm eligibility with the operator.")
         alerts = self.boarding_alerts(access, destinations, ranked)
-        return self.result(plans,warnings,alerts)
+        platform_options = self.nearby_platform_options(unverified) if not plans or plans[0]["transfers"] else []
+        return self.result(plans,warnings,alerts,platform_options)
 
     def recent_live_departures(self, live_candidates, pid, i, ready):
         """Yield direct observations at this boarding platform just before the rider is ready."""
@@ -599,14 +741,16 @@ class _Query:
                        "assumption":"If the bus is still boarding when you reach the platform, board immediately. "
                                     "The estimate keeps the predicted ride duration and shifts downstream stop times by the departure difference."})
         alert["conditional_itinerary"] = option
-        alert["fallback_itinerary"] = self.render(fallback)
+        alert["fallback_itinerary"] = self.render_feasible(fallback)
 
-    def result(self, plans, warnings, alerts=None):
+    def result(self, plans, warnings, alerts=None, platform_options=None):
         return {"origin":self.origin,"destination":self.destination,"departure":self.depart.isoformat(),
-                "journeys":plans,"boarding_alerts":alerts or [],"warnings":warnings,"limits":{"max_transfers":self.transfers,
+                "journeys":plans,"boarding_alerts":alerts or [], "direct_from_nearby_platforms":platform_options or [],
+                "warnings":warnings,"limits":{"max_transfers":self.transfers,
                 "horizon_seconds":self.horizon-self.start,"max_walk_m":self.max_walk,
                 "transfer_walk_m":self.transfer_walk,"transfer_buffer_seconds":self.buffer,
-                "endpoint_stops_considered":12,"max_transfer_candidates":180},
+                "endpoint_stops_considered":TRANSFER_ENDPOINT_LIMIT,"direct_endpoints":"all_in_walking_radius",
+                "max_transfer_candidates":180},
                 "source":"GTFS fixed-route schedule, walking graph and available ETA estimates"}
 
     def connect(self, first, destinations):
@@ -691,6 +835,15 @@ class _Query:
             previous = k
         return calls
 
+    def render_feasible(self, item):
+        plan = self.render(item)
+        if plan["transfers"] == 0:
+            services = self.same_platform_services(item)
+            if services:
+                bus = next(leg for leg in plan["legs"] if leg["mode"] == "bus")
+                bus["same_platform_services"] = services
+        return plan
+
     def render(self, item):
         access,rides,transfer,egress = item
         legs = []
@@ -704,7 +857,8 @@ class _Query:
 
         def walk_leg(a,b,walk):
             detail={k:walk[k] for k in ("distance_m","includes_arterial_without_mapped_sidewalk",
-                                         "origin_snap_m","destination_snap_m") if k in walk}
+                                         "origin_snap_m","destination_snap_m","uses_steps",
+                                         "inferred_crossing_access_m") if k in walk}
             leg("walk",a,b,cursor+walk["seconds"],walk["geometry"],walk["source"],**detail)
 
         for n,(ride,i,j) in enumerate(rides):

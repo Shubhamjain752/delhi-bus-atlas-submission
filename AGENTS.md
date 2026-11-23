@@ -18,12 +18,13 @@ The Git repository supplies `data/walk.npz` and the drawing layer, `data/walk-me
 
 ## Testing and rebuilding
 
-In the virtual environment from the README, install the build dependencies. These two suites run without fetching the Delhi timetable. They use a small invented timetable to test transfers, departures after midnight and a bus that is just about to leave.
+In the virtual environment from the README, install the build dependencies. These suites run without fetching the Delhi timetable. They check transfers, departures after midnight, buses about to leave and the pedestrian graph.
 
 ```sh
 python -m pip install -r requirements-build.txt
 python -m unittest discover -s tests -p test_router.py -v
 python -m unittest discover -s tests -p test_boarding_alerts.py -v
+python -m unittest discover -s tests -p test_walking.py -v
 ```
 
 For a city-scale check, supply v32 and run `python run.py --offline`. Open `/api-guide` and run its coordinate query. Each itinerary should satisfy walk + wait + ride = total. The original research suite requires additional raw archives and dated witness captures. Vehicle-identity exclusion IDs for that audit can be supplied locally using `DELHI_AUDIT_EXCLUDED_VEHICLES` as a comma-separated list.
@@ -40,4 +41,4 @@ Training uses 12–13 October. The held-out comparison uses 15 October. For the 
 python tools/train_eta.py --db-dir PATH_TO_DAILY_DATABASES --data-dir data/weekend --train 2026-10-10 2026-10-11 --holdout 2026-10-17 --late-evening
 ```
 
-The [walking build](docs/walking.md) explains foot access, map coverage and its source checksum. For live operation, omit `--offline`. The public Reclaim feed can supply updates; the optional official feed needs an authorized key in `DELHI_GTFS_RT_KEY`. Keep keys outside Git.
+The [walking build](docs/walking.md) explains foot access, map coverage and its source checksum. Serving requests load the separate `data/walk-crossings.json` layer. The original walking graph remains available for reproducing signed field studies. Verify changes against the [crossing tests](data/crossing-access-check.json) and the [journey comparisons](docs/journey-access-check.md). For live operation, omit `--offline`. The public Reclaim feed can supply updates; the optional official feed needs an authorized key in `DELHI_GTFS_RT_KEY`. Keep keys outside Git.

@@ -15,6 +15,11 @@ __pycache__/
 /data/*
 !/data/walk.npz
 !/data/walk-meta.json
+!/data/walk-crossings.json
+!/data/crossing-access-check.json
+!/data/direct-journey-gps-check.json
+!/data/journey-access-check.json
+!/data/boarding-minute-check.json
 !/data/map-context.geojson.gz
 !/data/eta_model.json.gz
 !/data/eta_metrics.json

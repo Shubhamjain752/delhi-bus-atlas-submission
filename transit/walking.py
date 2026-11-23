@@ -14,6 +14,7 @@ from scipy.sparse.csgraph import connected_components
 
 SPEED = 1.25
 MAX_SNAP = 65.
+MAX_CROSSING_APPROACH_M = 40.
 # Local equirectangular coordinates in metres, centred within the Delhi extract.
 SCALE = np.array([111195., 111195. * math.cos(math.radians(28.60))])
 ORIGIN = np.array([28.60, 77.20])
@@ -47,7 +48,7 @@ def cross(a, b):
 class Walking:
     """Offline street routes. Coordinates and line geometry are (latitude, longitude)."""
 
-    def __init__(self, data_dir: Path):
+    def __init__(self, data_dir: Path, *, use_crossing_access=False):
         data_dir = Path(data_dir)
         with np.load(data_dir/'walk.npz',allow_pickle=False) as data:
             self.coords = data['coords']
@@ -57,11 +58,16 @@ class Walking:
             self.index = SegmentIndex(self.xy[self.edges[:,0]], self.xy[self.edges[:,1]])
             self.length = np.sqrt(self.index.squared_lengths)
             self.cost = self.length * data['factors'] + data['delays'] * SPEED
+            self.steps = data['factors'] > 1
             self.centerlines = data['centerlines'] if 'centerlines' in data else np.zeros(len(self.edges),dtype=bool)
             barriers = data['barriers'].reshape(-1,4)
             self.obstacles = SegmentIndex(project(barriers[:,:2]), project(barriers[:,2:]))
         info_path = data_dir/'walk-meta.json'
         self.metadata = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
+        self.mapped_edge_count = len(self.edges)
+        evidence = data_dir/'walk-crossings.json'
+        if use_crossing_access and evidence.is_file():
+            self._add_crossing_approaches(json.loads(evidence.read_text(encoding='utf-8')))
         # CSR-style adjacency stores edges compactly while preserving parallel
         # ways and foot-only direction even when two roads share endpoints.
         forward = np.flatnonzero(self.directions & 1)
@@ -70,12 +76,48 @@ class Walking:
         order = np.argsort(from_nodes,kind='stable')
         self.to_nodes = np.r_[self.edges[forward,1], self.edges[reverse,0]][order]
         self.weights = self.cost[np.r_[forward,reverse][order]]
-        self.centerline_arcs = self.centerlines[np.r_[forward,reverse][order]]
+        self.arc_edges = np.r_[forward,reverse][order]
         self.offsets = np.r_[0, np.cumsum(np.bincount(from_nodes,minlength=len(self.coords)))]
         topology = csr_matrix((self.weights,self.to_nodes,self.offsets),shape=(len(self.coords),len(self.coords)))
         _, self.components = connected_components(topology,directed=False)
         self._snap = lru_cache(maxsize=30000)(self._nearest)
         self._cached_route = lru_cache(maxsize=1024)(self._route)
+
+    def mapped_node(self, point, neighbour):
+        """Find an unambiguous source edge, including its level at overlapping nodes."""
+        point_xy = project(point)
+        matches = set()
+        for i in self.index.nearby(point_xy, .2):
+            a, b = self.edges[i]
+            for n, other in ((a,b),(b,a)):
+                if (np.abs(self.coords[n]-point).max() < 5e-8 and
+                    np.abs(self.coords[other]-neighbour).max() < 5e-8):
+                    matches.add(int(n))
+        return matches.pop() if len(matches) == 1 else None
+
+    def _add_crossing_approaches(self, evidence):
+        # Keep synthetic approaches out of the spatial snapping index. Attach only
+        # when both original source edges still exist in this version of the map.
+        links = set()
+        for crossing in evidence['crossings']:
+            for item in crossing['approaches']:
+                a = self.mapped_node(item['landing'],item['steps_neighbour'])
+                b = self.mapped_node(item['street'],item['street_neighbour'])
+                if a is None or b is None:
+                    continue
+                length = np.linalg.norm(self.xy[a]-self.xy[b])
+                if 0 < length <= MAX_CROSSING_APPROACH_M and not self._crosses_barrier(self.xy[a],self.xy[b],length):
+                    links.add((a,b))
+        if not links:
+            return
+        extra = np.asarray(sorted(links),dtype=self.edges.dtype)
+        lengths = np.linalg.norm(self.xy[extra[:,0]]-self.xy[extra[:,1]],axis=1)
+        self.edges = np.concatenate((self.edges,extra))
+        self.directions = np.r_[self.directions,np.full(len(extra),3,dtype='u1')]
+        self.cost = np.r_[self.cost,lengths]
+        self.length = np.r_[self.length,lengths]
+        self.centerlines = np.r_[self.centerlines,np.zeros(len(extra),dtype=bool)]
+        self.steps = np.r_[self.steps,np.zeros(len(extra),dtype=bool)]
 
     def _crosses_barrier(self, point, mapped, distance):
         if distance < 1. or not len(self.obstacles.starts):
@@ -147,6 +189,7 @@ class Walking:
             return {'seconds':0, 'distance_m':0, 'geometry':[list(start)],
                     'source':'OpenStreetMap pedestrian network',
                     'origin_snap_m':round(a[2],1), 'destination_snap_m':round(b[2],1),
+                    'uses_steps':False, 'inferred_crossing_access_m':0,
                     'includes_arterial_without_mapped_sidewalk':False}
         best_cost = math.inf
         best_node = None
@@ -188,12 +231,22 @@ class Walking:
             return None
         nodes = []
         estimated_sidewalk = bool(self.centerlines[a[0]] or self.centerlines[b[0]])
+        # The first and last segments may be used for only a fraction of their length.
+        final_edge_cost = best_cost if best_node is None else goals[best_node]
+        uses_steps = bool(self.steps[b[0]] and final_edge_cost > 0)
+        inferred_access = 0.
         while best_node is not None:
             nodes.append(best_node)
             if best_node not in parents:
                 break
             best_node, arc = parents[best_node]
-            estimated_sidewalk |= bool(self.centerline_arcs[arc])
+            edge = self.arc_edges[arc]
+            estimated_sidewalk |= bool(self.centerlines[edge])
+            uses_steps |= bool(self.steps[edge])
+            if edge >= self.mapped_edge_count:
+                inferred_access += self.length[edge]
+        if nodes:
+            uses_steps |= bool(self.steps[a[0]] and scores[nodes[-1]] > 0)
         path = [start, a[3] / SCALE + ORIGIN]
         path.extend(self.coords[n] for n in reversed(nodes))
         path.extend([b[3] / SCALE + ORIGIN,end])
@@ -208,5 +261,6 @@ class Walking:
         return {'seconds':int(round((a[2]+best_cost+b[2])/SPEED)),
                 'distance_m':int(round(distance)), 'geometry':geometry,
                 'source':'OpenStreetMap pedestrian network',
+                'uses_steps':uses_steps, 'inferred_crossing_access_m':round(inferred_access),
                 'includes_arterial_without_mapped_sidewalk':estimated_sidewalk,
                 'origin_snap_m':round(a[2],1), 'destination_snap_m':round(b[2],1)}

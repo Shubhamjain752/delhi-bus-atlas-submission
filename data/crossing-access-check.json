@@ -1,0 +1,298 @@
+{
+  "method": "Every opposite-side street approach pair with an accepted crossing. A missing value means no route within the 2,000 m walking budget. These targeted checks measure graph connectivity, not passenger accuracy.",
+  "manifest_sha256": "3dfe2e6b77244d1ff683fdd1819f9e28cdfc9885d0a9273e6cd43b3fa575b0e2",
+  "crossings": 11,
+  "opposite_side_pairs": 12,
+  "reachable_before": 2,
+  "reachable_after": 12,
+  "both_reachable_and_shorter": 1,
+  "aiims_unbounded_metres_and_seconds": {
+    "google_433_board": {
+      "old": {
+        "distance_m": 11052,
+        "seconds": 8842,
+        "uses_steps": false,
+        "inferred_crossing_access_m": 0
+      },
+      "new": {
+        "distance_m": 369,
+        "seconds": 307,
+        "uses_steps": true,
+        "inferred_crossing_access_m": 59
+      }
+    },
+    "2839": {
+      "old": {
+        "distance_m": 11062,
+        "seconds": 8850,
+        "uses_steps": false,
+        "inferred_crossing_access_m": 0
+      },
+      "new": {
+        "distance_m": 369,
+        "seconds": 308,
+        "uses_steps": true,
+        "inferred_crossing_access_m": 59
+      }
+    },
+    "2840": {
+      "old": {
+        "distance_m": 10707,
+        "seconds": 8565,
+        "uses_steps": false,
+        "inferred_crossing_access_m": 0
+      },
+      "new": {
+        "distance_m": 788,
+        "seconds": 643,
+        "uses_steps": true,
+        "inferred_crossing_access_m": 59
+      }
+    }
+  },
+  "checks": [
+    {
+      "osm_way": 516280589,
+      "landmark_nearest_gtfs_stop": "Panchsheel Club (Sarv Priya Vihar)",
+      "landmark_stop_id": "2379",
+      "tests": [
+        {
+          "street_nodes": [
+            6286891309,
+            6469652562
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 91,
+            "seconds": 87,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 22
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 662256257,
+      "landmark_nearest_gtfs_stop": "Ashram (Hari Nagar)",
+      "landmark_stop_id": "2167",
+      "tests": [
+        {
+          "street_nodes": [
+            6543707217,
+            4212134664
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 110,
+            "seconds": 103,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 42
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 668809526,
+      "landmark_nearest_gtfs_stop": "Green Park Metro Station Gate No 1",
+      "landmark_stop_id": "4590",
+      "tests": [
+        {
+          "street_nodes": [
+            9757079886,
+            10216247289
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 118,
+            "seconds": 115,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 44
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 682848213,
+      "landmark_nearest_gtfs_stop": "AIIMS Ring Road",
+      "landmark_stop_id": "2839",
+      "tests": [
+        {
+          "street_nodes": [
+            10810639789,
+            6541525892
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 131,
+            "seconds": 117,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 59
+          }
+        },
+        {
+          "street_nodes": [
+            10810639789,
+            13701590601
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 144,
+            "seconds": 128,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 70
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 759593467,
+      "landmark_nearest_gtfs_stop": "Paras Cinema",
+      "landmark_stop_id": "5970",
+      "tests": [
+        {
+          "street_nodes": [
+            6114674680,
+            9867862426
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 82,
+            "seconds": 77,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 18
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 763110791,
+      "landmark_nearest_gtfs_stop": "Surajkund Crossing",
+      "landmark_stop_id": "2846",
+      "tests": [
+        {
+          "street_nodes": [
+            9857364086,
+            5957298061
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 99,
+            "seconds": 94,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 27
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 767442800,
+      "landmark_nearest_gtfs_stop": "Bhogal",
+      "landmark_stop_id": "1349",
+      "tests": [
+        {
+          "street_nodes": [
+            7165489970,
+            7165489972
+          ],
+          "before": {
+            "distance_m": 10,
+            "seconds": 28,
+            "uses_steps": false,
+            "inferred_crossing_access_m": 0
+          },
+          "after": {
+            "distance_m": 10,
+            "seconds": 28,
+            "uses_steps": false,
+            "inferred_crossing_access_m": 0
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 1156938672,
+      "landmark_nearest_gtfs_stop": "Khirki Village",
+      "landmark_stop_id": "2961",
+      "tests": [
+        {
+          "street_nodes": [
+            6438793178,
+            6618266063
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 116,
+            "seconds": 111,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 36
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 1158477616,
+      "landmark_nearest_gtfs_stop": "Hauz Khas",
+      "landmark_stop_id": "3007",
+      "tests": [
+        {
+          "street_nodes": [
+            6257609190,
+            2955431126
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 161,
+            "seconds": 166,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 34
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 1159133945,
+      "landmark_nearest_gtfs_stop": "Rani Bagh Railway Colony",
+      "landmark_stop_id": "4282",
+      "tests": [
+        {
+          "street_nodes": [
+            1825205292,
+            1826143652
+          ],
+          "before": {
+            "distance_m": 647,
+            "seconds": 518,
+            "uses_steps": false,
+            "inferred_crossing_access_m": 0
+          },
+          "after": {
+            "distance_m": 125,
+            "seconds": 117,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 52
+          }
+        }
+      ]
+    },
+    {
+      "osm_way": 1279270079,
+      "landmark_nearest_gtfs_stop": "Dr. RML Hospital",
+      "landmark_stop_id": "7824",
+      "tests": [
+        {
+          "street_nodes": [
+            11876008828,
+            9843540637
+          ],
+          "before": null,
+          "after": {
+            "distance_m": 106,
+            "seconds": 93,
+            "uses_steps": true,
+            "inferred_crossing_access_m": 55
+          }
+        }
+      ]
+    }
+  ]
+}

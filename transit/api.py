@@ -44,7 +44,7 @@ class Planner:
     def __init__(self, root, online):
         self.directory = root / "data"
         schedule = Path(os.getenv("DELHI_GTFS_ZIP") or root / "delhi_buses_static_gtfs_v1.zip")
-        self.walking = Walking(self.directory)
+        self.walking = Walking(self.directory, use_crossing_access=True)
         self.model = EtaModel.load(self.directory)
         self.live = ObservationOverlay(self.model, self.directory)
         self.router = Router(schedule, self.directory, self.walking, self.live)
@@ -118,7 +118,7 @@ async def lifespan(application):
         instance.close()
 
 
-app = FastAPI(title="Delhi Bus Atlas", version="0.5.2", lifespan=lifespan, docs_url=None,
+app = FastAPI(title="Delhi Bus Atlas", version="0.6.0", lifespan=lifespan, docs_url=None,
               description="Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. "
                           "See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.")
 

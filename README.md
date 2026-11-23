@@ -19,6 +19,8 @@ flowchart TD
 
 A scheduled departure, an estimate learned from GPS and a fresh observation each carry a different label. On a divided road, the planner checks whether there is a mapped path to the boarding side. It can show a bus that might still be boarding alongside a later fallback.
 
+Direct buses are checked at every compatible stop within the walking limit. On a direct journey, the details also show other lines serving the same two platforms within 30 minutes of reaching the first stop. If Atlas cannot find a walking route to a nearby boarding platform, departures from that platform appear separately.
+
 ## Run the Delhi planner
 
 1. Install Python **3.12**. Download or clone this repository.
@@ -46,6 +48,10 @@ Open the [passenger map](http://127.0.0.1:8765/), [runnable API guide](http://12
 **Try a real query.** [Compare 08:45 and 13:00 on 15 October](http://127.0.0.1:8765/journeys?from=1025&to=2560&depart=2026-10-15T08:45&compare_hour=13). For map pins, enter latitude and longitude. Any full itinerary lists the boarding and exit stops and the seconds spent walking, waiting and riding. API times use Delhi local time.
 
 ## What the evidence tells us
+
+Near AIIMS, the original map sent a passenger on an 11 km detour to the eastbound stop. The revised map uses a mapped pedestrian underpass with stairs and short estimated links to the street. It gives a 369 m walk to the official AIIMS Ring Road platform. For a Sunday 3 p.m. request this changed the first suggestion from two buses in about 24 minutes to a direct bus in about 19 minutes. Both times are estimates. The crossing and the passenger’s actual arrival still need a check on foot. [Results on other Delhi routes](docs/journey-access-check.md)
+
+The 19-minute estimate was calculated afterwards using the corrected map. GPS could not verify the complete trip on the recommended 711UP. It did place another suggested service, the 479UP, at both its official stops. [Direct bus checks](data/direct-journey-gps-check.json)
 
 GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [comparison screen](http://127.0.0.1:8765/field-trials.html) shows where each estimate could be checked.
 

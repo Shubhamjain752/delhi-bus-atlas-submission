@@ -1,0 +1,2727 @@
+{
+  "scope": "Same origin, destination, service calendar, issue clock and route limits in each pair. The first three have pre-departure study records; the Punjabi Bagh control also came from a saved field case. The three night cases restore feeds by receipt time. Other cases test route availability; changes in estimated time are not accuracy measurements. Mapped walking distances are not field measurements.",
+  "submitted_prototype_sha256": "db2d9fe4f10c4adf84d019724122a7e040a2c306fc592b0adc82e3989765b443",
+  "inputs_before": {
+    "transit\\router.py": "bd0ae2f3214015a43ced2ee1b1f17c619c4a17cf6d8c982f74dd064ba975f960",
+    "transit\\walking.py": "fc563e7eef4b99f55f781390ce0f120b17d46f68a893ce93e05acb7e0fccfe2a",
+    "data\\walk.npz": "6d385312b9be4ccad97ebbfd8386082c2c673d06e2752ddce3bb1b70e2026404",
+    "delhi_buses_static_gtfs_v1.zip": "8eb05d9c21e7a6b42d7b49de45cb095b70ddee5b8f7716859330c9784c322f05"
+  },
+  "inputs_after": {
+    "transit/router.py": "8581f849419b8cffed56f3f1cc459e159014c605005f7366ee968aff052ae2b5",
+    "transit/walking.py": "af0543bed965288d142fb63d759e05297a016a23c2736cbb50aaa33e20f09bf0",
+    "data/walk.npz": "6d385312b9be4ccad97ebbfd8386082c2c673d06e2752ddce3bb1b70e2026404",
+    "delhi_buses_static_gtfs_v1.zip": "8eb05d9c21e7a6b42d7b49de45cb095b70ddee5b8f7716859330c9784c322f05",
+    "data/walk-crossings.json": "3dfe2e6b77244d1ff683fdd1819f9e28cdfc9885d0a9273e6cd43b3fa575b0e2"
+  },
+  "journey_summary": {
+    "before_with_journey": 24,
+    "after_with_journey": 24,
+    "newly_reachable": 0,
+    "newly_unreachable": 0,
+    "before_with_direct": 21,
+    "after_with_direct": 22,
+    "earlier_first": 1,
+    "later_first": 0,
+    "same_first_time": 23
+  },
+  "journeys": [
+    {
+      "case": "sunday-offpeak",
+      "corridor": "AIIMS to Lajpat Nagar",
+      "departure": "2026-11-22T15:00:00+05:30",
+      "before": {
+        "routes": [
+          "623UP",
+          "724AUP"
+        ],
+        "board": [
+          "2828",
+          "2840"
+        ],
+        "alight": [
+          "2840",
+          "2363"
+        ],
+        "arrival": "2026-11-22T15:24:29+05:30",
+        "duration_seconds": 1469,
+        "transfers": 1,
+        "access_walk_seconds": 402,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 396,
+        "wait_seconds": 131,
+        "ride_seconds": 540
+      },
+      "after": {
+        "routes": [
+          "711UP"
+        ],
+        "board": [
+          "2839"
+        ],
+        "alight": [
+          "2363"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "323UP",
+            "departure": "2026-11-22T15:07:22+05:30"
+          },
+          {
+            "route": "724AUP",
+            "departure": "2026-11-22T15:07:53+05:30"
+          },
+          {
+            "route": "460UP",
+            "departure": "2026-11-22T15:10:39+05:30"
+          },
+          {
+            "route": "543ADOWN",
+            "departure": "2026-11-22T15:10:41+05:30"
+          },
+          {
+            "route": "392STLUP",
+            "departure": "2026-11-22T15:13:41+05:30"
+          },
+          {
+            "route": "D-042UP",
+            "departure": "2026-11-22T15:19:48+05:30"
+          },
+          {
+            "route": "479UP",
+            "departure": "2026-11-22T15:20:39+05:30"
+          },
+          {
+            "route": "611ADOWN",
+            "departure": "2026-11-22T15:22:13+05:30"
+          },
+          {
+            "route": "392UP",
+            "departure": "2026-11-22T15:22:22+05:30"
+          },
+          {
+            "route": "433ASTL-KJDUP",
+            "departure": "2026-11-22T15:24:52+05:30"
+          },
+          {
+            "route": "433AUP",
+            "departure": "2026-11-22T15:24:59+05:30"
+          },
+          {
+            "route": "DW-4DOWN",
+            "departure": "2026-11-22T15:33:43+05:30"
+          }
+        ],
+        "arrival": "2026-11-22T15:19:16+05:30",
+        "duration_seconds": 1156,
+        "transfers": 0,
+        "access_walk_seconds": 308,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 396,
+        "wait_seconds": 30,
+        "ride_seconds": 422
+      },
+      "direct_before": [],
+      "direct_after": [
+        "711UP"
+      ],
+      "alternatives_before": [
+        [
+          "623UP",
+          "724AUP"
+        ],
+        [
+          "711DOWN",
+          "543ADOWN"
+        ],
+        [
+          "543AUP",
+          "543ADOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "711UP"
+        ],
+        [
+          "711UP",
+          "D-026STLUP"
+        ],
+        [
+          "442UP",
+          "D-026STLUP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "monday-peak",
+      "corridor": "Kashmere Gate to Nehru Place",
+      "departure": "2026-11-23T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "425CLUP"
+        ],
+        "board": [
+          "1025"
+        ],
+        "alight": [
+          "2560"
+        ],
+        "arrival": "2026-11-23T09:34:07+05:30",
+        "duration_seconds": 3847,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 13,
+        "wait_seconds": 780,
+        "ride_seconds": 3054
+      },
+      "after": {
+        "routes": [
+          "425CLUP"
+        ],
+        "board": [
+          "1025"
+        ],
+        "alight": [
+          "2560"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-23T09:34:07+05:30",
+        "duration_seconds": 3847,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 13,
+        "wait_seconds": 780,
+        "ride_seconds": 3054
+      },
+      "direct_before": [
+        "425CLUP"
+      ],
+      "direct_after": [
+        "425CLUP"
+      ],
+      "alternatives_before": [
+        [
+          "425CLUP"
+        ],
+        [
+          "929DOWN",
+          "425CLUP"
+        ],
+        [
+          "183DOWN",
+          "425CLUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "425CLUP"
+        ],
+        [
+          "425CLUP",
+          "930DOWN"
+        ],
+        [
+          "425CLUP",
+          "425UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "tuesday-transfer",
+      "corridor": "Rohini Sector 22 to Azadpur",
+      "departure": "2026-11-24T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "972UP",
+          "114DOWN"
+        ],
+        "board": [
+          "7567",
+          "95"
+        ],
+        "alight": [
+          "95",
+          "97"
+        ],
+        "arrival": "2026-11-24T18:34:36+05:30",
+        "duration_seconds": 3876,
+        "transfers": 1,
+        "access_walk_seconds": 785,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 370,
+        "wait_seconds": 128,
+        "ride_seconds": 2593
+      },
+      "after": {
+        "routes": [
+          "972UP",
+          "114DOWN"
+        ],
+        "board": [
+          "7567",
+          "95"
+        ],
+        "alight": [
+          "95",
+          "97"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-24T18:34:36+05:30",
+        "duration_seconds": 3876,
+        "transfers": 1,
+        "access_walk_seconds": 785,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 370,
+        "wait_seconds": 128,
+        "ride_seconds": 2593
+      },
+      "direct_before": [
+        "102ADOWN"
+      ],
+      "direct_after": [
+        "102ADOWN"
+      ],
+      "alternatives_before": [
+        [
+          "972UP",
+          "114DOWN"
+        ],
+        [
+          "102ADOWN"
+        ],
+        [
+          "957UP",
+          "102ADOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "972UP",
+          "114DOWN"
+        ],
+        [
+          "102ADOWN"
+        ],
+        [
+          "972UP",
+          "174DOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "punjabi",
+      "corridor": "Punjabi Bagh Terminal to Wazirpur Depot",
+      "departure": "2026-11-22T15:10:00+05:30",
+      "before": {
+        "routes": [
+          "159UP"
+        ],
+        "board": [
+          "1234"
+        ],
+        "alight": [
+          "1238"
+        ],
+        "arrival": "2026-11-22T15:18:01+05:30",
+        "duration_seconds": 481,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 63,
+        "ride_seconds": 418
+      },
+      "after": {
+        "routes": [
+          "159UP"
+        ],
+        "board": [
+          "1234"
+        ],
+        "alight": [
+          "1238"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "978DOWN",
+            "departure": "2026-11-22T15:12:21+05:30"
+          },
+          {
+            "route": "861AUP",
+            "departure": "2026-11-22T15:14:00+05:30"
+          },
+          {
+            "route": "442DOWN",
+            "departure": "2026-11-22T15:16:15+05:30"
+          },
+          {
+            "route": "153DOWN",
+            "departure": "2026-11-22T15:28:55+05:30"
+          }
+        ],
+        "arrival": "2026-11-22T15:18:01+05:30",
+        "duration_seconds": 481,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 63,
+        "ride_seconds": 418
+      },
+      "direct_before": [
+        "159UP",
+        "978DOWN"
+      ],
+      "direct_after": [
+        "159UP",
+        "978DOWN"
+      ],
+      "alternatives_before": [
+        [
+          "159UP"
+        ],
+        [
+          "978DOWN"
+        ],
+        [
+          "159UP",
+          "804DOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "159UP"
+        ],
+        [
+          "978DOWN"
+        ],
+        [
+          "159UP",
+          "804DOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "night-285",
+      "corridor": "Sarai Peepal Thala → GTK Depot",
+      "departure": "2026-11-21T01:17:00+05:30",
+      "before": {
+        "routes": [
+          "012(NS)UP"
+        ],
+        "board": [
+          "285"
+        ],
+        "alight": [
+          "289"
+        ],
+        "arrival": "2026-11-21T01:27:39+05:30",
+        "duration_seconds": 639,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 350,
+        "ride_seconds": 289
+      },
+      "after": {
+        "routes": [
+          "012(NS)UP"
+        ],
+        "board": [
+          "285"
+        ],
+        "alight": [
+          "289"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "0131(NS)UP",
+            "departure": "2026-11-21T01:38:41+05:30"
+          }
+        ],
+        "arrival": "2026-11-21T01:27:39+05:30",
+        "duration_seconds": 639,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 350,
+        "ride_seconds": 289
+      },
+      "direct_before": [
+        "012(NS)UP",
+        "0131(NS)UP"
+      ],
+      "direct_after": [
+        "012(NS)UP",
+        "0131(NS)UP",
+        "181UP"
+      ],
+      "alternatives_before": [
+        [
+          "012(NS)UP"
+        ],
+        [
+          "0131(NS)UP"
+        ],
+        [
+          "012(NS)UP",
+          "0131(NS)UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "012(NS)UP"
+        ],
+        [
+          "0131(NS)UP"
+        ],
+        [
+          "181UP"
+        ]
+      ],
+      "unverified_platform_services": [],
+      "gps_check": {
+        "route": "012(NS)UP",
+        "first_fix_at_destination": "2026-11-21T01:19:36+05:30",
+        "predictions_for_observed_line": {
+          "before": {
+            "arrival": "2026-11-21T01:27:39+05:30",
+            "conditional": false,
+            "error_seconds": 483
+          },
+          "after": {
+            "arrival": "2026-11-21T01:27:39+05:30",
+            "conditional": false,
+            "error_seconds": 483
+          }
+        }
+      }
+    },
+    {
+      "case": "night-2383",
+      "corridor": "MMTC / Adhchini Village → T.B. Hospital",
+      "departure": "2026-11-21T01:18:00+05:30",
+      "before": {
+        "routes": [
+          "502UP"
+        ],
+        "board": [
+          "2383"
+        ],
+        "alight": [
+          "2386"
+        ],
+        "arrival": "2026-11-21T02:49:44+05:30",
+        "duration_seconds": 5504,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 5281,
+        "ride_seconds": 223
+      },
+      "after": {
+        "routes": [
+          "502UP"
+        ],
+        "board": [
+          "2383"
+        ],
+        "alight": [
+          "2386"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-21T02:49:44+05:30",
+        "duration_seconds": 5504,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 5281,
+        "ride_seconds": 223
+      },
+      "direct_before": [
+        "502UP"
+      ],
+      "direct_after": [
+        "502UP",
+        "516UP"
+      ],
+      "alternatives_before": [
+        [
+          "502UP"
+        ],
+        [
+          "OMS(-)DOWN",
+          "502UP"
+        ],
+        [
+          "546UP",
+          "502UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "502UP"
+        ],
+        [
+          "502UP",
+          "356DOWN"
+        ],
+        [
+          "516UP"
+        ]
+      ],
+      "unverified_platform_services": [],
+      "gps_check": {
+        "route": "502UP",
+        "first_fix_at_destination": "2026-11-21T01:20:35+05:30",
+        "predictions_for_observed_line": {
+          "before": {
+            "arrival": "2026-11-21T01:19:42+05:30",
+            "conditional": true,
+            "error_seconds": -53
+          },
+          "after": {
+            "arrival": "2026-11-21T01:19:42+05:30",
+            "conditional": true,
+            "error_seconds": -53
+          }
+        }
+      }
+    },
+    {
+      "case": "night-8065",
+      "corridor": "Sec B11 Vasant Kunj → Vasant Kunj Sec B 8/9",
+      "departure": "2026-11-21T01:20:00+05:30",
+      "before": {
+        "routes": [
+          "604UP"
+        ],
+        "board": [
+          "8065"
+        ],
+        "alight": [
+          "3472"
+        ],
+        "arrival": "2026-11-21T01:23:31+05:30",
+        "duration_seconds": 211,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 43,
+        "ride_seconds": 168
+      },
+      "after": {
+        "routes": [
+          "604UP"
+        ],
+        "board": [
+          "8065"
+        ],
+        "alight": [
+          "3472"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-21T01:23:31+05:30",
+        "duration_seconds": 211,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 43,
+        "ride_seconds": 168
+      },
+      "direct_before": [
+        "604UP"
+      ],
+      "direct_after": [
+        "604UP",
+        "604DOWN"
+      ],
+      "alternatives_before": [
+        [
+          "604UP"
+        ],
+        [
+          "604UP",
+          "604DOWN"
+        ],
+        [
+          "604DOWN",
+          "604UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "604UP"
+        ],
+        [
+          "604UP",
+          "604DOWN"
+        ],
+        [
+          "604DOWN"
+        ]
+      ],
+      "unverified_platform_services": [],
+      "gps_check": {
+        "route": "604UP",
+        "first_fix_at_destination": "2026-11-21T01:23:29+05:30",
+        "predictions_for_observed_line": {
+          "before": {
+            "arrival": "2026-11-21T01:23:31+05:30",
+            "conditional": false,
+            "error_seconds": 2
+          },
+          "after": {
+            "arrival": "2026-11-21T01:23:31+05:30",
+            "conditional": false,
+            "error_seconds": 2
+          }
+        }
+      }
+    },
+    {
+      "case": "corridor-213UP",
+      "corridor": "Subhash Park → Dharampura GT Road",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "213UP"
+        ],
+        "board": [
+          "378"
+        ],
+        "alight": [
+          "7693"
+        ],
+        "arrival": "2026-11-17T08:48:22+05:30",
+        "duration_seconds": 1102,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 50,
+        "ride_seconds": 1052
+      },
+      "after": {
+        "routes": [
+          "213UP"
+        ],
+        "board": [
+          "378"
+        ],
+        "alight": [
+          "7693"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "784UP",
+            "departure": "2026-11-17T08:37:50+05:30"
+          },
+          {
+            "route": "214UP",
+            "departure": "2026-11-17T08:38:37+05:30"
+          },
+          {
+            "route": "241UP",
+            "departure": "2026-11-17T08:47:32+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T08:48:22+05:30",
+        "duration_seconds": 1102,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 50,
+        "ride_seconds": 1052
+      },
+      "direct_before": [
+        "213UP"
+      ],
+      "direct_after": [
+        "213UP"
+      ],
+      "alternatives_before": [
+        [
+          "213UP"
+        ],
+        [
+          "213UP",
+          "GL-23UP"
+        ],
+        [
+          "425DOWN",
+          "GL-23UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "213UP"
+        ],
+        [
+          "213UP",
+          "GL-23UP"
+        ],
+        [
+          "425DOWN",
+          "GL-23UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-213UP",
+      "corridor": "Near Subhash Park → near Dharampura GT Road",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "429UP",
+          "273UP"
+        ],
+        "board": [
+          "334",
+          "377"
+        ],
+        "alight": [
+          "1826",
+          "2056"
+        ],
+        "arrival": "2026-11-17T09:06:40+05:30",
+        "duration_seconds": 2200,
+        "transfers": 1,
+        "access_walk_seconds": 168,
+        "transfer_walk_seconds": 21,
+        "egress_walk_seconds": 122,
+        "wait_seconds": 697,
+        "ride_seconds": 1192
+      },
+      "after": {
+        "routes": [
+          "429UP",
+          "273UP"
+        ],
+        "board": [
+          "334",
+          "377"
+        ],
+        "alight": [
+          "1826",
+          "2056"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T09:06:40+05:30",
+        "duration_seconds": 2200,
+        "transfers": 1,
+        "access_walk_seconds": 168,
+        "transfer_walk_seconds": 21,
+        "egress_walk_seconds": 122,
+        "wait_seconds": 697,
+        "ride_seconds": 1192
+      },
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [
+        [
+          "429UP",
+          "273UP"
+        ],
+        [
+          "260DOWN",
+          "273UP"
+        ],
+        [
+          "838UP",
+          "273UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "429UP",
+          "273UP"
+        ],
+        [
+          "260DOWN",
+          "273UP"
+        ],
+        [
+          "838UP",
+          "273UP"
+        ]
+      ],
+      "unverified_platform_services": [
+        {
+          "route": "274DOWN",
+          "board": "378",
+          "alight": "2056",
+          "departure": "2026-11-17T08:33:05+05:30",
+          "alight_at": "2026-11-17T08:50:04+05:30"
+        },
+        {
+          "route": "273UP",
+          "board": "378",
+          "alight": "2056",
+          "departure": "2026-11-17T08:47:40+05:30",
+          "alight_at": "2026-11-17T09:04:38+05:30"
+        }
+      ]
+    },
+    {
+      "case": "corridor-340UP",
+      "corridor": "ITO AGCR /  ITO → Jagatpuri F Block",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "317UP"
+        ],
+        "board": [
+          "1037"
+        ],
+        "alight": [
+          "1166"
+        ],
+        "arrival": "2026-11-17T13:21:21+05:30",
+        "duration_seconds": 1281,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 33,
+        "ride_seconds": 1248
+      },
+      "after": {
+        "routes": [
+          "317UP"
+        ],
+        "board": [
+          "1037"
+        ],
+        "alight": [
+          "1166"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "720DOWN",
+            "departure": "2026-11-17T13:03:34+05:30"
+          },
+          {
+            "route": "352UP",
+            "departure": "2026-11-17T13:05:39+05:30"
+          },
+          {
+            "route": "623DOWN",
+            "departure": "2026-11-17T13:07:38+05:30"
+          },
+          {
+            "route": "340UP",
+            "departure": "2026-11-17T13:10:11+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T13:21:21+05:30",
+        "duration_seconds": 1281,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 33,
+        "ride_seconds": 1248
+      },
+      "direct_before": [
+        "317UP",
+        "720DOWN"
+      ],
+      "direct_after": [
+        "317UP",
+        "720DOWN",
+        "623DOWN"
+      ],
+      "alternatives_before": [
+        [
+          "317UP"
+        ],
+        [
+          "85DOWN",
+          "317UP"
+        ],
+        [
+          "720DOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "317UP"
+        ],
+        [
+          "720DOWN"
+        ],
+        [
+          "623DOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-340UP",
+      "corridor": "Near ITO AGCR /  ITO → near Jagatpuri F Block",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "623DOWN",
+          "473DOWN"
+        ],
+        "board": [
+          "1037",
+          "7889"
+        ],
+        "alight": [
+          "7889",
+          "2104"
+        ],
+        "arrival": "2026-11-17T13:49:35+05:30",
+        "duration_seconds": 2975,
+        "transfers": 1,
+        "access_walk_seconds": 249,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 425,
+        "wait_seconds": 1254,
+        "ride_seconds": 1047
+      },
+      "after": {
+        "routes": [
+          "623DOWN",
+          "473DOWN"
+        ],
+        "board": [
+          "1037",
+          "7889"
+        ],
+        "alight": [
+          "7889",
+          "2104"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T13:49:35+05:30",
+        "duration_seconds": 2975,
+        "transfers": 1,
+        "access_walk_seconds": 249,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 425,
+        "wait_seconds": 1254,
+        "ride_seconds": 1047
+      },
+      "direct_before": [
+        "281UP"
+      ],
+      "direct_after": [
+        "281UP"
+      ],
+      "alternatives_before": [
+        [
+          "623DOWN",
+          "473DOWN"
+        ],
+        [
+          "352UP",
+          "473DOWN"
+        ],
+        [
+          "281UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "623DOWN",
+          "473DOWN"
+        ],
+        [
+          "352UP",
+          "473DOWN"
+        ],
+        [
+          "281UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "corridor-507UP",
+      "corridor": "DDA Flats Munirka → South Extension  Petrol pump",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "507UP"
+        ],
+        "board": [
+          "9773"
+        ],
+        "alight": [
+          "2841"
+        ],
+        "arrival": "2026-11-17T17:59:29+05:30",
+        "duration_seconds": 1769,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 519,
+        "ride_seconds": 1250
+      },
+      "after": {
+        "routes": [
+          "507UP"
+        ],
+        "board": [
+          "9773"
+        ],
+        "alight": [
+          "2841"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T17:59:29+05:30",
+        "duration_seconds": 1769,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 519,
+        "ride_seconds": 1250
+      },
+      "direct_before": [
+        "507UP"
+      ],
+      "direct_after": [
+        "507UP"
+      ],
+      "alternatives_before": [
+        [
+          "507UP"
+        ],
+        [
+          "764UP",
+          "507UP"
+        ],
+        [
+          "507UP",
+          "711AUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "507UP"
+        ],
+        [
+          "507UP",
+          "711AUP"
+        ],
+        [
+          "507UP",
+          "543ADOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-507UP",
+      "corridor": "Near DDA Flats Munirka → near South Extension  Petrol pump",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "711AUP",
+          "507UP"
+        ],
+        "board": [
+          "2417",
+          "2841"
+        ],
+        "alight": [
+          "2841",
+          "10022"
+        ],
+        "arrival": "2026-11-17T18:11:47+05:30",
+        "duration_seconds": 2507,
+        "transfers": 1,
+        "access_walk_seconds": 423,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 148,
+        "wait_seconds": 933,
+        "ride_seconds": 1003
+      },
+      "after": {
+        "routes": [
+          "711AUP",
+          "507UP"
+        ],
+        "board": [
+          "2417",
+          "2841"
+        ],
+        "alight": [
+          "2841",
+          "10022"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T18:11:47+05:30",
+        "duration_seconds": 2507,
+        "transfers": 1,
+        "access_walk_seconds": 423,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 148,
+        "wait_seconds": 933,
+        "ride_seconds": 1003
+      },
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [
+        [
+          "711AUP",
+          "507UP"
+        ],
+        [
+          "711AUP",
+          "522BDOWN"
+        ],
+        [
+          "623DOWN",
+          "522BDOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "711AUP",
+          "507UP"
+        ],
+        [
+          "711AUP",
+          "522BDOWN"
+        ],
+        [
+          "623DOWN",
+          "522BDOWN"
+        ]
+      ],
+      "unverified_platform_services": [
+        {
+          "route": "507UP",
+          "board": "9773",
+          "alight": "10022",
+          "departure": "2026-11-17T17:38:39+05:30",
+          "alight_at": "2026-11-17T18:00:19+05:30"
+        }
+      ]
+    },
+    {
+      "case": "corridor-534UP",
+      "corridor": "Ras Vihar Apartment (PS Madhu Vihar) → Maharani Bagh",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "534UP"
+        ],
+        "board": [
+          "2581"
+        ],
+        "alight": [
+          "7902"
+        ],
+        "arrival": "2026-11-17T08:57:22+05:30",
+        "duration_seconds": 1642,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 20,
+        "ride_seconds": 1622
+      },
+      "after": {
+        "routes": [
+          "534UP"
+        ],
+        "board": [
+          "2581"
+        ],
+        "alight": [
+          "7902"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "534AUP",
+            "departure": "2026-11-17T08:35:58+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T08:57:22+05:30",
+        "duration_seconds": 1642,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 20,
+        "ride_seconds": 1622
+      },
+      "direct_before": [
+        "534UP"
+      ],
+      "direct_after": [
+        "534UP"
+      ],
+      "alternatives_before": [
+        [
+          "534UP"
+        ],
+        [
+          "534UP",
+          "D-030UP"
+        ],
+        [
+          "534UP",
+          "611BUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "534UP"
+        ],
+        [
+          "534UP",
+          "D-030UP"
+        ],
+        [
+          "534UP",
+          "611BUP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-534UP",
+      "corridor": "Near Ras Vihar Apartment (PS Madhu Vihar) → near Maharani Bagh",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": null,
+      "after": null,
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [],
+      "alternatives_after": [],
+      "unverified_platform_services": [
+        {
+          "route": "534UP",
+          "board": "2581",
+          "alight": "7902",
+          "departure": "2026-11-17T08:32:20+05:30",
+          "alight_at": "2026-11-17T08:59:22+05:30"
+        },
+        {
+          "route": "534AUP",
+          "board": "2581",
+          "alight": "7902",
+          "departure": "2026-11-17T08:35:58+05:30",
+          "alight_at": "2026-11-17T09:02:49+05:30"
+        }
+      ]
+    },
+    {
+      "case": "corridor-543UP",
+      "corridor": "East Vinod Nagar Depot → ISBT Sarai Kale Khan",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "543AUP"
+        ],
+        "board": [
+          "3293"
+        ],
+        "alight": [
+          "2714"
+        ],
+        "arrival": "2026-11-17T13:14:09+05:30",
+        "duration_seconds": 849,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 86,
+        "ride_seconds": 763
+      },
+      "after": {
+        "routes": [
+          "543AUP"
+        ],
+        "board": [
+          "3293"
+        ],
+        "alight": [
+          "2714"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T13:14:09+05:30",
+        "duration_seconds": 849,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 86,
+        "ride_seconds": 763
+      },
+      "direct_before": [
+        "543AUP"
+      ],
+      "direct_after": [
+        "543AUP"
+      ],
+      "alternatives_before": [
+        [
+          "543AUP"
+        ],
+        [
+          "543AUP",
+          "534AUP"
+        ],
+        [
+          "543AUP",
+          "473UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "543AUP"
+        ],
+        [
+          "543AUP",
+          "534AUP"
+        ],
+        [
+          "543AUP",
+          "473UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-543UP",
+      "corridor": "Near East Vinod Nagar Depot → near ISBT Sarai Kale Khan",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": null,
+      "after": null,
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [],
+      "alternatives_after": [],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "corridor-578UP",
+      "corridor": "Vasant Vihar / Poorvi Marg RK Puram Sec 5 → Samalkha Crossing",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "578UP"
+        ],
+        "board": [
+          "3451"
+        ],
+        "alight": [
+          "3208"
+        ],
+        "arrival": "2026-11-17T18:09:22+05:30",
+        "duration_seconds": 2362,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 296,
+        "ride_seconds": 2066
+      },
+      "after": {
+        "routes": [
+          "578UP"
+        ],
+        "board": [
+          "3451"
+        ],
+        "alight": [
+          "3208"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T18:09:22+05:30",
+        "duration_seconds": 2362,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 296,
+        "ride_seconds": 2066
+      },
+      "direct_before": [
+        "578UP"
+      ],
+      "direct_after": [
+        "578UP"
+      ],
+      "alternatives_before": [
+        [
+          "578UP"
+        ],
+        [
+          "578UP",
+          "706AUP"
+        ],
+        [
+          "578UP",
+          "543AUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "578UP"
+        ],
+        [
+          "578UP",
+          "706AUP"
+        ],
+        [
+          "578UP",
+          "543AUP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-578UP",
+      "corridor": "Near Vasant Vihar / Poorvi Marg RK Puram Sec 5 → near Samalkha Crossing",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": null,
+      "after": null,
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [],
+      "alternatives_after": [],
+      "unverified_platform_services": [
+        {
+          "route": "578UP",
+          "board": "3451",
+          "alight": "3208",
+          "departure": "2026-11-17T17:34:56+05:30",
+          "alight_at": "2026-11-17T18:09:22+05:30"
+        }
+      ]
+    },
+    {
+      "case": "corridor-623UP",
+      "corridor": "Shakarpur (Vikas Marg) → Sewa Nagar Flyover",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "623UP"
+        ],
+        "board": [
+          "8833"
+        ],
+        "alight": [
+          "2552"
+        ],
+        "arrival": "2026-11-17T09:09:52+05:30",
+        "duration_seconds": 2392,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 194,
+        "ride_seconds": 2198
+      },
+      "after": {
+        "routes": [
+          "623UP"
+        ],
+        "board": [
+          "8833"
+        ],
+        "alight": [
+          "2552"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T09:09:52+05:30",
+        "duration_seconds": 2392,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 194,
+        "ride_seconds": 2198
+      },
+      "direct_before": [
+        "623UP"
+      ],
+      "direct_after": [
+        "623UP"
+      ],
+      "alternatives_before": [
+        [
+          "623UP"
+        ],
+        [
+          "73UP",
+          "623UP"
+        ],
+        [
+          "D-018UP",
+          "623UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "623UP"
+        ],
+        [
+          "D-018UP",
+          "440UP"
+        ],
+        [
+          "D-018UP",
+          "D-030UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-623UP",
+      "corridor": "Near Shakarpur (Vikas Marg) → near Sewa Nagar Flyover",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": null,
+      "after": null,
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [],
+      "alternatives_after": [],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "corridor-721UP",
+      "corridor": "RAJENDER PLACE METRO STATION → Payal Cinema",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "753UP"
+        ],
+        "board": [
+          "5721"
+        ],
+        "alight": [
+          "1886"
+        ],
+        "arrival": "2026-11-17T13:16:26+05:30",
+        "duration_seconds": 986,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 66,
+        "ride_seconds": 920
+      },
+      "after": {
+        "routes": [
+          "753UP"
+        ],
+        "board": [
+          "5721"
+        ],
+        "alight": [
+          "1886"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "807AUP",
+            "departure": "2026-11-17T13:01:27+05:30"
+          },
+          {
+            "route": "721UP",
+            "departure": "2026-11-17T13:05:42+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T13:16:26+05:30",
+        "duration_seconds": 986,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 66,
+        "ride_seconds": 920
+      },
+      "direct_before": [
+        "753UP",
+        "807AUP"
+      ],
+      "direct_after": [
+        "753UP",
+        "807AUP"
+      ],
+      "alternatives_before": [
+        [
+          "753UP"
+        ],
+        [
+          "753UP",
+          "73UP"
+        ],
+        [
+          "807AUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "753UP"
+        ],
+        [
+          "753UP",
+          "73UP"
+        ],
+        [
+          "807AUP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-721UP",
+      "corridor": "Near RAJENDER PLACE METRO STATION → near Payal Cinema",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "842UP",
+          "73UP"
+        ],
+        "board": [
+          "1897",
+          "1901"
+        ],
+        "alight": [
+          "1901",
+          "1886"
+        ],
+        "arrival": "2026-11-17T13:47:43+05:30",
+        "duration_seconds": 2863,
+        "transfers": 1,
+        "access_walk_seconds": 807,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 535,
+        "wait_seconds": 441,
+        "ride_seconds": 1080
+      },
+      "after": {
+        "routes": [
+          "842UP",
+          "73UP"
+        ],
+        "board": [
+          "1897",
+          "1901"
+        ],
+        "alight": [
+          "1901",
+          "1886"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T13:47:43+05:30",
+        "duration_seconds": 2863,
+        "transfers": 1,
+        "access_walk_seconds": 807,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 535,
+        "wait_seconds": 441,
+        "ride_seconds": 1080
+      },
+      "direct_before": [
+        "863UP"
+      ],
+      "direct_after": [
+        "863UP"
+      ],
+      "alternatives_before": [
+        [
+          "842UP",
+          "73UP"
+        ],
+        [
+          "953UP",
+          "73UP"
+        ],
+        [
+          "863UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "842UP",
+          "73UP"
+        ],
+        [
+          "953UP",
+          "73UP"
+        ],
+        [
+          "863UP"
+        ]
+      ],
+      "unverified_platform_services": [
+        {
+          "route": "721UP",
+          "board": "1898",
+          "alight": "1886",
+          "departure": "2026-11-17T13:04:42+05:30",
+          "alight_at": "2026-11-17T13:24:37+05:30"
+        },
+        {
+          "route": "753UP",
+          "board": "5721",
+          "alight": "1886",
+          "departure": "2026-11-17T13:12:06+05:30",
+          "alight_at": "2026-11-17T13:27:26+05:30"
+        },
+        {
+          "route": "838UP",
+          "board": "1898",
+          "alight": "1886",
+          "departure": "2026-11-17T13:22:53+05:30",
+          "alight_at": "2026-11-17T13:41:28+05:30"
+        },
+        {
+          "route": "803UP",
+          "board": "1898",
+          "alight": "1886",
+          "departure": "2026-11-17T13:29:38+05:30",
+          "alight_at": "2026-11-17T13:48:14+05:30"
+        }
+      ]
+    },
+    {
+      "case": "corridor-764UP",
+      "corridor": "Dwarka More Metro Station (Terminal) → Dwarka Flyover Palam Village / Palam Railway X ing",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "764UP"
+        ],
+        "board": [
+          "3809"
+        ],
+        "alight": [
+          "3695"
+        ],
+        "arrival": "2026-11-17T18:01:01+05:30",
+        "duration_seconds": 1861,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 47,
+        "ride_seconds": 1814
+      },
+      "after": {
+        "routes": [
+          "764UP"
+        ],
+        "board": [
+          "3809"
+        ],
+        "alight": [
+          "3695"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "DW-4DOWN",
+            "departure": "2026-11-17T17:37:00+05:30"
+          },
+          {
+            "route": "765UP",
+            "departure": "2026-11-17T17:38:54+05:30"
+          },
+          {
+            "route": "727DOWN",
+            "departure": "2026-11-17T17:55:00+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T18:01:01+05:30",
+        "duration_seconds": 1861,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 47,
+        "ride_seconds": 1814
+      },
+      "direct_before": [
+        "764UP",
+        "DW-4DOWN"
+      ],
+      "direct_after": [
+        "764UP",
+        "DW-4DOWN"
+      ],
+      "alternatives_before": [
+        [
+          "764UP"
+        ],
+        [
+          "764UP",
+          "774DOWN"
+        ],
+        [
+          "DW-4DOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "764UP"
+        ],
+        [
+          "764UP",
+          "774DOWN"
+        ],
+        [
+          "DW-4DOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-764UP",
+      "corridor": "Near Dwarka More Metro Station (Terminal) → near Dwarka Flyover Palam Village / Palam Railway X ing",
+      "departure": "2026-11-17T17:30:00+05:30",
+      "before": {
+        "routes": [
+          "751AUP",
+          "DW-4DOWN"
+        ],
+        "board": [
+          "9954",
+          "3811"
+        ],
+        "alight": [
+          "3811",
+          "3695"
+        ],
+        "arrival": "2026-11-17T18:05:39+05:30",
+        "duration_seconds": 2139,
+        "transfers": 1,
+        "access_walk_seconds": 188,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 171,
+        "wait_seconds": 221,
+        "ride_seconds": 1559
+      },
+      "after": {
+        "routes": [
+          "751AUP",
+          "DW-4DOWN"
+        ],
+        "board": [
+          "9954",
+          "3811"
+        ],
+        "alight": [
+          "3811",
+          "3695"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T18:05:39+05:30",
+        "duration_seconds": 2139,
+        "transfers": 1,
+        "access_walk_seconds": 188,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 171,
+        "wait_seconds": 221,
+        "ride_seconds": 1559
+      },
+      "direct_before": [
+        "DW-4DOWN"
+      ],
+      "direct_after": [
+        "DW-4DOWN"
+      ],
+      "alternatives_before": [
+        [
+          "751AUP",
+          "DW-4DOWN"
+        ],
+        [
+          "DW-4DOWN"
+        ],
+        [
+          "764UP",
+          "DW-4DOWN"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "751AUP",
+          "DW-4DOWN"
+        ],
+        [
+          "DW-4DOWN"
+        ],
+        [
+          "751AUP",
+          "715UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "corridor-85UP",
+      "corridor": "Vijaya Laxmi Apartment → ITO AGCR /  ITO",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "85UP"
+        ],
+        "board": [
+          "3167"
+        ],
+        "alight": [
+          "2197"
+        ],
+        "arrival": "2026-11-17T08:57:56+05:30",
+        "duration_seconds": 1676,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 168,
+        "ride_seconds": 1508
+      },
+      "after": {
+        "routes": [
+          "85UP"
+        ],
+        "board": [
+          "3167"
+        ],
+        "alight": [
+          "2197"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "DS-20DOWN",
+            "departure": "2026-11-17T08:35:49+05:30"
+          },
+          {
+            "route": "740EXTUP",
+            "departure": "2026-11-17T08:35:58+05:30"
+          },
+          {
+            "route": "85EXTUP",
+            "departure": "2026-11-17T08:43:26+05:30"
+          },
+          {
+            "route": "740UP",
+            "departure": "2026-11-17T08:49:04+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T08:57:56+05:30",
+        "duration_seconds": 1676,
+        "transfers": 0,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 168,
+        "ride_seconds": 1508
+      },
+      "direct_before": [
+        "85UP"
+      ],
+      "direct_after": [
+        "85UP"
+      ],
+      "alternatives_before": [
+        [
+          "85UP"
+        ],
+        [
+          "534UP",
+          "85UP"
+        ],
+        [
+          "DS-19DOWN",
+          "85UP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "85UP"
+        ],
+        [
+          "85UP",
+          "703UP"
+        ],
+        [
+          "85UP",
+          "73UP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-85UP",
+      "corridor": "Near Vijaya Laxmi Apartment → near ITO AGCR /  ITO",
+      "departure": "2026-11-17T08:30:00+05:30",
+      "before": {
+        "routes": [
+          "DS-20DOWN"
+        ],
+        "board": [
+          "3167"
+        ],
+        "alight": [
+          "2197"
+        ],
+        "arrival": "2026-11-17T09:08:15+05:30",
+        "duration_seconds": 2295,
+        "transfers": 0,
+        "access_walk_seconds": 223,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 484,
+        "wait_seconds": 126,
+        "ride_seconds": 1462
+      },
+      "after": {
+        "routes": [
+          "DS-20DOWN"
+        ],
+        "board": [
+          "3167"
+        ],
+        "alight": [
+          "2197"
+        ],
+        "other_lines_same_platforms": [
+          {
+            "route": "740EXTUP",
+            "departure": "2026-11-17T08:35:58+05:30"
+          },
+          {
+            "route": "85UP",
+            "departure": "2026-11-17T08:37:48+05:30"
+          },
+          {
+            "route": "85EXTUP",
+            "departure": "2026-11-17T08:43:26+05:30"
+          },
+          {
+            "route": "740UP",
+            "departure": "2026-11-17T08:49:04+05:30"
+          }
+        ],
+        "arrival": "2026-11-17T09:08:15+05:30",
+        "duration_seconds": 2295,
+        "transfers": 0,
+        "access_walk_seconds": 223,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 484,
+        "wait_seconds": 126,
+        "ride_seconds": 1462
+      },
+      "direct_before": [
+        "DS-20DOWN",
+        "740EXTUP"
+      ],
+      "direct_after": [
+        "DS-20DOWN",
+        "740EXTUP"
+      ],
+      "alternatives_before": [
+        [
+          "DS-20DOWN"
+        ],
+        [
+          "534AUP",
+          "DS-20DOWN"
+        ],
+        [
+          "740EXTUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "DS-20DOWN"
+        ],
+        [
+          "740EXTUP"
+        ],
+        [
+          "D-4501DOWN",
+          "359DOWN"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "corridor-990UP",
+      "corridor": "East Patel Nagar → Shakur Pur Crossing",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": {
+        "routes": [
+          "316DOWN",
+          "990EXTUP"
+        ],
+        "board": [
+          "1899",
+          "1440"
+        ],
+        "alight": [
+          "1440",
+          "1236"
+        ],
+        "arrival": "2026-11-17T13:29:02+05:30",
+        "duration_seconds": 1742,
+        "transfers": 1,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 308,
+        "ride_seconds": 1434
+      },
+      "after": {
+        "routes": [
+          "316DOWN",
+          "990EXTUP"
+        ],
+        "board": [
+          "1899",
+          "1440"
+        ],
+        "alight": [
+          "1440",
+          "1236"
+        ],
+        "other_lines_same_platforms": [],
+        "arrival": "2026-11-17T13:29:02+05:30",
+        "duration_seconds": 1742,
+        "transfers": 1,
+        "access_walk_seconds": 0,
+        "transfer_walk_seconds": 0,
+        "egress_walk_seconds": 0,
+        "wait_seconds": 308,
+        "ride_seconds": 1434
+      },
+      "direct_before": [
+        "990AUP"
+      ],
+      "direct_after": [
+        "990AUP"
+      ],
+      "alternatives_before": [
+        [
+          "316DOWN",
+          "990EXTUP"
+        ],
+        [
+          "910UP",
+          "990EXTUP"
+        ],
+        [
+          "990AUP"
+        ]
+      ],
+      "alternatives_after": [
+        [
+          "316DOWN",
+          "990EXTUP"
+        ],
+        [
+          "910UP",
+          "990EXTUP"
+        ],
+        [
+          "990AUP"
+        ]
+      ],
+      "unverified_platform_services": []
+    },
+    {
+      "case": "street-990UP",
+      "corridor": "Near East Patel Nagar → near Shakur Pur Crossing",
+      "departure": "2026-11-17T13:00:00+05:30",
+      "before": null,
+      "after": null,
+      "direct_before": [],
+      "direct_after": [],
+      "alternatives_before": [],
+      "alternatives_after": [],
+      "unverified_platform_services": [
+        {
+          "route": "990EXTUP",
+          "board": "1899",
+          "alight": "1236",
+          "departure": "2026-11-17T13:04:43+05:30",
+          "alight_at": "2026-11-17T13:34:02+05:30"
+        },
+        {
+          "route": "990AUP",
+          "board": "1899",
+          "alight": "1236",
+          "departure": "2026-11-17T13:06:47+05:30",
+          "alight_at": "2026-11-17T13:29:07+05:30"
+        },
+        {
+          "route": "990UP",
+          "board": "1899",
+          "alight": "1236",
+          "departure": "2026-11-17T13:12:13+05:30",
+          "alight_at": "2026-11-17T13:41:10+05:30"
+        },
+        {
+          "route": "85EXTUP",
+          "board": "1899",
+          "alight": "4342",
+          "departure": "2026-11-17T13:14:47+05:30",
+          "alight_at": "2026-11-17T13:36:37+05:30"
+        },
+        {
+          "route": "985_UP",
+          "board": "1899",
+          "alight": "1236",
+          "departure": "2026-11-17T13:15:28+05:30",
+          "alight_at": "2026-11-17T13:37:57+05:30"
+        },
+        {
+          "route": "970UP",
+          "board": "1899",
+          "alight": "4342",
+          "departure": "2026-11-17T13:16:10+05:30",
+          "alight_at": "2026-11-17T13:38:07+05:30"
+        },
+        {
+          "route": "930UP",
+          "board": "1899",
+          "alight": "4342",
+          "departure": "2026-11-17T13:21:22+05:30",
+          "alight_at": "2026-11-17T13:43:18+05:30"
+        },
+        {
+          "route": "975UP",
+          "board": "1899",
+          "alight": "4342",
+          "departure": "2026-11-17T13:23:43+05:30",
+          "alight_at": "2026-11-17T13:45:40+05:30"
+        }
+      ]
+    }
+  ],
+  "walks": [
+    {
+      "key": "aiims-access",
+      "origin": [
+        28.568914,
+        77.213693
+      ],
+      "destination": [
+        28.569232,
+        77.212737
+      ],
+      "distance_m": 369,
+      "seconds": 307,
+      "before_m": 11052,
+      "after_m": 369
+    },
+    {
+      "key": "punjabi-access",
+      "origin": [
+        28.67548133204641,
+        77.1404635907311
+      ],
+      "destination": [
+        28.675552,
+        77.140421
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "wazirpur-egress",
+      "origin": [
+        28.691948,
+        77.153415
+      ],
+      "destination": [
+        28.691712261319022,
+        77.15343657750829
+      ],
+      "distance_m": 52,
+      "seconds": 42,
+      "before_m": 52,
+      "after_m": 52
+    },
+    {
+      "key": "origin-to-2840",
+      "origin": [
+        28.568914,
+        77.213693
+      ],
+      "destination": [
+        28.56893088785809,
+        77.2168860221293
+      ],
+      "distance_m": 788,
+      "seconds": 643,
+      "before_m": 10707,
+      "after_m": 788
+    },
+    {
+      "key": "2828-to-2840",
+      "origin": [
+        28.56873036246039,
+        77.21849039207883
+      ],
+      "destination": [
+        28.56893088785809,
+        77.2168860221293
+      ],
+      "distance_m": 1263,
+      "seconds": 1022,
+      "before_m": 10249,
+      "after_m": 1263
+    },
+    {
+      "key": "213UP-access",
+      "origin": [
+        28.6504851,
+        77.2399481
+      ],
+      "destination": [
+        28.649272,
+        77.239311
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "213UP-egress",
+      "origin": [
+        28.67120107036109,
+        77.26158052682878
+      ],
+      "destination": [
+        28.67022,
+        77.2631889
+      ],
+      "distance_m": 1102,
+      "seconds": 882,
+      "before_m": 1102,
+      "after_m": 1102
+    },
+    {
+      "key": "340UP-access",
+      "origin": [
+        28.6293108,
+        77.2459057
+      ],
+      "destination": [
+        28.62814191474417,
+        77.2450429197547
+      ],
+      "distance_m": 312,
+      "seconds": 249,
+      "before_m": 312,
+      "after_m": 312
+    },
+    {
+      "key": "340UP-egress",
+      "origin": [
+        28.648333,
+        77.294949
+      ],
+      "destination": [
+        28.6477772,
+        77.2969842
+      ],
+      "distance_m": 3989,
+      "seconds": 3191,
+      "before_m": 3989,
+      "after_m": 3989
+    },
+    {
+      "key": "507UP-access",
+      "origin": [
+        28.5553973,
+        77.1802524
+      ],
+      "destination": [
+        28.5537372327592,
+        77.179198483991
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "507UP-egress",
+      "origin": [
+        28.56872479805183,
+        77.22106710076334
+      ],
+      "destination": [
+        28.5678775,
+        77.2228436
+      ],
+      "distance_m": 2134,
+      "seconds": 1719,
+      "before_m": 10579,
+      "after_m": 2134
+    },
+    {
+      "key": "534UP-access",
+      "origin": [
+        28.6265188,
+        77.3063238
+      ],
+      "destination": [
+        28.62525505570241,
+        77.30562642216684
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "534UP-egress",
+      "origin": [
+        28.576565,
+        77.264881
+      ],
+      "destination": [
+        28.5758722,
+        77.2671183
+      ],
+      "distance_m": 317,
+      "seconds": 254,
+      "before_m": 317,
+      "after_m": 317
+    },
+    {
+      "key": "543UP-access",
+      "origin": [
+        28.6229782,
+        77.3036042
+      ],
+      "destination": [
+        28.62191057009414,
+        77.3022623401445
+      ],
+      "distance_m": 562,
+      "seconds": 450,
+      "before_m": 562,
+      "after_m": 562
+    },
+    {
+      "key": "543UP-egress",
+      "origin": [
+        28.58662627239774,
+        77.25952416411319
+      ],
+      "destination": [
+        28.5861045,
+        77.2618836
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "578UP-access",
+      "origin": [
+        28.5645167,
+        77.1694644
+      ],
+      "destination": [
+        28.562822,
+        77.167991
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "578UP-egress",
+      "origin": [
+        28.537322,
+        77.092137
+      ],
+      "destination": [
+        28.5366178,
+        77.0933465
+      ],
+      "distance_m": 287,
+      "seconds": 230,
+      "before_m": 287,
+      "after_m": 287
+    },
+    {
+      "key": "623UP-access",
+      "origin": [
+        28.6350729,
+        77.2827986
+      ],
+      "destination": [
+        28.63338356814324,
+        77.28195145737119
+      ],
+      "distance_m": 268,
+      "seconds": 215,
+      "before_m": 268,
+      "after_m": 268
+    },
+    {
+      "key": "623UP-egress",
+      "origin": [
+        28.57875,
+        77.229533
+      ],
+      "destination": [
+        28.5778834,
+        77.2313741
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "721UP-access",
+      "origin": [
+        28.6436338,
+        77.1786917
+      ],
+      "destination": [
+        28.64231228689357,
+        77.17764973744771
+      ],
+      "distance_m": null,
+      "seconds": null,
+      "before_m": null,
+      "after_m": null
+    },
+    {
+      "key": "721UP-egress",
+      "origin": [
+        28.6309,
+        77.1383
+      ],
+      "destination": [
+        28.6298205,
+        77.140118
+      ],
+      "distance_m": 669,
+      "seconds": 535,
+      "before_m": 669,
+      "after_m": 669
+    },
+    {
+      "key": "764UP-access",
+      "origin": [
+        28.619187,
+        77.0331319
+      ],
+      "destination": [
+        28.617802,
+        77.031875
+      ],
+      "distance_m": 288,
+      "seconds": 231,
+      "before_m": 288,
+      "after_m": 288
+    },
+    {
+      "key": "764UP-egress",
+      "origin": [
+        28.583896366432,
+        77.09151327620931
+      ],
+      "destination": [
+        28.5831854,
+        77.0931737
+      ],
+      "distance_m": 207,
+      "seconds": 171,
+      "before_m": 207,
+      "after_m": 207
+    },
+    {
+      "key": "85UP-access",
+      "origin": [
+        28.6302995,
+        77.3101079
+      ],
+      "destination": [
+        28.6289,
+        77.309017
+      ],
+      "distance_m": 279,
+      "seconds": 223,
+      "before_m": 279,
+      "after_m": 279
+    },
+    {
+      "key": "85UP-egress",
+      "origin": [
+        28.62792138965657,
+        77.24446535320651
+      ],
+      "destination": [
+        28.6271437,
+        77.2464557
+      ],
+      "distance_m": 605,
+      "seconds": 484,
+      "before_m": 605,
+      "after_m": 605
+    },
+    {
+      "key": "990UP-access",
+      "origin": [
+        28.6438202,
+        77.1745437
+      ],
+      "destination": [
+        28.6423912476023,
+        77.1735534453166
+      ],
+      "distance_m": 5154,
+      "seconds": 4123,
+      "before_m": 5154,
+      "after_m": 5154
+    },
+    {
+      "key": "990UP-egress",
+      "origin": [
+        28.684228,
+        77.147619
+      ],
+      "destination": [
+        28.6833452,
+        77.1494149
+      ],
+      "distance_m": 456,
+      "seconds": 365,
+      "before_m": 456,
+      "after_m": 456
+    }
+  ]
+}

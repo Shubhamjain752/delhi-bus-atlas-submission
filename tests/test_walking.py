@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+import json
 from pathlib import Path
 
 import numpy as np
@@ -55,6 +56,49 @@ class WalkRoutingTest(unittest.TestCase):
         self.assertEqual(foot_directions({'highway':'secondary'}), 3)
         self.assertTrue(blocked_node({'barrier':'wall'}))
 
+    def test_only_estimated_ground_approaches_join_a_grade_separated_crossing(self):
+        # A separate stairway under a divided road has two street-facing ends.
+        a, b = [28.6,77.2], [28.6,77.201]
+        c, d = [28.6004,77.2], [28.6004,77.201]
+        e, f = [28.60004,77.201], [28.60008,77.20095]
+        g, h = [28.60032,77.20095], [28.60036,77.201]
+        folder = Path(self.work.name)
+        np.savez(folder/'walk.npz', coords=[a,b,c,d,e,f,g,h],
+                 edges=[[0,1],[2,3],[4,5],[5,6],[6,7]], directions=[3]*5,
+                 factors=[1,1,1.5,1,1.5], delays=[0]*5,
+                 barriers=[[28.6002,77.1999,28.6002,77.2011]])
+        def link(ground, stair, street, next_street):
+            return {'landing':ground,'steps_neighbour':stair,
+                    'street':street,'street_neighbour':next_street}
+        # A spurious direct link through the median must be rejected.
+        links = [link(e,f,b,a),link(h,g,d,c),link(e,f,d,c)]
+        (folder/'walk-crossings.json').write_text(json.dumps({'crossings':[{'approaches':links}]}))
+        trip = Walking(folder,use_crossing_access=True).route(a,c)
+        self.assertIsNotNone(trip)
+        self.assertTrue(trip['uses_steps'])
+        self.assertEqual(trip['inferred_crossing_access_m'],9)
+        self.assertIn(g,trip['geometry'])
+        self.assertIn(f,trip['geometry'])
+        self.assertIsNone(Walking(folder).route(a,c))
+
+    def test_approach_builder_rejects_mapped_obstacle_and_other_floor(self):
+        from shapely.geometry import Polygon
+        from tools.build_crossing_access import approach
+
+        # The upper pavement has a disconnected bridge at the same coordinates;
+        # source neighbour coordinates identify the intended street level.
+        landing = [28.6002,77.2019]
+        street, neighbour = self.walk.coords[3].tolist(), self.walk.coords[2].tolist()
+        self.assertEqual(self.walk.mapped_node(street,neighbour),3)
+        self.assertEqual(self.walk.mapped_node(street,self.walk.coords[5]),4)
+        candidate = {'landing':landing,'steps_neighbour':landing,'landing_node':10,
+                     'steps_way':11,'graph':4}
+        target = [(12,street,neighbour,13)]
+        self.assertIsNotNone(approach(self.walk,candidate,target,[]))
+        building = Polygon([(28.60019,77.20194),(28.60021,77.20194),
+                            (28.60021,77.20196),(28.60019,77.20196)])
+        self.assertIsNone(approach(self.walk,candidate,target,[building]))
+
 
 class DelhiGraphTest(unittest.TestCase):
     @classmethod
@@ -62,7 +106,19 @@ class DelhiGraphTest(unittest.TestCase):
         data_dir = Path(__file__).resolve().parents[1]/'data'
         if not (data_dir/'walk.npz').is_file():
             raise unittest.SkipTest('Build the offline Delhi graph to run real-location checks')
-        cls.walk = Walking(data_dir)
+        cls.walk = Walking(data_dir,use_crossing_access=True)
+
+    def test_aiims_uses_stairs_and_accounts_for_same_side_approaches(self):
+        if len(self.walk.edges)==self.walk.mapped_edge_count:
+            self.skipTest('Install the walking crossing evidence to run the crossing check')
+        trip=self.walk.route((28.568914,77.213693),(28.569232,77.212737),max_distance_m=1100)
+        self.assertIsNotNone(trip)
+        self.assertTrue(300<trip['distance_m']<450)
+        self.assertTrue(trip['uses_steps'])
+        self.assertTrue(50<=trip['inferred_crossing_access_m']<=65)
+        # Check both sides of the physical crossing, not just a short estimate.
+        self.assertIn([28.5689344,77.2117954],trip['geometry'])
+        self.assertIn([28.5693055,77.211831],trip['geometry'])
 
     def test_kashmere_gate_and_nehru_place(self):
         # Published stop coordinates, correct to rounding within a metre.

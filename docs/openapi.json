@@ -3,7 +3,7 @@
   "info": {
     "title": "Delhi Bus Atlas",
     "description": "Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.",
-    "version": "0.5.2"
+    "version": "0.6.0"
   },
   "paths": {
     "/status": {
@@ -672,6 +672,14 @@
             },
             "type": "array",
             "title": "Calls"
+          },
+          "same_platform_services": {
+            "items": {
+              "$ref": "#/components/schemas/PlatformService"
+            },
+            "type": "array",
+            "title": "Same Platform Services",
+            "description": "Other direct lines serving the same boarding and alighting platforms. One eligible departure per line within 30 minutes of the passenger’s ready time."
           }
         },
         "type": "object",
@@ -1004,6 +1012,14 @@
               }
             ]
           },
+          "direct_from_nearby_platforms": {
+            "items": {
+              "$ref": "#/components/schemas/NearbyDirectDeparture"
+            },
+            "type": "array",
+            "title": "Direct From Nearby Platforms",
+            "description": "Direct services from nearby platforms when the walk to board cannot be verified within the search limit. Times start at the boarding platform. These services are separate from the ranked door-to-door journeys."
+          },
           "boarding_alerts": {
             "items": {
               "$ref": "#/components/schemas/BoardingAlert"
@@ -1049,6 +1065,70 @@
           "source"
         ],
         "title": "JourneyResult"
+      },
+      "NearbyDirectDeparture": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "departure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure At",
+            "description": "Departure at the named platform, conditional on the passenger already being there."
+          },
+          "alight_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Alight At",
+            "description": "Estimated time at the alighting platform."
+          },
+          "departure_source": {
+            "type": "string",
+            "title": "Departure Source"
+          },
+          "boarding_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "alighting_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "straight_line_to_board_m": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Straight Line To Board M",
+            "description": "Separation of the starting pin and platform. Walking distance and time to board are unknown."
+          },
+          "egress_walk_seconds": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Egress Walk Seconds",
+            "description": "Mapped walk from the alighting platform to the destination."
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "route",
+          "trip_id",
+          "departure_at",
+          "alight_at",
+          "departure_source",
+          "boarding_stop",
+          "alighting_stop",
+          "straight_line_to_board_m",
+          "egress_walk_seconds"
+        ],
+        "title": "NearbyDirectDeparture"
       },
       "Place": {
         "properties": {
@@ -1212,6 +1292,46 @@
           "note"
         ],
         "title": "PlatformResponse"
+      },
+      "PlatformService": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "title": "Route Id"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          },
+          "trip_id": {
+            "type": "string",
+            "title": "Trip Id"
+          },
+          "departure_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departure At"
+          },
+          "alight_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Alight At"
+          },
+          "departure_source": {
+            "type": "string",
+            "title": "Departure Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "route",
+          "trip_id",
+          "departure_at",
+          "alight_at",
+          "departure_source"
+        ],
+        "title": "PlatformService"
       },
       "PossibleBoarding": {
         "properties": {
@@ -1395,7 +1515,21 @@
           },
           "endpoint_stops_considered": {
             "type": "integer",
-            "title": "Endpoint Stops Considered"
+            "title": "Endpoint Stops Considered",
+            "description": "Maximum number of nearby endpoint platforms considered for transfer journeys."
+          },
+          "direct_endpoints": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "all_in_walking_radius"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direct Endpoints",
+            "description": "Direct-service searches consider connecting stops throughout the walking radius."
           },
           "max_transfer_candidates": {
             "type": "integer",
@@ -1687,6 +1821,31 @@
               }
             ],
             "title": "Includes Arterial Without Mapped Sidewalk"
+          },
+          "uses_steps": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Steps",
+            "description": "The mapped walking path includes steps."
+          },
+          "inferred_crossing_access_m": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inferred Crossing Access M",
+            "description": "Metres of estimated street-level access to a mapped pedestrian crossing. These links have not been checked on foot."
           }
         },
         "type": "object",
@@ -1788,6 +1947,31 @@
               }
             ],
             "title": "Includes Arterial Without Mapped Sidewalk"
+          },
+          "uses_steps": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Steps",
+            "description": "The mapped walking path includes steps."
+          },
+          "inferred_crossing_access_m": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inferred Crossing Access M",
+            "description": "Metres of estimated street-level access to a mapped pedestrian crossing. These links have not been checked on foot."
           },
           "assumed_pace_m_s": {
             "type": "number",
