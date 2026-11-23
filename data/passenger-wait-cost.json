@@ -1,0 +1,36 @@
+{
+  "dates": [
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-24",
+    "2026-10-25",
+    "2026-10-26",
+    "2026-10-29"
+  ],
+  "run_id": "74a56f438d52ec0e",
+  "measure": "Seconds from the first verified line at the boarding platform to the first verified passage of the recommended line. Rider already at stop.",
+  "all": {
+    "queries": 1728,
+    "paired_observed_choices": 304,
+    "before": {
+      "median_extra_wait_seconds": 212.0,
+      "within_five_minutes": 164
+    },
+    "after": {
+      "median_extra_wait_seconds": 184.5,
+      "within_five_minutes": 168
+    }
+  },
+  "overnight": {
+    "queries": 360,
+    "paired_observed_choices": 27,
+    "before": {
+      "median_extra_wait_seconds": 0,
+      "within_five_minutes": 21
+    },
+    "after": {
+      "median_extra_wait_seconds": 0,
+      "within_five_minutes": 20
+    }
+  }
+}

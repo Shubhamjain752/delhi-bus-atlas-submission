@@ -1,0 +1,218 @@
+{
+  "method": "Identical dated stop pairs, timetable, model and four-minute inputs. Only the longer arm also receives the preceding 26 minutes of vehicle-position polls. Both use named upstream positioning and ordinary destination ranking.",
+  "dates": [
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-26",
+    "2026-10-29"
+  ],
+  "issue_clocks_ist": [
+    "01:10",
+    "08:10",
+    "13:10",
+    "18:10"
+  ],
+  "latest_fix_age_limit_seconds": 180,
+  "runtime_sha256": "a05637a74715b396c137b2d53393f10e20bd1b33ac8d9d721afa1bdbcf9201b4",
+  "four_minute_reference_runtime": "74a56f438d52ec0e",
+  "four_minute_first_choices_verified": 192,
+  "timetable_and_models_sha256": {
+    "delhi_buses_static_gtfs_v1.zip": "8eb05d9c21e7a6b42d7b49de45cb095b70ddee5b8f7716859330c9784c322f05",
+    "data/eta_model.json.gz": "10966c5d60d1fa409249800029b68c0957dd4990c87c20947f23c465d76975e6",
+    "data/weekend/eta_model.json.gz": "d0933f0ddebf2b86a2927b8c27ba890bebc6b0edf0b3bf0ed25bb45a7e5ed02b"
+  },
+  "limits": "Four weekdays with complete available databases. GPS can verify vehicle passages on these links. Passenger boarding is unobserved. These cases overlap the prior six-day evaluation and do not establish accuracy on new dates.",
+  "all": {
+    "queries": 192,
+    "board": {
+      "scored": 67,
+      "correct_4_minutes": 10,
+      "correct_30_minutes": 11,
+      "fixed": 3,
+      "new_errors": 2
+    },
+    "exit": {
+      "scored": 70,
+      "correct_4_minutes": 10,
+      "correct_30_minutes": 10,
+      "fixed": 2,
+      "new_errors": 2
+    },
+    "picks_using_named_upstream_gps_4_minutes": 6,
+    "picks_using_named_upstream_gps_30_minutes": 7,
+    "changed_top_line": 48,
+    "changed_boarding_time": 111
+  },
+  "by_time_ist": {
+    "01:10": {
+      "queries": 48,
+      "board": {
+        "scored": 1,
+        "correct_4_minutes": 0,
+        "correct_30_minutes": 0,
+        "fixed": 0,
+        "new_errors": 0
+      },
+      "exit": {
+        "scored": 2,
+        "correct_4_minutes": 0,
+        "correct_30_minutes": 0,
+        "fixed": 0,
+        "new_errors": 0
+      },
+      "picks_using_named_upstream_gps_4_minutes": 1,
+      "picks_using_named_upstream_gps_30_minutes": 1,
+      "changed_top_line": 3,
+      "changed_boarding_time": 11
+    },
+    "08:10": {
+      "queries": 48,
+      "board": {
+        "scored": 22,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 5,
+        "fixed": 2,
+        "new_errors": 0
+      },
+      "exit": {
+        "scored": 23,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 4,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "picks_using_named_upstream_gps_4_minutes": 2,
+      "picks_using_named_upstream_gps_30_minutes": 2,
+      "changed_top_line": 17,
+      "changed_boarding_time": 34
+    },
+    "13:10": {
+      "queries": 48,
+      "board": {
+        "scored": 18,
+        "correct_4_minutes": 4,
+        "correct_30_minutes": 3,
+        "fixed": 0,
+        "new_errors": 1
+      },
+      "exit": {
+        "scored": 18,
+        "correct_4_minutes": 4,
+        "correct_30_minutes": 3,
+        "fixed": 0,
+        "new_errors": 1
+      },
+      "picks_using_named_upstream_gps_4_minutes": 2,
+      "picks_using_named_upstream_gps_30_minutes": 3,
+      "changed_top_line": 14,
+      "changed_boarding_time": 30
+    },
+    "18:10": {
+      "queries": 48,
+      "board": {
+        "scored": 26,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 3,
+        "fixed": 1,
+        "new_errors": 1
+      },
+      "exit": {
+        "scored": 27,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 3,
+        "fixed": 1,
+        "new_errors": 1
+      },
+      "picks_using_named_upstream_gps_4_minutes": 1,
+      "picks_using_named_upstream_gps_30_minutes": 1,
+      "changed_top_line": 14,
+      "changed_boarding_time": 36
+    }
+  },
+  "by_date": {
+    "2026-10-22": {
+      "queries": 48,
+      "board": {
+        "scored": 16,
+        "correct_4_minutes": 4,
+        "correct_30_minutes": 5,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "exit": {
+        "scored": 16,
+        "correct_4_minutes": 4,
+        "correct_30_minutes": 5,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "picks_using_named_upstream_gps_4_minutes": 1,
+      "picks_using_named_upstream_gps_30_minutes": 1,
+      "changed_top_line": 9,
+      "changed_boarding_time": 25
+    },
+    "2026-10-23": {
+      "queries": 48,
+      "board": {
+        "scored": 12,
+        "correct_4_minutes": 1,
+        "correct_30_minutes": 2,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "exit": {
+        "scored": 15,
+        "correct_4_minutes": 1,
+        "correct_30_minutes": 2,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "picks_using_named_upstream_gps_4_minutes": 2,
+      "picks_using_named_upstream_gps_30_minutes": 3,
+      "changed_top_line": 13,
+      "changed_boarding_time": 30
+    },
+    "2026-10-26": {
+      "queries": 48,
+      "board": {
+        "scored": 19,
+        "correct_4_minutes": 2,
+        "correct_30_minutes": 3,
+        "fixed": 1,
+        "new_errors": 0
+      },
+      "exit": {
+        "scored": 18,
+        "correct_4_minutes": 2,
+        "correct_30_minutes": 2,
+        "fixed": 0,
+        "new_errors": 0
+      },
+      "picks_using_named_upstream_gps_4_minutes": 2,
+      "picks_using_named_upstream_gps_30_minutes": 2,
+      "changed_top_line": 13,
+      "changed_boarding_time": 28
+    },
+    "2026-10-29": {
+      "queries": 48,
+      "board": {
+        "scored": 20,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 1,
+        "fixed": 0,
+        "new_errors": 2
+      },
+      "exit": {
+        "scored": 21,
+        "correct_4_minutes": 3,
+        "correct_30_minutes": 1,
+        "fixed": 0,
+        "new_errors": 2
+      },
+      "picks_using_named_upstream_gps_4_minutes": 1,
+      "picks_using_named_upstream_gps_30_minutes": 1,
+      "changed_top_line": 13,
+      "changed_boarding_time": 28
+    }
+  }
+}

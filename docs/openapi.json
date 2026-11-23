@@ -3,7 +3,7 @@
   "info": {
     "title": "Delhi Bus Atlas",
     "description": "Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.",
-    "version": "0.8.0"
+    "version": "0.9.0"
   },
   "paths": {
     "/status": {
@@ -1282,6 +1282,58 @@
         ],
         "title": "NearbyDirectDeparture"
       },
+      "ObservedServiceGap": {
+        "properties": {
+          "approach_stop_id": {
+            "type": "string",
+            "title": "Approach Stop Id",
+            "description": "The preceding platform seen on both vehicles' approaches."
+          },
+          "gap_seconds": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Gap Seconds",
+            "description": "Time between the two vehicles' first GPS fixes inside the selected platform area on those passages."
+          },
+          "window_seconds": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Window Seconds",
+            "description": "Length of the lookback at the time of the request."
+          },
+          "previous_observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Previous Observed At"
+          },
+          "previous_received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Previous Received At"
+          },
+          "latest_observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Latest Observed At"
+          },
+          "latest_received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Latest Received At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "approach_stop_id",
+          "gap_seconds",
+          "window_seconds",
+          "previous_observed_at",
+          "previous_received_at",
+          "latest_observed_at",
+          "latest_received_at"
+        ],
+        "title": "ObservedServiceGap"
+      },
       "Place": {
         "properties": {
           "id": {
@@ -1407,6 +1459,17 @@
                 "type": "null"
               }
             ]
+          },
+          "observed_service_gap": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObservedServiceGap"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Interval between two distinct tracked buses at this platform via the same approach. GPS can miss buses. Passenger wait is estimated separately."
           },
           "replay": {
             "anyOf": [

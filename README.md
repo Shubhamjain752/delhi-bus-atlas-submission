@@ -25,6 +25,8 @@ Atlas orders journeys by predicted arrival at the destination. The platform list
 
 If a direct bus is due before you could walk to its stop, the app can show it separately. Compare the time the bus is due with your estimated walking arrival and decide whether you can get there sooner.
 
+Open **Check next bus at this stop** for the selected line. When GPS has tracked two different buses through the same approach, Atlas shows when each passed the platform and how far apart they were. The next bus has its own arrival estimate.
+
 ## Run the Delhi planner
 
 1. Install Python **3.12**. Download or clone this repository.
@@ -59,7 +61,9 @@ Near AIIMS, the original map sent a passenger on an 11 km detour to the eastboun
 
 The 19-minute estimate was calculated afterwards using the corrected map. At 3 p.m. the provider predicted the 711UP first. A GPS reading put it near the AIIMS boarding stop at 3:05:34. Its published stopping pattern conflicted with the provider and its arrival at the Lajpat Nagar stop remains unverified. The 392UP was the first direct bus seen at both stops, at roughly 3:12 and 3:22. [Sunday GPS check](data/aiims-observed-order.json)
 
-We also tested 1,728 departures across six October dates. GPS identified a clear first line at the boarding stop in 655 cases. The previous planner picked it 107 times. With individual bus positions, that rose to 114. Ten picks improved and three regressed. From midnight to 3:59 a.m., correct picks rose from 17 to 18 out of 63. [Delhi results and limitations](docs/first-direct-bus.md)
+We also tested 1,728 departures across six October dates. GPS identified a clear first line at the boarding stop in 655 cases. The previous planner picked it 107 times. With individual bus positions, that rose to 114. Ten picks improved and three regressed. In the hourly checks from 12:10 a.m. through 4:10 a.m., correct picks rose from 17 to 18 out of 63. [Delhi results and limitations](docs/first-direct-bus.md)
+
+For 304 searches, GPS also showed when both planners' suggested lines passed. For someone already at the stop, the median extra wait compared with the first verified line fell from 3 minutes 32 seconds to about 3 minutes 5 seconds. [Wait comparison](data/passenger-wait-cost.json)
 
 GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [comparison screen](http://127.0.0.1:8765/field-trials.html) shows where each estimate could be checked.
 

@@ -37,6 +37,16 @@ class PossibleBoarding(BoardingEvidence):
     note: str
 
 
+class ObservedServiceGap(BaseModel):
+    approach_stop_id: str = Field(description="The preceding platform seen on both vehicles' approaches.")
+    gap_seconds: int = Field(gt=0, description="Time between the two vehicles' first GPS fixes inside the selected platform area on those passages.")
+    window_seconds: int = Field(gt=0, description="Length of the lookback at the time of the request.")
+    previous_observed_at: AwareDatetime
+    previous_received_at: AwareDatetime
+    latest_observed_at: AwareDatetime
+    latest_received_at: AwareDatetime
+
+
 class PlatformEstimate(BaseModel):
     platform: Place
     route_id: str
@@ -49,6 +59,7 @@ class PlatformEstimate(BaseModel):
     observed_stop: Place | None
     note: str
     possible_boarding: PossibleBoarding | None = None
+    observed_service_gap: ObservedServiceGap | None = Field(default=None, description="Interval between two distinct tracked buses at this platform via the same approach. GPS can miss buses. Passenger wait is estimated separately.")
     replay: ReplayInfo | None = None
 
 

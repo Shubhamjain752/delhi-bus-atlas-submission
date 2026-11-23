@@ -23,6 +23,7 @@ OFFICIAL_POSITIONS = ("https://dts-backend.transportstack.in/api/dataset/otd/get
                       "?agency=delhi-buses&category=realtime_gtfs&filename=VehiclePositions.pb")
 TTL = 180
 HORIZON = 90 * 60
+SERVICE_GAP_WINDOW = 30 * 60
 MAX_BYTES = 16 * 1024 * 1024
 
 
@@ -37,6 +38,14 @@ class VehicleRun:
     cancelled: bool
     live_run_id: str = ""
     direction_id: int | None = None
+
+
+@dataclass(frozen=True)
+class PlatformPassage:
+    observed: int
+    received: int
+    vehicle: str
+    approach: str
 
 
 def protobuf():
@@ -66,6 +75,15 @@ def fresh(ts,now):
     return ts > 0 and -30 <= now-ts <= TTL
 
 
+def passage_service_date_matches(day, first_fix, second_fix):
+    if not day:
+        return True
+    first = datetime.fromtimestamp(first_fix, IST).date()
+    last = datetime.fromtimestamp(second_fix, IST).date()
+    # Across midnight only the first civil day's service can already be underway at both fixes.
+    return day == first.strftime('%Y%m%d') or (first == last and day == (first-timedelta(days=1)).strftime('%Y%m%d'))
+
+
 class LiveOverlay:
     def __init__(self,eta,data_dir):
         self.eta, self.data_dir = eta, Path(data_dir)
@@ -77,6 +95,7 @@ class LiveOverlay:
         self.board_index = (0,{})
         self.disruptions = (0,{})
         self.position_snapshot = (0,{})
+        self.service_gap_snapshot = (None, 0, 0, 0, {})
         self.multiple_claims = (0, 0, {})
         self.single_vehicle_claims = (0, 0, {})
         self.vehicle_witnesses = (0, 0, {})
@@ -87,6 +106,7 @@ class LiveOverlay:
         self.position_claims = {}
         self.latest_position_fixes = {}
         self.previous_position_stops = {}
+        self.passage_directions = {}
         self.position_journeys_cache = None
         self.tracks, self.observations = {}, defaultdict(list)
         self.feed_reports = {}
@@ -97,6 +117,7 @@ class LiveOverlay:
         self.ids.clear()
         self.by_clock.clear()
         self.edges.clear()
+        self.passage_directions.clear()
         for pid,p in enumerate(router.patterns):
             for k,trip in enumerate(p.trips):
                 self.ids[trip] = (pid,k)
@@ -299,6 +320,7 @@ class LiveOverlay:
         if not fresh(stamp,now):
             return {"state":"stale","timestamp":stamp}
         matched, observations = 0,0
+        new_passages = []
         witnesses = {}
         seen_ids, duplicate_ids = set(),set()
         for entity in feed.entity:
@@ -371,7 +393,14 @@ class LiveOverlay:
                     if 15<=delta<=900 and distance/delta<23:
                         self.observations[rt,track[2],s].append((observed,delta))
                         observations+=1
-            self.tracks[vid] = rt,run,s,first,observed,day,now,start_clock or (track[7] if track else None)
+                        # Non-overlapping 45 m stop areas and distinct, chronologically plausible fixes.
+                        if (distance > 90 and distance / (observed-track[4]) < 23
+                                and track[8:] == (provider, direction) and track[6] <= now
+                                and passage_service_date_matches(day, track[4], observed)
+                                and self.matches_passage_run(rt, run, direction, track[2], s)):
+                            new_passages.append(((rt, s), PlatformPassage(observed, now, vid, track[2]), track[6]))
+            self.tracks[vid] = (rt,run,s,first,observed,day,now,start_clock or (track[7] if track else None),
+                                provider,direction)
         self.tracks={v:t for v,t in self.tracks.items() if now-t[4]<=900}
         self.previous_position_stops = {v:s for v,s in self.previous_position_stops.items() if v in self.tracks}
         recent = {}
@@ -392,13 +421,69 @@ class LiveOverlay:
         self.position_passages = tuple({"route_id":rt, "stop_id":stop, "timestamp":first, "received_at":received,
                                         "position_trip":run, "position_vehicle":vid,
                                         "service_date":day,"position_start_time":start_clock}
-                                       for vid,(rt, run, stop, first, _,day,received,start_clock) in self.tracks.items()
+                                       for vid,(rt, run, stop, first, _,day,received,start_clock,_,_) in self.tracks.items()
                                        if 0 <= now - first <= TTL)
         self.position_snapshot = stamp,recent
+        self.update_service_gaps(provider, stamp, now, new_passages)
         return {"state":"fresh","timestamp":stamp,"entities":len(feed.entity),"matched_positions":matched,
                 "new_segment_samples":observations,"segments_available":len(recent),
                 "source":("Transport Stack official DTC/DoT vehicle positions" if provider == "official_positions"
                           else "Reclaim Delhi GTFS-Realtime VehiclePositions")}
+
+    def matches_passage_run(self, route, run, direction, approach, stop):
+        # An unmatched run can still supply a physical movement on the route's directed edge.
+        if run not in self.ids and direction is None:
+            return True
+        if run in self.ids:
+            pid, _ = self.ids[run]
+            pattern = self.router.patterns[pid]
+            return (pattern.route == route and (direction is None or self.router.trip_directions.get(run) in (None, direction))
+                    and (approach, stop) in zip(pattern.stops, pattern.stops[1:]))
+        key = route, approach, stop
+        if key not in self.passage_directions:
+            allowed = set()
+            for pid, i in self.router.at[stop]:
+                pattern = self.router.patterns[pid]
+                if i > 0 and pattern.route == route and pattern.stops[i-1] == approach:
+                    allowed.update(self.router.trip_directions.get(trip) for trip in pattern.trips)
+            self.passage_directions[key] = allowed
+        allowed = self.passage_directions[key]
+        return direction in allowed or None in allowed
+
+    def update_service_gaps(self, provider, stamp, receipt, new_passages):
+        old_provider, old_stamp, old_receipt, started, old = self.service_gap_snapshot
+        if receipt < old_receipt or (provider == old_provider and stamp < old_stamp):
+            return
+        if provider != old_provider or receipt-old_receipt > TTL or stamp-old_stamp > TTL:
+            started, old = receipt, {}
+        cutoff = receipt-SERVICE_GAP_WINDOW
+        # One poller writes a complete snapshot. API readers never see a partial update.
+        recent = {key: tuple(p for p in calls if p.observed >= cutoff)
+                  for key, calls in old.items() if calls[-1].observed >= cutoff}
+        for key, passage, upstream_receipt in new_passages:
+            if upstream_receipt < started or passage.observed < cutoff:
+                continue
+            calls = recent.get(key, ()) + (passage,)
+            recent[key] = tuple(sorted(calls, key=lambda p: p.observed)[-2:])
+        self.service_gap_snapshot = provider, stamp, receipt, started, recent
+
+    def observed_service_gap(self, route, stop, when):
+        """Time between the last two tracked passages. Missed buses can widen this interval."""
+        issue = int(when.timestamp())
+        _, stamp, receipt, _, recent = self.service_gap_snapshot
+        calls = recent.get((route, stop), ())
+        if len(calls) != 2 or receipt > issue or not self.eligible(stamp, issue):
+            return None
+        previous, latest = calls
+        if (previous.vehicle == latest.vehicle or previous.approach != latest.approach
+                or not issue-SERVICE_GAP_WINDOW <= previous.observed < latest.observed <= issue):
+            return None
+        def local(epoch):
+            return datetime.fromtimestamp(epoch, when.tzinfo).isoformat()
+        return {"approach_stop_id":latest.approach, "gap_seconds":latest.observed-previous.observed,
+                "window_seconds":SERVICE_GAP_WINDOW, "previous_observed_at":local(previous.observed),
+                "previous_received_at":local(previous.received), "latest_observed_at":local(latest.observed),
+                "latest_received_at":local(latest.received)}
 
     def update_exit_tracks(self, witnesses, receipt):
         history = {key:(ident,points) for key,(ident,points) in self.exit_tracks.items() if points[-1][0]>=receipt-TTL}

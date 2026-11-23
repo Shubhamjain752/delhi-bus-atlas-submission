@@ -132,7 +132,10 @@ def platform_estimate(router, overlay, stop, route, when):
         note = "No approaching service was found within the search limits."
     route_name = router.routes[route][0]
     possible = possible_boarding(query, board, next_departures, wait, route_name)
+    gap_lookup = getattr(overlay, "observed_service_gap", None)
+    gap = gap_lookup(route, stop, when) if gap_lookup else None
     return {"platform":router.stops[stop], "route_id":route, "route":route_name,
             "at":when.isoformat(), "arrival":(when + timedelta(seconds=wait)).isoformat() if wait is not None else None,
             "wait_seconds":wait, "source":source, "observed_at":observed_at, "observed_stop":observed_stop, "note":note,
+            **({"observed_service_gap":gap} if gap else {}),
             **({"possible_boarding":possible} if possible else {})}

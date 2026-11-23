@@ -23,6 +23,9 @@ __pycache__/
 !/data/aiims-departure-evidence.json
 !/data/aiims-observed-order.json
 !/data/first-direct-bus.json
+!/data/passenger-wait-cost.json
+!/data/gps-warmup.json
+!/data/observed-service-gaps.json
 !/data/map-context.geojson.gz
 !/data/eta_model.json.gz
 !/data/eta_metrics.json

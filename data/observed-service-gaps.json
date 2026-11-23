@@ -1,0 +1,68 @@
+{
+  "method": "Position packets replayed in local receipt order. Count each distinct pair of GPS fix times visible on a boardable route and platform once, regardless of how many polls display it. This measures observed coverage, not prediction accuracy.",
+  "captures": [
+    {
+      "capture": "nov21-samples",
+      "first_receipt": "2026-11-21T01:17:16+05:30",
+      "last_receipt": "2026-11-21T01:30:15+05:30",
+      "position_packets": 27,
+      "boardable_route_platforms_with_passage": 34,
+      "boardable_route_platforms_with_interval": 0,
+      "route_ids_with_interval": 0,
+      "distinct_intervals_displayable": 0,
+      "first_example": null
+    },
+    {
+      "capture": "2026-11-22",
+      "first_receipt": "2026-11-22T14:18:30+05:30",
+      "last_receipt": "2026-11-22T16:59:48+05:30",
+      "position_packets": 372,
+      "boardable_route_platforms_with_passage": 19739,
+      "boardable_route_platforms_with_interval": 5258,
+      "route_ids_with_interval": 708,
+      "distinct_intervals_displayable": 10210,
+      "first_example": {
+        "route_id": "1552",
+        "route": "118EXTUP",
+        "stop_id": "829",
+        "platform": "Shakarpur School Block",
+        "issued_at": "2026-11-22T14:19:49+05:30",
+        "observed_service_gap": {
+          "approach_stop_id": "7676",
+          "gap_seconds": 37,
+          "window_seconds": 1800,
+          "previous_observed_at": "2026-11-22T14:18:24+05:30",
+          "previous_received_at": "2026-11-22T14:19:15+05:30",
+          "latest_observed_at": "2026-11-22T14:19:01+05:30",
+          "latest_received_at": "2026-11-22T14:19:49+05:30"
+        }
+      }
+    },
+    {
+      "capture": "2026-11-23",
+      "first_receipt": "2026-11-23T08:36:46+05:30",
+      "last_receipt": "2026-11-23T10:34:49+05:30",
+      "position_packets": 235,
+      "boardable_route_platforms_with_passage": 22789,
+      "boardable_route_platforms_with_interval": 6686,
+      "route_ids_with_interval": 799,
+      "distinct_intervals_displayable": 12552,
+      "first_example": {
+        "route_id": "1918",
+        "route": "424UP",
+        "stop_id": "6038",
+        "platform": "Nelson Mandela Marg T point",
+        "issued_at": "2026-11-23T08:38:44+05:30",
+        "observed_service_gap": {
+          "approach_stop_id": "3469",
+          "gap_seconds": 35,
+          "window_seconds": 1800,
+          "previous_observed_at": "2026-11-23T08:37:12+05:30",
+          "previous_received_at": "2026-11-23T08:38:14+05:30",
+          "latest_observed_at": "2026-11-23T08:37:47+05:30",
+          "latest_received_at": "2026-11-23T08:38:44+05:30"
+        }
+      }
+    }
+  ]
+}

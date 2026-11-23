@@ -21,6 +21,28 @@ The first line to reach the **exit** could be verified 605 times. The top choice
 
 ## How we checked
 
+### What choosing the suggested line costs in time
+
+For each case with a clear first line, we checked whether the old and new recommendations both appeared in the GPS record at both platforms. That left 304 of the 1,728 searches. We subtracted the first verified bus's time at the boarding platform from the first verified passage of each recommended line there. The median extra wait was **3 min 32 sec before and about 3 min 5 sec after**. The unit is time spent waiting for the chosen line by someone already at the stop. A passenger's actual boarding time is unknown. [Aggregate results](../data/passenger-wait-cost.json)
+
+The figures can be reproduced from the saved October forecasts and observations with `python tools/check_passenger_wait_cost.py --scratch SCRATCH --run-id 74a56f438d52ec0e --output data/passenger-wait-cost.json`. For a fresh replay, use the signature in its `scored-native-<signature>.gz` filenames and the corresponding study JSON.
+
+### Does half an hour of earlier GPS help choose the first bus?
+
+We replayed 192 of the original searches on four weekdays. Both planners used the same timetable, stop pairs and ranking. One had the last four minutes of GPS. The other also had the preceding 26 minutes to estimate recent traffic. A sighting of a specific bus still had to be at most three minutes old to count as its current position. All 192 four-minute choices matched the saved forecasts, including the boarding and exit times.
+
+| Delhi time | Searches | Clear first line at boarding | Correct with 4 minutes | Correct with 30 minutes |
+| --- | ---: | ---: | ---: | ---: |
+| 01:10 | 48 | 1 | 0 | 0 |
+| 08:10 | 48 | 22 | 3 | 5 |
+| 13:10 | 48 | 18 | 4 | 3 |
+| 18:10 | 48 | 26 | 3 | 3 |
+| **Total** | **192** | **67** | **10** | **11** |
+
+The longer GPS history changed the top line in 48 searches. Of the 67 that could be judged at boarding, it corrected three choices and introduced two errors. At the exit both runs picked the first verified line 10 times in 70. Only one after-midnight boarding result could be judged. These four dates are part of the earlier six-day test. We still need fresh dates and better overnight coverage to establish whether a longer history helps consistently. [Results by time and date](../data/gps-warmup.json)
+
+### Data and sampling
+
 - We used the official timetable to choose stop pairs **before** inspecting the GPS. At least two distinct lines had to be scheduled to leave for the same next stop within half an hour. At ten minutes past every hour, we picked up to 12 pairs in different areas of Delhi. Six slots favour busy links. A reproducible draw fills the other six. The draw changes with the hour and date.
 - The six GPS dates were 22, 23, 24, 25, 26 and 29 October 2026. They include a Saturday, a Sunday and all 24 hours of the clock. The weekday travel-time model was trained on 12–13 October, and the weekend model on 10–11 October.
 - For each query, both planners received the same four minutes of vehicle position messages leading up to the forecast. Each message was replayed at the time the archive received it. The software independently checks the age of the vehicle's GPS clock. We supplied the trip identifiers exactly as recorded. The databases have no original provider predictions or explicit service date. The software resolves an unambiguous service date where it can. A live deployment may have a longer traffic history.
@@ -42,3 +64,11 @@ python tools/check_first_direct_bus.py report --scratch SCRATCH --output data/fi
 ```
 
 The default panel uses 12 geographically separated pairs per hour when available. A fresh run with `--pairs-per-hour 0` at the prepare step evaluates all eligible pairs. Scratch files contain vehicle identifiers and belong on the research machine. [Aggregate results](../data/first-direct-bus.json)
+
+For the longer GPS history comparison, use the default panel and put the daily databases for 22, 23, 26 and 29 October in the same directory. The prepare step above accepts `--days 2026-10-22 2026-10-23 2026-10-26 2026-10-29` if these are the only dates unpacked.
+
+```sh
+python tools/check_gps_warmup.py --databases PATH_TO_DAILY_DATABASES --panel SCRATCH --output gps-warmup.json
+```
+
+The published run used the same routing code as [public revision cc7fe9e](https://github.com/Shubhamjain752/delhi-bus-atlas-submission/commit/cc7fe9e36973eef3e6fb03ff57b7102e4df0ef7c). Where its original saved predictions are available, add `--reference-runtime 74a56f438d52ec0e` to verify the four-minute choice, boarding time, exit time and source for every search. A fresh run on a different version records its own code and data hashes.

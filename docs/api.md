@@ -12,6 +12,8 @@ The first journey is ranked by predicted arrival at the destination. For each bu
 
 Without a recent usable observation, the planner can still give a timetable or historical estimate. The exact fields and request limits are in the [saved OpenAPI schema](openapi.json).
 
+When `GET /arrivals` has two qualifying observations from the previous 30 minutes, `observed_service_gap` describes the last two distinct buses tracked through the same approach to this route's boarding platform. `gap_seconds` is the time between their observed stop passages. The response includes observation and receipt times for both buses. Some buses can be missing from the feed. Use `arrival` and `wait_seconds` for the next-bus forecast. At Shakarpur School Block on 22 November, GPS showed 37 seconds between tracked buses. Atlas estimated another 238 seconds until the next bus. [Delhi replay results](../data/observed-service-gaps.json)
+
 ### If the passenger can reach the stop sooner
 
 `earlier_boarding_options` lists direct departures due after the requested start time but before the estimated walk to the boarding platform finishes. Each option names the boarding and exit platforms. It gives the bus’s predicted time at each, the passenger’s estimated arrival on foot (`walk_ready_at`), and the gap in seconds (`seconds_before_walk_ready`). The passenger can compare the two clocks and decide whether their own way to the stop works. The planner makes no assumption about a bike or cab. The regular journey list still uses the mapped walk.

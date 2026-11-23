@@ -4,11 +4,22 @@ from types import SimpleNamespace
 import numpy as np
 
 from tools.check_first_direct_bus import winner, witnessed
+from tools.check_passenger_wait_cost import wait_costs
 from tools.fleet_gps import FIX
 from transit.router import approximate_m, coords
 
 
 class FirstDirectOutcomeTests(unittest.TestCase):
+    def test_wait_cost_compares_two_tracked_choices_against_same_first_line(self):
+        observed = {"complete": {"A": [100, 240], "B": [220, 360]}, "without_exit": []}
+        decisions = {"before": {"line": "B"}, "after": {"line": "A"}}
+        self.assertEqual(wait_costs(decisions, observed), (120, 0))
+        decisions["after"] = {"line": "unobserved"}
+        self.assertIsNone(wait_costs(decisions, observed))
+        decisions["after"] = {"line": "A"}
+        observed["without_exit"] = [["C", 80]]
+        self.assertIsNone(wait_costs(decisions, observed))
+
     def test_earlier_rival_without_an_exit_and_close_observations_remain_unscored(self):
         trace = {"complete": {"A": [100, 220], "B": [180, 280]}, "without_exit": [["C", 142]]}
         self.assertEqual(winner(trace, 0), (None, "incomplete_early_rival"))

@@ -664,6 +664,15 @@ function platformArrival(leg) {
           element("p",null,boardingEvidence(possible)));
       }
       result.append(element("strong",null,heading));
+      const gap=prediction.observed_service_gap;
+      if (gap && Number.isFinite(gap.gap_seconds)) {
+        const observedClock=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",
+          day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"});
+        result.append(element("strong",null,"Last two tracked buses were "+segmentTime(gap.gap_seconds)+" apart"),
+          element("p",null,"GPS saw two "+leg.route+" buses at this platform at "+
+            observedClock.format(new Date(gap.previous_observed_at))+" and "+
+            observedClock.format(new Date(gap.latest_observed_at))+" IST. Other buses may have passed between them."));
+      }
       if (prediction.source || prediction.observed_at) {
         const evidence=[];
         if (prediction.source) evidence.push(sourceName(prediction.source));
