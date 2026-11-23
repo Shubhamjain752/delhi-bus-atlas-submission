@@ -8,6 +8,10 @@ The trip calendar determines which runs can be boarded. The returned path follow
 
 ## Passenger routing
 
+For a direct journey, Atlas checks every compatible boarding and exit stop within the 1,100 m walking limit, in the direction and stop order that the bus actually serves. The 12-stop shortlist applies to transfer search. A direct option lists other lines leaving from the very same platform for the same exit stop within 30 minutes of reaching the platform. A transfer onto a bus already available directly is omitted when both choices reach the same stop on the same run and the transfer saves no walking.
+
+The serving map adds documented stair approaches to mapped pedestrian crossings. A short connection between a stair landing and a street is an estimate and can change the time available to catch a bus. Where the map cannot verify the access walk, the planner can show departures from up to two nearby platforms within 250 m separately. Those times begin at the named platform. [Before-and-after tests](journey-access-check.md)
+
 1. Resolve the endpoints to GTFS platforms or coordinates. Search nearby serviced stops in both directions. Validate access and egress paths with a pedestrian A* search. Opposite-side transfers need a reachable walking path. Short approaches from an input pin to the mapped path are estimates.
 2. For every candidate boarding, evaluate the predicted departure after the rider's walk. Follow that bus through its stopping pattern using the estimated running times, or individual fresh stop predictions where available. Distinguish the ride, wait and walk in the result.
 3. For a change, add the walking time and a minimum 90-second change allowance. Search the second bus again with that ready time. A late inbound bus can invalidate a connection. Count the allowance inside the waiting budget once.

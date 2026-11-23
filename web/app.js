@@ -39,6 +39,9 @@ function duration(seconds) {
   const mins = Math.round(n / 60);
   return mins >= 60 ? Math.floor(mins/60)+" h"+(mins%60 ? " "+mins%60+" min" : "") : mins+" min";
 }
+function waitDuration(seconds) {
+  return seconds > 0 && seconds < 60 ? segmentTime(seconds) : duration(seconds);
+}
 function timeText(value) {
   const date = new Date(value);
   return Number.isNaN(date.valueOf()) ? "—" : timeFormat.format(date);
@@ -461,7 +464,7 @@ function choices() {
     const buses=(journey.legs || []).filter(l=>l.mode==="bus");
     if (buses.length) choice.setAttribute("aria-label","Journey "+(index+1)+", arrival "+arrivalText(journey.departure,journey.arrival)+
       ", "+duration(journey.duration_seconds)+", board "+buses[0].route+" at "+timeText(buses[0].departure)+
-      ", total wait "+duration(journey.wait_seconds));
+      ", total wait "+waitDuration(journey.wait_seconds));
     buses.forEach((leg,i) => chain.append(routeChip(leg,i)));
     if (!chain.children.length) chain.append(icon("walk"),"Walk");
     let serviceType=journey.transfers>0?journey.transfers+" transfer"+(journey.transfers===1?"":"s"):"Direct";
@@ -472,7 +475,7 @@ function choices() {
     bottom.append(chain,element("span","subtle",serviceType));
     choice.append(top,bottom);
     if (buses.length) choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
-      " · "+duration(journey.wait_seconds)+" total wait"));
+      " · "+waitDuration(journey.wait_seconds)+" total wait"));
     const others=buses[0]?.same_platform_services?.length;
     if (others) choice.append(element("div","choice-boarding",others+" other direct "+(others===1?"line serves":"lines serve")+" both stops"));
     box.append(choice);
@@ -613,7 +616,7 @@ function platformArrival(leg) {
       const date=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",day:"numeric",month:"short"}).format(new Date(asof));
       const when=clock(asof)+" IST on "+date;
       const heading=prediction.arrival && Number.isFinite(prediction.wait_seconds)
-        ? (possible?"Later ":"Next ")+leg.route+" at "+clock(prediction.arrival)+" · "+duration(prediction.wait_seconds)+" wait"
+        ? (possible?"Later ":"Next ")+leg.route+" at "+clock(prediction.arrival)+" · "+waitDuration(prediction.wait_seconds)+" wait"
         : "No arrival estimate available";
       result.replaceChildren(element("p",null,"For a rider already at "+leg.from.name+" at "+when+"."));
       if (possible?.predicted_departure) {
@@ -662,7 +665,7 @@ function details(journey) {
     " while the bus is still at the platform. Downstream times move "+segmentTime(journey.shift_seconds)+" later, keeping the forecast ride duration."));
   [["walk","Walk",journey.walk_seconds],["clock","Wait",journey.wait_seconds],["bus","Ride",journey.ride_seconds]].forEach(([key,label,value])=>{
     const item=element("span");
-    item.append(icon(key),label+" "+duration(value));
+    item.append(icon(key),label+" "+(key==="clock"?waitDuration(value):duration(value)));
     stats.append(item);
   });
   panel.append(stats);
@@ -689,7 +692,7 @@ function details(journey) {
     body.append(header);
     const description=leg.mode==="bus"?start+" → "+end:leg.mode==="walk"?"From "+start:"";
     if (description) body.append(element("p","leg-destination",description));
-    const meta=[duration(leg.seconds)];
+    const meta=[leg.mode==="wait"?waitDuration(leg.seconds):duration(leg.seconds)];
     if (leg.distance_m>0) meta.push(leg.distance_m<1000?Math.round(leg.distance_m)+" m":(leg.distance_m/1000).toFixed(1)+" km");
     if (leg.source) meta.push(sourceName(leg.source));
     if (leg.geometry_source==="ordered_stops") meta.push("Approximate path between stops");

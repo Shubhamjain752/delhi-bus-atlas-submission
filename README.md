@@ -27,6 +27,8 @@ Direct buses are checked at every compatible stop within the walking limit. On a
 2. Get **Delhi Buses: GTFS Static Data – DTC / DoT** from the [official Transport Stack catalogue](https://delhi.transportstack.in/data-services). Save the original ZIP as `delhi_buses_static_gtfs_v1.zip` beside `run.py`. Judges can also copy that one file from the submitted working-prototype ZIP. The October GPS and ticket archives are unnecessary for running the app.
 3. From this folder, run the commands below. The first run builds a timetable index and can take a few minutes.
 
+Keep the included `data/walk.npz` walking network and `data/walk-crossings.json` crossing connections together in `data/`. The repository also includes the map and fitted travel-time files.
+
 **Windows PowerShell**
 
 ```powershell

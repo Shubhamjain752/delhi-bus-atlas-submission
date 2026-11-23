@@ -13,6 +13,8 @@ The check covers 29 requests. Four are the recorded AIIMS, Punjabi Bagh, Kashmer
 | First AIIMS–Lajpat Nagar choice at 15:00 | 623UP → 724AUP, 24m 29s | 711UP direct, 19m 16s |
 | First-choice time on the other 23 served requests | Reference | Identical |
 
+Ten of the 24 revised first choices now list more lines that call at the same boarding and alighting platforms. At AIIMS the list includes 479UP, so a rider can consider that line if it comes first. From the ITO AGCR pin to the Jagatpuri F Block pin the revised top three are all direct (317UP, 720DOWN and 623DOWN). The previous top three included a change from 85DOWN to 317UP.
+
 Four of the 27 checked walking links became shorter. Fifteen retained the same mapped distance. Eight still had no connected walk. The distances include estimated approaches to the crossing. Nobody field-timed them.
 
 | Walking link | Previous | Revised |
