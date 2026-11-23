@@ -9,3 +9,5 @@ Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright
 The browser uses [Leaflet](web/vendor/leaflet/LICENSE) and [Swagger UI](web/vendor/swagger/LICENSE), with notices in their vendor folders. The Python server uses FastAPI, Pydantic, Uvicorn, NumPy, SciPy, Requests, GTFS Realtime Bindings and Protocol Buffers. Build and evaluation tools also use pandas, pyosmium, Shapely and Numba. Playwright and Chromium supported browser verification. Each dependency retains its own licence.
 
 The [pedestrian crossing file](data/walk-crossings.json) is also derived from OpenStreetMap and distributed under ODbL 1.0. Its Delhi extract comes from OpenStreetMap France. The file records the source URL, checksum, mapped crossings and estimated street connections used by the planner. [Crossing builder](tools/build_crossing_access.py)
+
+The [MIT License](LICENSE) covers the original Atlas code and documentation by Shubham Jain, Akhil Goyal and Keshav Gilra of Team IITBOYS. Materials in `data/`, external comparison material and third-party software remain subject to their respective publishers’ terms and notices.

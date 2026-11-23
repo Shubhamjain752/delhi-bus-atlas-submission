@@ -68,3 +68,7 @@ For 304 searches, GPS also showed when both planners' suggested lines passed. Fo
 GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [comparison screen](http://127.0.0.1:8765/field-trials.html) shows where each estimate could be checked.
 
 Further work should test waits on routes with irregular service, verify road crossings near AIIMS, and repeat after-midnight boarding checks on fresh dates. [Build guide, data and test commands](AGENTS.md) · [Technical note](docs/technical-note.md) · [Credits](CREDITS.md) · [Official challenge](https://delhi.transportstack.in/hackathon/)
+
+## Licence
+
+Team IITBOYS licenses its original source code and documentation under the [MIT License](LICENSE). Materials in `data/`, Delhi transit records, OpenStreetMap-derived maps, Google Maps comparison material and third-party software retain their respective terms. [Data sources and credits](CREDITS.md)
