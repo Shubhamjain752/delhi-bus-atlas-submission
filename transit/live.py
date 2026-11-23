@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import datetime, timedelta
 from hashlib import sha256
 import os
 import math
@@ -84,6 +84,10 @@ class LiveOverlay:
         self.position_provider = None
         self.position_received = 0
         self.position_passages = ()
+        self.position_claims = {}
+        self.latest_position_fixes = {}
+        self.previous_position_stops = {}
+        self.position_journeys_cache = None
         self.tracks, self.observations = {}, defaultdict(list)
         self.feed_reports = {}
         self.last_attempt = None
@@ -277,6 +281,7 @@ class LiveOverlay:
         self.forecast_received = now
         self.forecast_days = frozenset(day for day,_ in mapped.keys() | multiple.keys())
         self.trips_snapshot = stamp,predictions
+        self.position_journeys_cache = None
         self.disruptions=stamp,restrictions
         if mapped:
             (day,trip),(times,_)=next(iter(mapped.items()))
@@ -305,6 +310,9 @@ class LiveOverlay:
         for vid in duplicate_ids:
             witnesses[vid] = None
             self.tracks.pop(vid,None)
+            self.previous_position_stops.pop(vid,None)
+        position_claims = defaultdict(set)
+        latest_fixes = {}
         for entity in feed.entity:
             if not entity.HasField("vehicle") or entity.is_deleted:
                 continue
@@ -322,8 +330,17 @@ class LiveOverlay:
                 witnesses[vid] = None
                 continue
             day = v.trip.start_date or None
+            direction = v.trip.direction_id if v.trip.HasField("direction_id") else None
+            if run in self.ids:
+                pid,k = self.ids[run]
+                pattern = self.router.patterns[pid]
+                start_minute = (pattern.starts[k]+pattern.departures[0])//60
+            else:
+                start_minute = self.clock(v.trip)
+            clock_key = (rt,start_minute % 1440 if start_minute is not None else run)
+            position_claims[clock_key].add(vid)
+            latest_fixes[vid] = (rt,run,day,observed,coord,direction,clock_key)
             if day:
-                direction = v.trip.direction_id if v.trip.HasField("direction_id") else None
                 witnesses[vid] = (day,rt,run,observed,coord,direction)
             else:
                 witnesses[vid] = None
@@ -341,6 +358,10 @@ class LiveOverlay:
             s = near[0][1]
             matched+=1
             first = observed
+            if not track or observed-track[4]>240:
+                self.previous_position_stops.pop(vid,None)
+            elif s != track[2]:
+                self.previous_position_stops[vid] = track[2]
             if track and track[:2]==(rt,run) and observed-track[4]<=240:
                 if s==track[2]:
                     first = track[3]
@@ -352,6 +373,7 @@ class LiveOverlay:
                         observations+=1
             self.tracks[vid] = rt,run,s,first,observed,day,now,start_clock or (track[7] if track else None)
         self.tracks={v:t for v,t in self.tracks.items() if now-t[4]<=900}
+        self.previous_position_stops = {v:s for v,s in self.previous_position_stops.items() if v in self.tracks}
         recent = {}
         for key in list(self.observations):
             values=[v for v in self.observations[key] if now-v[0]<=1800]
@@ -361,6 +383,9 @@ class LiveOverlay:
             else:
                 del self.observations[key]
         self.position_provider = provider
+        self.position_claims = position_claims
+        self.latest_position_fixes = latest_fixes
+        self.position_journeys_cache = None
         self.update_exit_tracks(witnesses, now)
         self.vehicle_witnesses = stamp,now,witnesses
         self.position_received = now
@@ -580,6 +605,75 @@ class LiveOverlay:
         if self.eligible(self.position_snapshot[0], issue) and self.position_received <= issue:
             return [p for p in self.position_passages if p["timestamp"] >= issue - TTL]
         return self.eta.recent_passages(when)
+
+    def journey_positions(self, when):
+        """Match a fresh upstream stop entry to one vehicle and one dated timetable run."""
+        issue = int(when.timestamp())
+        stamp = self.position_snapshot[0]
+        if not self.eligible(stamp,issue) or self.position_received > issue:
+            return {}
+        key = (issue, stamp, self.position_received, self.trips_snapshot[0], self.forecast_received)
+        if self.position_journeys_cache and self.position_journeys_cache[0] == key:
+            return self.position_journeys_cache[1]
+        # Provider calls carry their own clocks. Preserve their precedence and
+        # physical-vehicle checks instead of shifting the same trip twice.
+        supplied = set()
+        updates, calls = self.trips_snapshot
+        if self.forecast_received <= issue and self.eligible(updates,issue):
+            supplied.update((day,trip) for (day,trip,_),(_,seen) in calls.items() if 0 <= issue-seen <= TTL)
+            supplied.update(self.multiple_claims[2])
+        calendar_days = tuple(when.date()+timedelta(days=d) for d in (-1,0,1))
+        matches = defaultdict(list)
+        for seen in self.recent_passages(when):
+            route, run, vid = seen.get("route_id"), seen.get("position_trip"), seen.get("position_vehicle")
+            ts, receipt = seen["timestamp"], seen["received_at"]
+            if not run or not vid or not issue-TTL <= ts <= receipt <= issue:
+                continue
+            fix = self.latest_position_fixes.get(vid)
+            if (not fix or fix[:3] != (route,run,seen.get("service_date")) or fix[3] < ts
+                    or self.position_claims.get(fix[6]) != {vid}
+                    or approximate_m(fix[4],coords(self.router.stops[seen["stop_id"]])) > 45):
+                continue
+            if run in self.ids:
+                candidates = (self.ids[run],)
+            else:
+                minute = self.provider_clock(route,run,seen.get("position_start_time"))
+                if minute is None:
+                    continue
+                candidates = list(self.by_clock.get((route,minute),()))
+                if minute < 1440:
+                    # A provider can express a previous-day 24:xx start as civil 00:xx.
+                    candidates.extend(self.by_clock.get((route,minute+1440),()))
+            days = calendar_days
+            if seen.get("service_date"):
+                days = tuple(day for day in days if day.strftime("%Y%m%d") == seen["service_date"])
+            possible = []
+            for pid,k in candidates:
+                p = self.router.patterns[pid]
+                if p.route != route or p.stops.count(seen["stop_id"]) != 1:
+                    continue
+                i = p.stops.index(seen["stop_id"])
+                direction = self.router.trip_directions.get(p.trips[k]) if fix[5] is not None else None
+                if direction is not None and direction != fix[5]:
+                    continue
+                previous = self.previous_position_stops.get(vid)
+                if previous is not None and (p.stops.count(previous) != 1 or p.stops.index(previous) >= i):
+                    continue
+                for day in days:
+                    midnight = int(datetime.combine(day,datetime.min.time(),IST).timestamp())
+                    nominal = midnight + p.starts[k] + p.arrivals[i]
+                    if abs(ts-nominal) <= HORIZON and p.service in self.router._active(day):
+                        possible.append((day,pid,k,i))
+            if len(possible) == 1:
+                day,pid,k,i = possible[0]
+                if (day,self.router.patterns[pid].trips[k]) not in supplied:
+                    matches[day,pid,k].append((i,ts,receipt))
+        result = defaultdict(dict)
+        for (day,pid,k),observations in matches.items():
+            if len(observations) == 1:
+                result[day,pid][k] = observations[0]
+        self.position_journeys_cache = key, result
+        return result
 
     def can_approach(self, passage, stop, when):
         """Honor known trip-specific stopping patterns and disruptions for raw positions."""

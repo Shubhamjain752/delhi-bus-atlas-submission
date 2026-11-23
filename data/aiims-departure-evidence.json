@@ -1,0 +1,633 @@
+{
+  "departure": "2026-11-22T15:00:00+05:30",
+  "board": "2839",
+  "exit": "2363",
+  "router_sha256": "cf5c7ea671d8420079f51af46520ded4e01e8f1db529a25afd9a26d1462ac378",
+  "live_adapter_sha256": "e0f55d711ad5183d81b406779d3d102a37bf54671b6af46098e1c6e47f1c0588",
+  "original_forecast_sha256": "ffc3fc9f0e806af6f1da20484ea9f320d267b44cbeb754c88305afccd06ec874",
+  "original_saved_first": {
+    "routes": [
+      "623UP",
+      "724AUP"
+    ],
+    "boarding_sources": [
+      "gps_historical",
+      "timetable"
+    ],
+    "first_bus_at": "2026-11-22T15:06:55+05:30",
+    "destination_at": "2026-11-22T15:24:29+05:30",
+    "wait_seconds": 131
+  },
+  "clocks": [
+    {
+      "issued_at": "2026-11-22T14:19:37+05:30",
+      "rider_ready_at": "2026-11-22T15:05:08+05:30",
+      "files_received": {
+        "positions": 2,
+        "predictions": 1
+      },
+      "latest_packets": {
+        "positions": {
+          "receipt": "2026-11-22T14:19:15+05:30",
+          "feed_timestamp": "2026-11-22T14:18:28+05:30",
+          "sha256": "9dde5ad8723359f58676359a168945aa22160fb0f5eb60976b9d7420a3edfddf"
+        },
+        "predictions": {
+          "receipt": "2026-11-22T14:18:32+05:30",
+          "feed_timestamp": "2026-11-22T14:17:43+05:30",
+          "sha256": "f9dcef97a84188385424aef9d784cb33006207baaffa20d0af9f44a564af29b8"
+        }
+      },
+      "receipt_set_sha256": "0ae09c6af327e33722b37c14952e6c865aee2404a3640111a8f4da6018a4e60f",
+      "pin_journeys": [
+        {
+          "routes": [
+            "711UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:05:38+05:30",
+          "destination_at": "2026-11-22T15:19:16+05:30",
+          "wait_seconds": 30
+        },
+        {
+          "routes": [
+            "711UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "gps_historical",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:05:38+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 442
+        },
+        {
+          "routes": [
+            "442UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "timetable",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:06:24+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 264
+        },
+        {
+          "routes": [
+            "323UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "timetable",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:07:22+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 264
+        },
+        {
+          "routes": [
+            "711UP",
+            "433AUP"
+          ],
+          "boarding_sources": [
+            "gps_historical",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:05:38+05:30",
+          "destination_at": "2026-11-22T15:21:36+05:30",
+          "wait_seconds": 163
+        }
+      ],
+      "displayed_other_lines_at_first_pair": [
+        {
+          "route": "323UP",
+          "departure_at": "2026-11-22T15:07:22+05:30",
+          "alight_at": "2026-11-22T15:17:22+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "724AUP",
+          "departure_at": "2026-11-22T15:07:53+05:30",
+          "alight_at": "2026-11-22T15:17:53+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "460UP",
+          "departure_at": "2026-11-22T15:10:39+05:30",
+          "alight_at": "2026-11-22T15:18:17+05:30",
+          "departure_source": "gps_historical"
+        },
+        {
+          "route": "543ADOWN",
+          "departure_at": "2026-11-22T15:10:41+05:30",
+          "alight_at": "2026-11-22T15:18:10+05:30",
+          "departure_source": "gps_historical"
+        },
+        {
+          "route": "392STLUP",
+          "departure_at": "2026-11-22T15:13:41+05:30",
+          "alight_at": "2026-11-22T15:23:41+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "D-042UP",
+          "departure_at": "2026-11-22T15:19:48+05:30",
+          "alight_at": "2026-11-22T15:29:48+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "479UP",
+          "departure_at": "2026-11-22T15:20:39+05:30",
+          "alight_at": "2026-11-22T15:27:56+05:30",
+          "departure_source": "gps_historical"
+        },
+        {
+          "route": "611ADOWN",
+          "departure_at": "2026-11-22T15:22:13+05:30",
+          "alight_at": "2026-11-22T15:32:14+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "392UP",
+          "departure_at": "2026-11-22T15:22:22+05:30",
+          "alight_at": "2026-11-22T15:32:22+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "433ASTL-KJDUP",
+          "departure_at": "2026-11-22T15:24:52+05:30",
+          "alight_at": "2026-11-22T15:34:52+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "433AUP",
+          "departure_at": "2026-11-22T15:24:59+05:30",
+          "alight_at": "2026-11-22T15:35:00+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "DW-4DOWN",
+          "departure_at": "2026-11-22T15:33:43+05:30",
+          "alight_at": "2026-11-22T15:43:41+05:30",
+          "departure_source": "timetable"
+        }
+      ],
+      "platform_to_platform": [
+        {
+          "routes": [
+            "711UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:05:38+05:30",
+          "destination_at": "2026-11-22T15:12:40+05:30",
+          "wait_seconds": 30
+        },
+        {
+          "routes": [
+            "323UP"
+          ],
+          "boarding_sources": [
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:07:22+05:30",
+          "destination_at": "2026-11-22T15:17:22+05:30",
+          "wait_seconds": 134
+        },
+        {
+          "routes": [
+            "724AUP"
+          ],
+          "boarding_sources": [
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:07:53+05:30",
+          "destination_at": "2026-11-22T15:17:53+05:30",
+          "wait_seconds": 165
+        },
+        {
+          "routes": [
+            "543ADOWN"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:10:41+05:30",
+          "destination_at": "2026-11-22T15:18:10+05:30",
+          "wait_seconds": 333
+        },
+        {
+          "routes": [
+            "460UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:10:39+05:30",
+          "destination_at": "2026-11-22T15:18:17+05:30",
+          "wait_seconds": 331
+        },
+        {
+          "routes": [
+            "507UP"
+          ],
+          "boarding_sources": [
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:08:44+05:30",
+          "destination_at": "2026-11-22T15:22:20+05:30",
+          "wait_seconds": 216
+        }
+      ],
+      "platform_board_at_issue": {
+        "392UP": {
+          "arrival": "2026-11-22T14:22:22+05:30",
+          "source": "timetable",
+          "observed_at": null
+        },
+        "479UP": {
+          "arrival": "2026-11-22T14:21:05+05:30",
+          "source": "live",
+          "observed_at": null
+        },
+        "711UP": {
+          "arrival": "2026-11-22T14:55:40+05:30",
+          "source": "gps_historical",
+          "observed_at": null
+        }
+      },
+      "raw_gps_and_provider_calls": {
+        "392UP": {
+          "fresh_vehicle_fixes": 0,
+          "paired_stop_calls": []
+        },
+        "479UP": {
+          "fresh_vehicle_fixes": 4,
+          "paired_stop_calls": [
+            {
+              "board_at": "2026-11-22T14:21:05+05:30",
+              "exit_at": "2026-11-22T14:28:44+05:30",
+              "gps_at": "2026-11-22T14:18:03+05:30",
+              "gps_age_seconds": 94,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "serves",
+              "exact_stop_list_and_trip_match": true,
+              "matched_stop_times_accepted_by_planner": false
+            },
+            {
+              "board_at": "2026-11-22T15:00:47+05:30",
+              "exit_at": "2026-11-22T15:08:28+05:30",
+              "gps_at": "2026-11-22T14:18:20+05:30",
+              "gps_age_seconds": 77,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "serves",
+              "exact_stop_list_and_trip_match": true,
+              "matched_stop_times_accepted_by_planner": true
+            },
+            {
+              "board_at": "2026-11-22T15:13:35+05:30",
+              "exit_at": "2026-11-22T15:21:17+05:30",
+              "gps_at": "2026-11-22T14:18:18+05:30",
+              "gps_age_seconds": 79,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "cannot_board",
+              "exact_stop_list_and_trip_match": false,
+              "matched_stop_times_accepted_by_planner": false
+            }
+          ]
+        },
+        "711UP": {
+          "fresh_vehicle_fixes": 3,
+          "paired_stop_calls": [
+            {
+              "board_at": "2026-11-22T14:44:47+05:30",
+              "exit_at": "2026-11-22T14:52:36+05:30",
+              "gps_at": "2026-11-22T14:16:57+05:30",
+              "gps_age_seconds": 160,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "cannot_board",
+              "exact_stop_list_and_trip_match": false,
+              "matched_stop_times_accepted_by_planner": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "issued_at": "2026-11-22T15:00:00+05:30",
+      "rider_ready_at": "2026-11-22T15:05:08+05:30",
+      "files_received": {
+        "positions": 98,
+        "predictions": 96
+      },
+      "latest_packets": {
+        "positions": {
+          "receipt": "2026-11-22T14:59:44+05:30",
+          "feed_timestamp": "2026-11-22T14:58:58+05:30",
+          "sha256": "fdc42882d2010cfd0dfc000368f8b0867ff1c17e9acc22150c00544870760f51"
+        },
+        "predictions": {
+          "receipt": "2026-11-22T14:59:45+05:30",
+          "feed_timestamp": "2026-11-22T14:58:58+05:30",
+          "sha256": "ee7f5de711dd3ca50bab843e203261417ce97f092619f397fe2f89ed78952461"
+        }
+      },
+      "receipt_set_sha256": "284b2d8dd74281e9f6adb1ceeb1318e53b3cbe5bbd590b7425690b655f626d88",
+      "pin_journeys": [
+        {
+          "routes": [
+            "711UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:05:42+05:30",
+          "destination_at": "2026-11-22T15:19:20+05:30",
+          "wait_seconds": 34
+        },
+        {
+          "routes": [
+            "711UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "gps_historical",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:05:42+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 442
+        },
+        {
+          "routes": [
+            "442UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "gps_live_segment",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:06:38+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 269
+        },
+        {
+          "routes": [
+            "323UP",
+            "D-026STLUP"
+          ],
+          "boarding_sources": [
+            "timetable",
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:07:22+05:30",
+          "destination_at": "2026-11-22T15:20:51+05:30",
+          "wait_seconds": 264
+        },
+        {
+          "routes": [
+            "711UP",
+            "433AUP"
+          ],
+          "boarding_sources": [
+            "gps_historical",
+            "gps_live_segment"
+          ],
+          "first_bus_at": "2026-11-22T15:05:42+05:30",
+          "destination_at": "2026-11-22T15:21:13+05:30",
+          "wait_seconds": 140
+        }
+      ],
+      "displayed_other_lines_at_first_pair": [
+        {
+          "route": "323UP",
+          "departure_at": "2026-11-22T15:07:22+05:30",
+          "alight_at": "2026-11-22T15:17:22+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "460UP",
+          "departure_at": "2026-11-22T15:10:39+05:30",
+          "alight_at": "2026-11-22T15:18:17+05:30",
+          "departure_source": "gps_historical"
+        },
+        {
+          "route": "543ADOWN",
+          "departure_at": "2026-11-22T15:10:41+05:30",
+          "alight_at": "2026-11-22T15:18:10+05:30",
+          "departure_source": "gps_historical"
+        },
+        {
+          "route": "392UP",
+          "departure_at": "2026-11-22T15:11:10+05:30",
+          "alight_at": "2026-11-22T15:19:26+05:30",
+          "departure_source": "live"
+        },
+        {
+          "route": "392STLUP",
+          "departure_at": "2026-11-22T15:13:29+05:30",
+          "alight_at": "2026-11-22T15:23:02+05:30",
+          "departure_source": "gps_live_segment"
+        },
+        {
+          "route": "D-042UP",
+          "departure_at": "2026-11-22T15:19:48+05:30",
+          "alight_at": "2026-11-22T15:29:48+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "611ADOWN",
+          "departure_at": "2026-11-22T15:22:13+05:30",
+          "alight_at": "2026-11-22T15:32:14+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "433ASTL-KJDUP",
+          "departure_at": "2026-11-22T15:24:52+05:30",
+          "alight_at": "2026-11-22T15:34:52+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "433AUP",
+          "departure_at": "2026-11-22T15:24:59+05:30",
+          "alight_at": "2026-11-22T15:34:37+05:30",
+          "departure_source": "timetable"
+        },
+        {
+          "route": "DW-4DOWN",
+          "departure_at": "2026-11-22T15:33:43+05:30",
+          "alight_at": "2026-11-22T15:43:41+05:30",
+          "departure_source": "timetable"
+        }
+      ],
+      "platform_to_platform": [
+        {
+          "routes": [
+            "711UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:05:42+05:30",
+          "destination_at": "2026-11-22T15:12:44+05:30",
+          "wait_seconds": 34
+        },
+        {
+          "routes": [
+            "323UP"
+          ],
+          "boarding_sources": [
+            "timetable"
+          ],
+          "first_bus_at": "2026-11-22T15:07:22+05:30",
+          "destination_at": "2026-11-22T15:17:22+05:30",
+          "wait_seconds": 134
+        },
+        {
+          "routes": [
+            "543ADOWN"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:10:41+05:30",
+          "destination_at": "2026-11-22T15:18:10+05:30",
+          "wait_seconds": 333
+        },
+        {
+          "routes": [
+            "460UP"
+          ],
+          "boarding_sources": [
+            "gps_historical"
+          ],
+          "first_bus_at": "2026-11-22T15:10:39+05:30",
+          "destination_at": "2026-11-22T15:18:17+05:30",
+          "wait_seconds": 331
+        },
+        {
+          "routes": [
+            "392UP"
+          ],
+          "boarding_sources": [
+            "live"
+          ],
+          "first_bus_at": "2026-11-22T15:11:10+05:30",
+          "destination_at": "2026-11-22T15:19:26+05:30",
+          "wait_seconds": 362
+        },
+        {
+          "routes": [
+            "392STLUP"
+          ],
+          "boarding_sources": [
+            "gps_live_segment"
+          ],
+          "first_bus_at": "2026-11-22T15:13:29+05:30",
+          "destination_at": "2026-11-22T15:23:02+05:30",
+          "wait_seconds": 501
+        }
+      ],
+      "platform_board_at_issue": {
+        "392UP": {
+          "arrival": "2026-11-22T15:07:43+05:30",
+          "source": "upstream_gps",
+          "observed_at": "2026-11-22T14:58:54+05:30"
+        },
+        "479UP": {
+          "arrival": "2026-11-22T15:36:33+05:30",
+          "source": "live",
+          "observed_at": null
+        },
+        "711UP": {
+          "arrival": "2026-11-22T15:05:42+05:30",
+          "source": "gps_historical",
+          "observed_at": null
+        }
+      },
+      "raw_gps_and_provider_calls": {
+        "392UP": {
+          "fresh_vehicle_fixes": 1,
+          "paired_stop_calls": [
+            {
+              "board_at": "2026-11-22T15:11:10+05:30",
+              "exit_at": "2026-11-22T15:19:26+05:30",
+              "gps_at": "2026-11-22T14:58:54+05:30",
+              "gps_age_seconds": 66,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "serves",
+              "exact_stop_list_and_trip_match": true,
+              "matched_stop_times_accepted_by_planner": true
+            }
+          ]
+        },
+        "479UP": {
+          "fresh_vehicle_fixes": 5,
+          "paired_stop_calls": [
+            {
+              "board_at": "2026-11-22T15:04:18+05:30",
+              "exit_at": "2026-11-22T15:12:32+05:30",
+              "gps_at": "2026-11-22T14:58:57+05:30",
+              "gps_age_seconds": 63,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "cannot_board",
+              "exact_stop_list_and_trip_match": false,
+              "matched_stop_times_accepted_by_planner": false
+            },
+            {
+              "board_at": "2026-11-22T15:36:33+05:30",
+              "exit_at": "2026-11-22T15:44:46+05:30",
+              "gps_at": "2026-11-22T14:58:52+05:30",
+              "gps_age_seconds": 68,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "serves",
+              "exact_stop_list_and_trip_match": true,
+              "matched_stop_times_accepted_by_planner": true
+            },
+            {
+              "board_at": "2026-11-22T15:53:06+05:30",
+              "exit_at": "2026-11-22T16:01:19+05:30",
+              "gps_at": "2026-11-22T14:58:47+05:30",
+              "gps_age_seconds": 73,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "cannot_board",
+              "exact_stop_list_and_trip_match": false,
+              "matched_stop_times_accepted_by_planner": false
+            }
+          ]
+        },
+        "711UP": {
+          "fresh_vehicle_fixes": 1,
+          "paired_stop_calls": [
+            {
+              "board_at": "2026-11-22T15:05:30+05:30",
+              "exit_at": "2026-11-22T15:13:41+05:30",
+              "gps_at": "2026-11-22T14:58:48+05:30",
+              "gps_age_seconds": 72,
+              "service_date": "20261122",
+              "scheduled_patterns_at_provider_start_minute": 1,
+              "timetable_pair_status": "cannot_board",
+              "exact_stop_list_and_trip_match": false,
+              "matched_stop_times_accepted_by_planner": false
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -21,6 +21,8 @@ A scheduled departure, an estimate learned from GPS and a fresh observation each
 
 Direct buses are checked at every compatible stop within the walking limit. On a direct journey, the details also show other lines serving the same two platforms within 30 minutes of reaching the first stop. If Atlas cannot find a walking route to a nearby boarding platform, departures from that platform appear separately.
 
+Atlas orders journeys by predicted arrival at the destination. The platform list also shows which line is due first and whether its estimate comes from this bus’s GPS, an operator prediction or past running times. [How often did Atlas pick the right line?](docs/first-direct-bus.md) · [API fields](docs/api.md)
+
 ## Run the Delhi planner
 
 1. Install Python **3.12**. Download or clone this repository.
@@ -53,7 +55,9 @@ Open the [passenger map](http://127.0.0.1:8765/), [runnable API guide](http://12
 
 Near AIIMS, the original map sent a passenger on an 11 km detour to the eastbound stop. The revised map uses a mapped pedestrian underpass with stairs and short estimated links to the street. It gives a 369 m walk to the official AIIMS Ring Road platform. For a Sunday 3 p.m. request this changed the first suggestion from two buses in about 24 minutes to a direct bus in about 19 minutes. Both times are estimates. The crossing and the passenger’s actual arrival still need a check on foot. [Results on other Delhi routes](docs/journey-access-check.md)
 
-The 19-minute estimate was calculated afterwards using the corrected map. GPS could not verify the complete trip on the recommended 711UP. It did place another suggested service, the 479UP, at both its official stops. [Direct bus checks](data/direct-journey-gps-check.json)
+The 19-minute estimate was calculated afterwards using the corrected map. At 3 p.m. the provider predicted the 711UP first. A GPS reading put it near the AIIMS boarding stop at 3:05:34. Its published stopping pattern conflicted with the provider and its arrival at the Lajpat Nagar stop remains unverified. The 392UP was the first direct bus seen at both stops, at roughly 3:12 and 3:22. [Sunday GPS check](data/aiims-observed-order.json)
+
+We also tested 1,728 departures across six October dates. GPS identified a clear first line at the boarding stop in 655 cases. The previous planner picked it 107 times. With individual bus positions, that rose to 114. Ten picks improved and three regressed. From midnight to 3:59 a.m., correct picks rose from 17 to 18 out of 63. [Delhi results and limitations](docs/first-direct-bus.md)
 
 GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [comparison screen](http://127.0.0.1:8765/field-trials.html) shows where each estimate could be checked.
 

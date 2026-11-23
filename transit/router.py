@@ -4,15 +4,16 @@ import json
 import math
 import re
 import sqlite3
+import zipfile
 from bisect import bisect_left
 from collections import Counter, defaultdict
 from contextlib import closing
 from dataclasses import dataclass, replace
 from datetime import datetime, timedelta, timezone
-from functools import lru_cache
+from functools import cached_property, lru_cache
 from inspect import signature
 
-from .schedule import cache_schedule
+from .schedule import cache_schedule, rows
 from .boarding import PlatformPath
 
 
@@ -25,6 +26,8 @@ TRANSFER_ENDPOINT_LIMIT = 12
 NEARBY_PLATFORM_SCREEN_M = 250
 NEARBY_PLATFORM_COUNT = 2
 DEPARTURE_BOARD_SECONDS = 30 * 60
+POSITION_BOARD_STOPS = 8
+POSITION_BOARD_SECONDS = 20 * 60
 
 
 def normalized(text):
@@ -71,6 +74,7 @@ class Ride:
     skipped: frozenset
     live_run_id: str | None = None
     forecast_calls: frozenset | None = None
+    position_anchor: tuple | None = None
 
     def serves(self, index):
         return index not in self.skipped and (self.forecast_calls is None or index in self.forecast_calls)
@@ -78,6 +82,7 @@ class Ride:
 
 class Router:
     def __init__(self, gtfs_path, data_dir, walking, eta):
+        self.gtfs_path = gtfs_path
         self.cache_path = cache_schedule(gtfs_path, data_dir)
         self.walking, self.eta = walking, eta
         self.patterns, self.at = [], defaultdict(list)
@@ -211,6 +216,13 @@ class Router:
             return None
         return PlatformPath.build(points,indexes,index,coords(self.stops[pattern.stops[index]]))
 
+    @cached_property
+    def trip_directions(self):
+        # Older portable indexes omit this optional GTFS column.
+        with zipfile.ZipFile(self.gtfs_path) as feed:
+            return {row["trip_id"]:int(row["direction_id"]) for row in rows(feed,"trips.txt")
+                    if row.get("direction_id") in ("0","1")}
+
     def journeys(self, origin, destination, depart, **kwargs):
         return _Query(self, local(depart), kwargs).run(self._place(origin), self._place(destination))
 
@@ -235,6 +247,9 @@ class _Query:
         lookup = getattr(self.eta,"vehicle_runs",None)
         self.instances = lookup(int(self.asof.timestamp())) if lookup else {}
         self._position_passages = None
+        position_lookup = getattr(self.eta,"journey_positions",None)
+        self.position_runs = (position_lookup(self.asof) if position_lookup
+                              and options.get("use_position_board_times",True) else {})
         self.instance_boards = defaultdict(set)
         for (day,trip), runs in self.instances.items():
             self.exclusions.pop((day,trip),None)  # All restrictions are now applied per confirmed vehicle.
@@ -244,7 +259,8 @@ class _Query:
                     self.instance_boards[day,pid,stop].add(k)
         self.bounded_walk = bool(router.walking and "max_distance_m" in signature(router.walking.route).parameters)
         self.days = []
-        forecast_days = getattr(self.eta,'forecast_service_dates',lambda asof: ())(int(self.asof.timestamp()))
+        forecast_days = set(getattr(self.eta,'forecast_service_dates',lambda asof: ())(int(self.asof.timestamp())))
+        forecast_days.update(day for day,_ in self.position_runs)
         for offset in (-1,0,1):
             day = (self.midnight+timedelta(days=offset)).date()
             if offset == -1 and self.r.max_service < self.start + 86400 and day not in forecast_days:
@@ -278,8 +294,8 @@ class _Query:
                 result[s] = w
         return result
 
-    def timeline(self, pid, k, day, offset, instance=None, boarding_index=None):
-        key = pid,k,offset,instance.live_run_id if instance else None,boarding_index
+    def timeline(self, pid, k, day, offset, instance=None, boarding_index=None, position=None):
+        key = pid,k,offset,instance.live_run_id if instance else None,boarding_index,position
         if key in self.timelines:
             return self.timelines[key]
         p = self.r.patterns[pid]
@@ -308,6 +324,8 @@ class _Query:
                 arrival = max(departures[-1],arrivals[-1]+max(0,round(run)))
             else:
                 arrival = offset+sch_arr
+            if position is not None and i == position[0]:
+                arrival = position[1] - int(self.midnight.timestamp())
             departure = arrival if i in skipped else arrival+sch_dep-sch_arr
             if instance:
                 live = instance.times.get(stop)
@@ -348,9 +366,12 @@ class _Query:
             arrivals.append(arrival)
             departures.append(departure)
             sources.append(source)
-            board_sources.append("live" if live is not None else ("schedule" if not i else source))
+            board_sources.append("live" if live is not None else
+                                 "upstream_gps" if position is not None and i > position[0] else
+                                 "schedule" if not i else source)
         result = Ride(pid,p.trips[k],arrivals,departures,sources,board_sources,skipped,
-                      instance.live_run_id if instance else None, frozenset(forecast_calls) if instance else None)
+                      instance.live_run_id if instance else None, frozenset(forecast_calls) if instance else None,
+                      position)
         self.timelines[key] = result
         return result
 
@@ -392,7 +413,24 @@ class _Query:
                 indexes.update(live_options(pid,p.stops[i],day,midnight+ready,midnight+self.horizon,
                                             asof))
             indexes.update(self.instance_boards.get((day,pid,p.stops[i]), ()))
+            position_runs = self.position_runs.get((day,pid),{})
+            indexes.update(position_runs)
             for k in sorted(indexes):
+                position = position_runs.get(k)
+                if position is not None and i != position[0]:
+                    # A fix at the boarding platform cannot by itself establish
+                    # when the doors close. Retain the original forecast there.
+                    if i < position[0]:
+                        continue
+                    if i-position[0] <= POSITION_BOARD_STOPS:
+                        ride = self.timeline(pid,k,day,offset,position=position)
+                        if ride is None:
+                            continue
+                        issue = int((self.asof-self.midnight).total_seconds())
+                        if ride.departures[i] <= issue + POSITION_BOARD_SECONDS:
+                            if ride.serves(i) and max(ready,issue) <= ride.departures[i] <= self.horizon:
+                                choices.append(ride)
+                            continue
                 # A recent expired call still takes precedence over its nominal timetable departure.
                 board_index = i if k in recent_calls else None
                 for ride in self.trip_timelines(pid,k,day,offset,boarding_index=board_index):
@@ -514,7 +552,15 @@ class _Query:
         route = self.r.patterns[ride.pid].route
         return {"route_id":route, "route":self.r.routes[route][0], "trip_id":ride.trip,
                 "departure_at":self.stamp(ride.departures[i]), "alight_at":self.stamp(ride.arrivals[j]),
-                "departure_source":ride.board_source[i]}
+                "departure_source":ride.board_source[i], **self.position_evidence(ride)}
+
+    def position_evidence(self, ride):
+        if ride.position_anchor is None:
+            return {}
+        index, observed, received = ride.position_anchor
+        return {"boarding_position": {"observed_stop_id":self.r.patterns[ride.pid].stops[index],
+                                      "observed_at":datetime.fromtimestamp(observed,IST).isoformat(),
+                                      "received_at":datetime.fromtimestamp(received,IST).isoformat()}}
 
     def same_platform_services(self, item):
         """Other lines a passenger can board here and leave at the same exit stop."""
@@ -881,6 +927,7 @@ class _Query:
             leg("bus",a,b,ride.arrivals[j],geometry,", ".join(sorted(sources)),route_id=p.route,route=name,
                 agency=agency,trip_id=ride.trip,geometry_source=geo_source,model_sources=sources,
                 **({"live_run_id":ride.live_run_id} if ride.live_run_id else {}),
+                **self.position_evidence(ride),
                 stop_count=sum(k not in ride.skipped for k in range(i+1,j+1)),
                 calls=self.stop_calls(ride,i,j),
                 stops=[self.r.stops[p.stops[k]] for k in range(i,j+1) if k not in ride.skipped],

@@ -20,6 +20,9 @@ __pycache__/
 !/data/direct-journey-gps-check.json
 !/data/journey-access-check.json
 !/data/boarding-minute-check.json
+!/data/aiims-departure-evidence.json
+!/data/aiims-observed-order.json
+!/data/first-direct-bus.json
 !/data/map-context.geojson.gz
 !/data/eta_model.json.gz
 !/data/eta_metrics.json

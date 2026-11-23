@@ -1,0 +1,106 @@
+{
+  "departure": "2026-11-22T15:00:00+05:30",
+  "rider_ready_at": "2026-11-22T15:05:08+05:30",
+  "board": "2839",
+  "exit": "2363",
+  "frozen_position_receipt_manifest_sha256": "83ea65aa6a3af1f41794f08f44c199d668ba5d84936976c95f63b07a075ffcb0",
+  "frozen_position_files": 346,
+  "all_active_direct_route_ids": 25,
+  "route_labels": [
+    "323UP",
+    "392BUP",
+    "392STLUP",
+    "392UP",
+    "398UP",
+    "433ASTL-KJDUP",
+    "433AUP",
+    "433UP",
+    "460UP",
+    "479UP",
+    "480UP",
+    "507BDOWN",
+    "518DOWN",
+    "543ADOWN",
+    "611ADOWN",
+    "611DOWN",
+    "711AUP",
+    "711UP",
+    "724AUP",
+    "763AUP",
+    "763UP",
+    "984AUP",
+    "CBD2(-)DOWN",
+    "D-042UP",
+    "DW-4DOWN"
+  ],
+  "routes_with_usable_vehicle_runs": 19,
+  "strict_first_half_hour_boardings_including_missing_exits": [
+    {
+      "route": "392UP",
+      "pattern_status": "serves",
+      "boarding_interval": [
+        "2026-11-22T15:11:42+05:30",
+        "2026-11-22T15:12:26+05:30"
+      ],
+      "exit_interval": [
+        "2026-11-22T15:21:53+05:30",
+        "2026-11-22T15:23:11+05:30"
+      ],
+      "entry_after_walker_ready": true
+    },
+    {
+      "route": "479UP",
+      "pattern_status": "serves",
+      "boarding_interval": [
+        "2026-11-22T15:23:04+05:30",
+        "2026-11-22T15:23:37+05:30"
+      ],
+      "exit_interval": [
+        "2026-11-22T15:31:08+05:30",
+        "2026-11-22T15:31:41+05:30"
+      ],
+      "entry_after_walker_ready": true
+    },
+    {
+      "route": "392UP",
+      "pattern_status": "serves",
+      "boarding_interval": [
+        "2026-11-22T15:30:06+05:30",
+        "2026-11-22T15:30:39+05:30"
+      ],
+      "exit_interval": [
+        "2026-11-22T15:37:48+05:30",
+        "2026-11-22T15:38:10+05:30"
+      ],
+      "entry_after_walker_ready": true
+    },
+    {
+      "route": "392STLUP",
+      "pattern_status": "serves",
+      "boarding_interval": [
+        "2026-11-22T15:33:49+05:30",
+        "2026-11-22T15:34:22+05:30"
+      ],
+      "exit_interval": null,
+      "entry_after_walker_ready": true
+    }
+  ],
+  "strict_matching_diagnostics": {},
+  "physical_711_seen_at_departure": [
+    {
+      "route": "711UP",
+      "last_fix_available_at_departure": "2026-11-22T14:58:48+05:30",
+      "feed_received": "2026-11-22T14:59:44+05:30",
+      "service_date": "20261122",
+      "strict_pattern_status_for_pair": "cannot_board",
+      "first_entry_window": [
+        "2026-11-22T15:05:01+05:30",
+        "2026-11-22T15:05:34+05:30"
+      ],
+      "closest_exit_fix_metres_within_half_hour": 261,
+      "fixes_inside_boarding_area_count": 2,
+      "closest_boarding_fix_metres": 14
+    }
+  ],
+  "scope": "First witnessed service at the two specified stops. GPS gaps and actual boardings are unknown. Physical proximity is listed separately when a run's timetable stopping pattern disagrees."
+}

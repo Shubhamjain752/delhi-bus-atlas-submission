@@ -89,6 +89,19 @@ function sourceName(text) {
   return [...new Set(String(text || "").split(",").map(s => s.trim()).filter(Boolean)
     .map(s => labels[s] || s.replaceAll("_"," ")))].join(" · ");
 }
+function boardingBasis(source) {
+  if (source==="upstream_gps") return "Estimated from this bus’s GPS";
+  if (source==="live") return "Operator stop prediction";
+  if (source==="live_inferred") return "Estimated from an operator update";
+  if (source==="schedule" || source==="timetable") return "Timetable estimate";
+  if (source==="gps_live_segment" || source==="gps_historical_recent") return "Estimated from recent bus travel times";
+  if (source==="gps_historical" || source==="gps_replay" || source==="replay") return "Estimated from past bus travel times";
+  return sourceName(source);
+}
+function boardingObservation(position) {
+  return position ? "Bus GPS recorded upstream at "+exactTime(position.observed_at)+
+    ", received at "+exactTime(position.received_at)+" IST." : "";
+}
 async function getJSON(path, params={}, signal) {
   const url = new URL(path, location.origin);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
@@ -125,6 +138,12 @@ function resultContext(departure) {
   const day=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",day:"numeric",month:"short",year:"numeric"})
     .format(new Date(departure));
   node.textContent=prefix+" · "+day+" at "+(ui.submitted?.replay?exactTime(departure):timeText(departure))+" IST";
+  if (departure==="2026-11-22T15:00:00+05:30" && ui.submitted?.from==="28.568914,77.213693" &&
+      ui.submitted.to==="28.56661,77.246373") {
+    const link=element("a",null,"What GPS recorded at AIIMS");
+    link.href="/field-trials.html#aiims-departures";
+    node.append(" · ",link);
+  }
 }
 function setPoint(which, item) {
   points[which] = item;
@@ -372,7 +391,19 @@ function selectedSummary(journey) {
   }
   const directions=button("View directions","summary-action",viewDetails);
   directions.append(icon("next"));
-  panel.append(head,arrival,element("div","summary-place",destination),stages,boardLine,directions);
+  panel.append(head,arrival,element("div","summary-place",destination),stages,boardLine);
+  const earlier=board?.same_platform_services?.find(s=>Date.parse(s.departure_at)<Date.parse(board.departure));
+  if (earlier && !conditional) {
+    panel.append(element("div","choice-boarding",earlier.route+" is due at the same platform at "+
+      timeText(earlier.departure_at)+" and reaches "+board.to.name+" at "+timeText(earlier.alight_at)+"."));
+  }
+  const vehicleUpdates=new Set(["live","upstream_gps"]);
+  const nextWithUpdate=board?.same_platform_services?.find(s=>vehicleUpdates.has(s.departure_source));
+  if (!conditional && nextWithUpdate && nextWithUpdate!==earlier && !vehicleUpdates.has(board.calls?.[0]?.source)) {
+    panel.append(element("div","choice-boarding",nextWithUpdate.route+" also serves these stops. "+
+      boardingBasis(nextWithUpdate.departure_source)+" · due "+timeText(nextWithUpdate.departure_at)+"."));
+  }
+  panel.append(directions);
 }
 function showRoute(journey) {
   routeLegend(journey);
@@ -474,8 +505,15 @@ function choices() {
     }
     bottom.append(chain,element("span","subtle",serviceType));
     choice.append(top,bottom);
-    if (buses.length) choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
-      " · "+waitDuration(journey.wait_seconds)+" total wait"));
+    if (buses.length) {
+      const basis=boardingBasis(buses[0].calls?.[0]?.source);
+      choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
+        " · "+waitDuration(journey.wait_seconds)+" total wait"));
+      if (basis) {
+        choice.append(element("div","choice-boarding",basis));
+        choice.setAttribute("aria-label",choice.getAttribute("aria-label")+", "+basis);
+      }
+    }
     const others=buses[0]?.same_platform_services?.length;
     if (others) choice.append(element("div","choice-boarding",others+" other direct "+(others===1?"line serves":"lines serve")+" both stops"));
     box.append(choice);
@@ -697,6 +735,7 @@ function details(journey) {
     if (leg.source) meta.push(sourceName(leg.source));
     if (leg.geometry_source==="ordered_stops") meta.push("Approximate path between stops");
     body.append(element("p","leg-source",meta.join(" · ")));
+    if (leg.boarding_position) body.append(element("p","leg-source",boardingObservation(leg.boarding_position)));
     if (leg.includes_arterial_without_mapped_sidewalk) {
       body.append(element("p","leg-source","Part of this walk follows a road with no mapped sidewalk."));
     }
@@ -715,9 +754,13 @@ function details(journey) {
     }
     if (leg.same_platform_services?.length) {
       const sameStops=element("details","service-list");
-      sameStops.append(element("summary",null,"Other buses from this platform to "+leg.to.name),
-        element("p","leg-source","If another line arrives first, check its direction. These buses serve the same two stops. Times are estimates."),
-        serviceRows(leg.same_platform_services,journey.departure));
+      const chosen={route:leg.route, departure_at:leg.departure, alight_at:leg.arrival,
+        departure_source:leg.calls?.[0]?.source, boarding_position:leg.boarding_position};
+      const departures=[chosen,...leg.same_platform_services].sort((a,b)=>
+        Date.parse(a.departure_at)-Date.parse(b.departure_at) || Date.parse(a.alight_at)-Date.parse(b.alight_at));
+      sameStops.append(element("summary",null,"Departures from this platform to "+leg.to.name),
+        element("p","leg-source","All these lines serve both stops. They are listed by estimated boarding time. Journey choices above are ordered by arrival at your destination."),
+        serviceRows(departures,journey.departure));
       body.append(sameStops);
     }
     const schedule=leg.mode==="bus" ? stopSchedule(leg,clock) : null;
@@ -736,7 +779,8 @@ function serviceRows(services,reference) {
     const row=element("li",null);
     row.append(element("strong",null,service.route+" · "+arrivalText(reference,service.departure_at)),
       element("span",null," → "+(service.alighting_stop?service.alighting_stop.name+" ":"")+arrivalText(reference,service.alight_at)),
-      element("small","leg-source",sourceName(service.departure_source)));
+      element("small","leg-source",[boardingBasis(service.departure_source),
+        boardingObservation(service.boarding_position)].filter(Boolean).join(". ")));
     list.append(row);
   }
   return list;

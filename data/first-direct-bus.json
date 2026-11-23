@@ -1,0 +1,2420 @@
+{
+  "dates": [
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-24",
+    "2026-10-25",
+    "2026-10-26",
+    "2026-10-29"
+  ],
+  "test_issue": "HH:10 IST on each calendar hour; observer already at boarding pole",
+  "gps_window": "Only polls received in the previous four minutes feed both versions. Arrival scoring uses later GPS.",
+  "official_route_records": 2574,
+  "official_distinct_line_labels": 2574,
+  "route_count_in_candidate_pairs": 2205,
+  "distinct_route_labels_in_candidate_pairs": 2205,
+  "distinct_fully_witnessed_route_labels": 1392,
+  "distinct_pairs": 1137,
+  "boarding_poles": 1080,
+  "geographic_cells_about_4km": 82,
+  "top_choice_source_before": {
+    "timetable": 1148,
+    "schedule": 73,
+    "gps_historical": 438,
+    "gps_live_segment": 69
+  },
+  "top_choice_source_after": {
+    "timetable": 1114,
+    "schedule": 73,
+    "gps_historical": 425,
+    "gps_live_segment": 61,
+    "upstream_gps": 55
+  },
+  "examples_of_changed_picks": {
+    "still_wrong": [
+      {
+        "date": "2026-10-22",
+        "issue_hour": 7,
+        "board": "Kapashera Crossing",
+        "exit": "Samalkha Village",
+        "before": {
+          "line": "539DOWN",
+          "depart": "2026-10-22T07:12:28+05:30",
+          "arrive": "2026-10-22T07:13:51+05:30",
+          "source": "gps_historical"
+        },
+        "after": {
+          "line": "543ADOWN",
+          "depart": "2026-10-22T07:13:41+05:30",
+          "arrive": "2026-10-22T07:15:24+05:30",
+          "source": "gps_historical"
+        },
+        "first_witnessed_line": "717ADOWN"
+      },
+      {
+        "date": "2026-10-23",
+        "issue_hour": 7,
+        "board": "Chander Nagar / Tilak Pul",
+        "exit": "Jivan park",
+        "before": {
+          "line": "711UP",
+          "depart": "2026-10-23T07:10:52+05:30",
+          "arrive": "2026-10-23T07:12:36+05:30",
+          "source": "gps_historical"
+        },
+        "after": {
+          "line": "761DOWN",
+          "depart": "2026-10-23T07:10:28+05:30",
+          "arrive": "2026-10-23T07:12:14+05:30",
+          "source": "upstream_gps"
+        },
+        "first_witnessed_line": "741DOWN"
+      },
+      {
+        "date": "2026-10-23",
+        "issue_hour": 8,
+        "board": "PNB Geetanjali",
+        "exit": "PTS",
+        "before": {
+          "line": "424UP",
+          "depart": "2026-10-23T08:11:18+05:30",
+          "arrive": "2026-10-23T08:13:37+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "680DOWN",
+          "depart": "2026-10-23T08:14:00+05:30",
+          "arrive": "2026-10-23T08:16:19+05:30",
+          "source": "timetable"
+        },
+        "first_witnessed_line": "546DOWN"
+      }
+    ],
+    "fixed": [
+      {
+        "date": "2026-10-22",
+        "issue_hour": 10,
+        "board": "Jhandewalan",
+        "exit": "Paharganj Police Station",
+        "before": {
+          "line": "775EDOWN",
+          "depart": "2026-10-22T10:10:24+05:30",
+          "arrive": "2026-10-22T10:11:51+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "954DOWN",
+          "depart": "2026-10-22T10:10:13+05:30",
+          "arrive": "2026-10-22T10:11:40+05:30",
+          "source": "upstream_gps"
+        },
+        "first_witnessed_line": "954DOWN"
+      },
+      {
+        "date": "2026-10-22",
+        "issue_hour": 16,
+        "board": "New Kondali A1 Crossing",
+        "exit": "Mayur vihar Phase 3 Crossing",
+        "before": {
+          "line": "378STLDOWN",
+          "depart": "2026-10-22T16:12:23+05:30",
+          "arrive": "2026-10-22T16:13:09+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "D-4503UP",
+          "depart": "2026-10-22T16:10:51+05:30",
+          "arrive": "2026-10-22T16:11:36+05:30",
+          "source": "upstream_gps"
+        },
+        "first_witnessed_line": "D-4503UP"
+      },
+      {
+        "date": "2026-10-22",
+        "issue_hour": 17,
+        "board": "Deepali Chowk Ring Road",
+        "exit": "Saraswati Vihar C Block",
+        "before": {
+          "line": "MC715UP",
+          "depart": "2026-10-22T17:12:26+05:30",
+          "arrive": "2026-10-22T17:13:34+05:30",
+          "source": "gps_historical"
+        },
+        "after": {
+          "line": "883DOWN",
+          "depart": "2026-10-22T17:10:55+05:30",
+          "arrive": "2026-10-22T17:12:44+05:30",
+          "source": "upstream_gps"
+        },
+        "first_witnessed_line": "883DOWN"
+      }
+    ],
+    "lost": [
+      {
+        "date": "2026-10-24",
+        "issue_hour": 15,
+        "board": "Kasturi Ram School",
+        "exit": "Babu Jag Jeevan Ram Colony",
+        "before": {
+          "line": "179DOWN",
+          "depart": "2026-10-24T15:12:10+05:30",
+          "arrive": "2026-10-24T15:14:26+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "172STL-NDEVUP",
+          "depart": "2026-10-24T15:15:46+05:30",
+          "arrive": "2026-10-24T15:18:45+05:30",
+          "source": "timetable"
+        },
+        "first_witnessed_line": "179DOWN"
+      },
+      {
+        "date": "2026-10-26",
+        "issue_hour": 6,
+        "board": "Tuglkabad Fort",
+        "exit": "Tughlaqabad Village",
+        "before": {
+          "line": "34UP",
+          "depart": "2026-10-26T06:12:55+05:30",
+          "arrive": "2026-10-26T06:13:28+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "525STLDOWN",
+          "depart": "2026-10-26T06:16:38+05:30",
+          "arrive": "2026-10-26T06:17:01+05:30",
+          "source": "upstream_gps"
+        },
+        "first_witnessed_line": "34UP"
+      },
+      {
+        "date": "2026-10-29",
+        "issue_hour": 11,
+        "board": "Naya Bans",
+        "exit": "Noida Sec 3",
+        "before": {
+          "line": "347UP",
+          "depart": "2026-10-29T11:10:10+05:30",
+          "arrive": "2026-10-29T11:11:09+05:30",
+          "source": "timetable"
+        },
+        "after": {
+          "line": "443UP",
+          "depart": "2026-10-29T11:27:02+05:30",
+          "arrive": "2026-10-29T11:28:01+05:30",
+          "source": "timetable"
+        },
+        "first_witnessed_line": "347UP"
+      }
+    ]
+  },
+  "source_sha256": {
+    "check_first_direct_bus.py": "3a7b67aafbbf1b2cd781629fce29c381412b89bca689ec9ebfa8f182de549270",
+    "router.py": "cf5c7ea671d8420079f51af46520ded4e01e8f1db529a25afd9a26d1462ac378",
+    "live.py": "e0f55d711ad5183d81b406779d3d102a37bf54671b6af46098e1c6e47f1c0588",
+    "eta.py": "f2a6f3752702371d046d037a7ae1687062b832026a9c7fd55939ed8160798810",
+    "arrivals.py": "98c346885b86df4b92954906db36a1172b83d165ac79d254d5c712cec33e2487"
+  },
+  "timetable_and_models_sha256": {
+    "delhi_buses_static_gtfs_v1.zip": "8eb05d9c21e7a6b42d7b49de45cb095b70ddee5b8f7716859330c9784c322f05",
+    "data/eta_model.json.gz": "10966c5d60d1fa409249800029b68c0957dd4990c87c20947f23c465d76975e6",
+    "data/weekend/eta_model.json.gz": "d0933f0ddebf2b86a2927b8c27ba890bebc6b0edf0b3bf0ed25bb45a7e5ed02b"
+  },
+  "by_period": {
+    "all": {
+      "board": {
+        "counts": {
+          "queries": 1728,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 655,
+          "old_correct": 107,
+          "new_correct": 114,
+          "old_pick_without_complete_witness": 344,
+          "new_pick_without_complete_witness": 340,
+          "both_picks_fully_witnessed": 304,
+          "old_correct_when_both_picks_witnessed": 106,
+          "new_correct_when_both_picks_witnessed": 108,
+          "new_top_bus_anchored_by_gps": 55,
+          "first_departure_time_changed": 97,
+          "changed_all": 79,
+          "both_wrong_after_change": 21,
+          "right_after_change": 10,
+          "wrong_after_change": 3
+        },
+        "unscored": {
+          "one_complete_line": 299,
+          "no_complete_line": 363,
+          "incomplete_early_rival": 186,
+          "close_observations": 225
+        },
+        "distinct_winning_lines": 440,
+        "scored_boarding_poles": 506
+      },
+      "exit": {
+        "counts": {
+          "queries": 1728,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 605,
+          "old_correct": 106,
+          "new_correct": 113,
+          "old_pick_without_complete_witness": 316,
+          "new_pick_without_complete_witness": 314,
+          "both_picks_fully_witnessed": 282,
+          "old_correct_when_both_picks_witnessed": 105,
+          "new_correct_when_both_picks_witnessed": 108,
+          "new_top_bus_anchored_by_gps": 55,
+          "first_departure_time_changed": 97,
+          "changed_all": 79,
+          "both_wrong_after_change": 20,
+          "right_after_change": 10,
+          "wrong_after_change": 3
+        },
+        "unscored": {
+          "one_complete_line": 299,
+          "no_complete_line": 363,
+          "incomplete_early_rival": 244,
+          "close_observations": 217
+        },
+        "distinct_winning_lines": 408,
+        "scored_boarding_poles": 468
+      }
+    },
+    "midnight_00_to_04": {
+      "board": {
+        "counts": {
+          "queries": 360,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 63,
+          "old_correct": 17,
+          "new_correct": 18,
+          "old_pick_without_complete_witness": 36,
+          "new_pick_without_complete_witness": 35,
+          "both_picks_fully_witnessed": 27,
+          "old_correct_when_both_picks_witnessed": 17,
+          "new_correct_when_both_picks_witnessed": 17,
+          "new_top_bus_anchored_by_gps": 7,
+          "first_departure_time_changed": 10,
+          "changed_all": 9,
+          "right_after_change": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "one_complete_line": 103,
+          "no_complete_line": 179,
+          "incomplete_early_rival": 9,
+          "close_observations": 6
+        },
+        "distinct_winning_lines": 37,
+        "scored_boarding_poles": 31
+      },
+      "exit": {
+        "counts": {
+          "queries": 360,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 59,
+          "old_correct": 16,
+          "new_correct": 16,
+          "old_pick_without_complete_witness": 34,
+          "new_pick_without_complete_witness": 34,
+          "both_picks_fully_witnessed": 25,
+          "old_correct_when_both_picks_witnessed": 16,
+          "new_correct_when_both_picks_witnessed": 16,
+          "new_top_bus_anchored_by_gps": 7,
+          "first_departure_time_changed": 10,
+          "changed_all": 9,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "one_complete_line": 103,
+          "no_complete_line": 179,
+          "incomplete_early_rival": 14,
+          "close_observations": 5
+        },
+        "distinct_winning_lines": 36,
+        "scored_boarding_poles": 28
+      }
+    },
+    "peak_08_to_10_and_17_to_19": {
+      "board": {
+        "counts": {
+          "queries": 432,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 32,
+          "changed_all": 21,
+          "scored": 192,
+          "old_correct": 30,
+          "new_correct": 33,
+          "old_pick_without_complete_witness": 95,
+          "new_pick_without_complete_witness": 92,
+          "new_top_bus_anchored_by_gps": 18,
+          "both_picks_fully_witnessed": 96,
+          "old_correct_when_both_picks_witnessed": 30,
+          "new_correct_when_both_picks_witnessed": 31,
+          "right_after_change": 3,
+          "both_wrong_after_change": 4
+        },
+        "unscored": {
+          "incomplete_early_rival": 59,
+          "close_observations": 74,
+          "one_complete_line": 57,
+          "no_complete_line": 50
+        },
+        "distinct_winning_lines": 172,
+        "scored_boarding_poles": 184
+      },
+      "exit": {
+        "counts": {
+          "queries": 432,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 32,
+          "changed_all": 21,
+          "scored": 181,
+          "old_correct": 32,
+          "new_correct": 33,
+          "old_pick_without_complete_witness": 87,
+          "new_pick_without_complete_witness": 85,
+          "new_top_bus_anchored_by_gps": 18,
+          "both_picks_fully_witnessed": 93,
+          "old_correct_when_both_picks_witnessed": 32,
+          "new_correct_when_both_picks_witnessed": 32,
+          "right_after_change": 2,
+          "both_wrong_after_change": 5,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 75,
+          "close_observations": 69,
+          "one_complete_line": 57,
+          "no_complete_line": 50
+        },
+        "distinct_winning_lines": 161,
+        "scored_boarding_poles": 174
+      }
+    },
+    "remaining_hours": {
+      "board": {
+        "counts": {
+          "queries": 936,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 400,
+          "old_correct": 60,
+          "new_correct": 63,
+          "old_pick_without_complete_witness": 213,
+          "new_pick_without_complete_witness": 213,
+          "both_picks_fully_witnessed": 181,
+          "old_correct_when_both_picks_witnessed": 59,
+          "new_correct_when_both_picks_witnessed": 60,
+          "new_top_bus_anchored_by_gps": 30,
+          "first_departure_time_changed": 55,
+          "changed_all": 49,
+          "both_wrong_after_change": 16,
+          "right_after_change": 6,
+          "wrong_after_change": 3
+        },
+        "unscored": {
+          "incomplete_early_rival": 118,
+          "one_complete_line": 139,
+          "close_observations": 145,
+          "no_complete_line": 134
+        },
+        "distinct_winning_lines": 306,
+        "scored_boarding_poles": 338
+      },
+      "exit": {
+        "counts": {
+          "queries": 936,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 365,
+          "old_correct": 58,
+          "new_correct": 64,
+          "old_pick_without_complete_witness": 195,
+          "new_pick_without_complete_witness": 195,
+          "both_picks_fully_witnessed": 164,
+          "old_correct_when_both_picks_witnessed": 57,
+          "new_correct_when_both_picks_witnessed": 60,
+          "new_top_bus_anchored_by_gps": 30,
+          "first_departure_time_changed": 55,
+          "changed_all": 49,
+          "both_wrong_after_change": 14,
+          "right_after_change": 8,
+          "wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 155,
+          "one_complete_line": 139,
+          "close_observations": 143,
+          "no_complete_line": 134
+        },
+        "distinct_winning_lines": 283,
+        "scored_boarding_poles": 311
+      }
+    },
+    "weekday": {
+      "board": {
+        "counts": {
+          "queries": 1152,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 427,
+          "old_correct": 73,
+          "new_correct": 78,
+          "old_pick_without_complete_witness": 223,
+          "new_pick_without_complete_witness": 221,
+          "both_picks_fully_witnessed": 200,
+          "old_correct_when_both_picks_witnessed": 73,
+          "new_correct_when_both_picks_witnessed": 74,
+          "new_top_bus_anchored_by_gps": 36,
+          "first_departure_time_changed": 59,
+          "changed_all": 49,
+          "both_wrong_after_change": 12,
+          "right_after_change": 7,
+          "wrong_after_change": 2
+        },
+        "unscored": {
+          "one_complete_line": 208,
+          "no_complete_line": 238,
+          "incomplete_early_rival": 129,
+          "close_observations": 150
+        },
+        "distinct_winning_lines": 333,
+        "scored_boarding_poles": 350
+      },
+      "exit": {
+        "counts": {
+          "queries": 1152,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 405,
+          "old_correct": 70,
+          "new_correct": 74,
+          "old_pick_without_complete_witness": 211,
+          "new_pick_without_complete_witness": 211,
+          "both_picks_fully_witnessed": 190,
+          "old_correct_when_both_picks_witnessed": 70,
+          "new_correct_when_both_picks_witnessed": 72,
+          "new_top_bus_anchored_by_gps": 36,
+          "first_departure_time_changed": 59,
+          "changed_all": 49,
+          "both_wrong_after_change": 12,
+          "right_after_change": 6,
+          "wrong_after_change": 2
+        },
+        "unscored": {
+          "one_complete_line": 208,
+          "no_complete_line": 238,
+          "incomplete_early_rival": 163,
+          "close_observations": 138
+        },
+        "distinct_winning_lines": 313,
+        "scored_boarding_poles": 337
+      }
+    },
+    "weekend": {
+      "board": {
+        "counts": {
+          "queries": 576,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 228,
+          "old_correct": 34,
+          "new_correct": 36,
+          "old_pick_without_complete_witness": 121,
+          "new_pick_without_complete_witness": 119,
+          "both_picks_fully_witnessed": 104,
+          "old_correct_when_both_picks_witnessed": 33,
+          "new_correct_when_both_picks_witnessed": 34,
+          "new_top_bus_anchored_by_gps": 19,
+          "first_departure_time_changed": 38,
+          "changed_all": 30,
+          "both_wrong_after_change": 9,
+          "right_after_change": 3,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 57,
+          "one_complete_line": 91,
+          "no_complete_line": 125,
+          "close_observations": 75
+        },
+        "distinct_winning_lines": 193,
+        "scored_boarding_poles": 207
+      },
+      "exit": {
+        "counts": {
+          "queries": 576,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 200,
+          "old_correct": 36,
+          "new_correct": 39,
+          "old_pick_without_complete_witness": 105,
+          "new_pick_without_complete_witness": 103,
+          "both_picks_fully_witnessed": 92,
+          "old_correct_when_both_picks_witnessed": 35,
+          "new_correct_when_both_picks_witnessed": 36,
+          "new_top_bus_anchored_by_gps": 19,
+          "first_departure_time_changed": 38,
+          "changed_all": 30,
+          "right_after_change": 4,
+          "both_wrong_after_change": 8,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 79,
+          "incomplete_early_rival": 81,
+          "one_complete_line": 91,
+          "no_complete_line": 125
+        },
+        "distinct_winning_lines": 174,
+        "scored_boarding_poles": 184
+      }
+    }
+  },
+  "by_date": {
+    "2026-10-22": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 105,
+          "old_correct": 16,
+          "new_correct": 20,
+          "old_pick_without_complete_witness": 57,
+          "new_pick_without_complete_witness": 55,
+          "both_picks_fully_witnessed": 48,
+          "old_correct_when_both_picks_witnessed": 16,
+          "new_correct_when_both_picks_witnessed": 18,
+          "new_top_bus_anchored_by_gps": 11,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_wrong_after_change": 1,
+          "right_after_change": 4
+        },
+        "unscored": {
+          "one_complete_line": 54,
+          "no_complete_line": 59,
+          "incomplete_early_rival": 30,
+          "close_observations": 40
+        },
+        "distinct_winning_lines": 95,
+        "scored_boarding_poles": 100
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 98,
+          "old_correct": 15,
+          "new_correct": 18,
+          "old_pick_without_complete_witness": 53,
+          "new_pick_without_complete_witness": 52,
+          "both_picks_fully_witnessed": 45,
+          "old_correct_when_both_picks_witnessed": 15,
+          "new_correct_when_both_picks_witnessed": 17,
+          "new_top_bus_anchored_by_gps": 11,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_wrong_after_change": 1,
+          "right_after_change": 3
+        },
+        "unscored": {
+          "one_complete_line": 54,
+          "no_complete_line": 59,
+          "incomplete_early_rival": 39,
+          "close_observations": 38
+        },
+        "distinct_winning_lines": 88,
+        "scored_boarding_poles": 92
+      }
+    },
+    "2026-10-23": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 108,
+          "old_correct": 22,
+          "new_correct": 24,
+          "old_pick_without_complete_witness": 48,
+          "new_pick_without_complete_witness": 48,
+          "new_top_bus_anchored_by_gps": 12,
+          "first_departure_time_changed": 15,
+          "changed_all": 12,
+          "right_after_change": 2,
+          "both_picks_fully_witnessed": 58,
+          "old_correct_when_both_picks_witnessed": 22,
+          "new_correct_when_both_picks_witnessed": 23,
+          "both_wrong_after_change": 4
+        },
+        "unscored": {
+          "one_complete_line": 54,
+          "incomplete_early_rival": 33,
+          "no_complete_line": 55,
+          "close_observations": 38
+        },
+        "distinct_winning_lines": 105,
+        "scored_boarding_poles": 105
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 106,
+          "old_correct": 23,
+          "new_correct": 23,
+          "old_pick_without_complete_witness": 47,
+          "new_pick_without_complete_witness": 48,
+          "new_top_bus_anchored_by_gps": 12,
+          "first_departure_time_changed": 15,
+          "changed_all": 12,
+          "both_picks_fully_witnessed": 57,
+          "old_correct_when_both_picks_witnessed": 23,
+          "new_correct_when_both_picks_witnessed": 23,
+          "both_wrong_after_change": 4,
+          "right_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 39,
+          "one_complete_line": 54,
+          "no_complete_line": 55,
+          "close_observations": 34
+        },
+        "distinct_winning_lines": 101,
+        "scored_boarding_poles": 100
+      }
+    },
+    "2026-10-24": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 113,
+          "old_correct": 15,
+          "new_correct": 15,
+          "old_pick_without_complete_witness": 62,
+          "new_pick_without_complete_witness": 63,
+          "both_picks_fully_witnessed": 49,
+          "old_correct_when_both_picks_witnessed": 14,
+          "new_correct_when_both_picks_witnessed": 15,
+          "new_top_bus_anchored_by_gps": 12,
+          "first_departure_time_changed": 22,
+          "changed_all": 16,
+          "both_wrong_after_change": 5,
+          "right_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 30,
+          "one_complete_line": 41,
+          "no_complete_line": 68,
+          "close_observations": 36
+        },
+        "distinct_winning_lines": 104,
+        "scored_boarding_poles": 112
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 94,
+          "old_correct": 16,
+          "new_correct": 17,
+          "old_pick_without_complete_witness": 53,
+          "new_pick_without_complete_witness": 54,
+          "both_picks_fully_witnessed": 39,
+          "old_correct_when_both_picks_witnessed": 15,
+          "new_correct_when_both_picks_witnessed": 16,
+          "new_top_bus_anchored_by_gps": 12,
+          "first_departure_time_changed": 22,
+          "changed_all": 16,
+          "right_after_change": 2,
+          "both_wrong_after_change": 4,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 36,
+          "incomplete_early_rival": 49,
+          "one_complete_line": 41,
+          "no_complete_line": 68
+        },
+        "distinct_winning_lines": 91,
+        "scored_boarding_poles": 94
+      }
+    },
+    "2026-10-25": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 115,
+          "old_correct": 19,
+          "new_correct": 21,
+          "old_pick_without_complete_witness": 59,
+          "new_pick_without_complete_witness": 56,
+          "both_picks_fully_witnessed": 55,
+          "old_correct_when_both_picks_witnessed": 19,
+          "new_correct_when_both_picks_witnessed": 19,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_wrong_after_change": 4,
+          "new_top_bus_anchored_by_gps": 7,
+          "right_after_change": 2
+        },
+        "unscored": {
+          "one_complete_line": 50,
+          "no_complete_line": 57,
+          "incomplete_early_rival": 27,
+          "close_observations": 39
+        },
+        "distinct_winning_lines": 105,
+        "scored_boarding_poles": 107
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 106,
+          "old_correct": 20,
+          "new_correct": 22,
+          "old_pick_without_complete_witness": 52,
+          "new_pick_without_complete_witness": 49,
+          "both_picks_fully_witnessed": 53,
+          "old_correct_when_both_picks_witnessed": 20,
+          "new_correct_when_both_picks_witnessed": 20,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_wrong_after_change": 4,
+          "new_top_bus_anchored_by_gps": 7,
+          "right_after_change": 2
+        },
+        "unscored": {
+          "one_complete_line": 50,
+          "no_complete_line": 57,
+          "incomplete_early_rival": 32,
+          "close_observations": 43
+        },
+        "distinct_winning_lines": 95,
+        "scored_boarding_poles": 99
+      }
+    },
+    "2026-10-26": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 121,
+          "old_correct": 18,
+          "new_correct": 18,
+          "old_pick_without_complete_witness": 66,
+          "new_pick_without_complete_witness": 65,
+          "both_picks_fully_witnessed": 54,
+          "old_correct_when_both_picks_witnessed": 18,
+          "new_correct_when_both_picks_witnessed": 17,
+          "new_top_bus_anchored_by_gps": 7,
+          "first_departure_time_changed": 12,
+          "changed_all": 9,
+          "wrong_after_change": 1,
+          "both_wrong_after_change": 3,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 29,
+          "one_complete_line": 47,
+          "no_complete_line": 58,
+          "close_observations": 33
+        },
+        "distinct_winning_lines": 110,
+        "scored_boarding_poles": 112
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 106,
+          "old_correct": 15,
+          "new_correct": 16,
+          "old_pick_without_complete_witness": 57,
+          "new_pick_without_complete_witness": 55,
+          "both_picks_fully_witnessed": 49,
+          "old_correct_when_both_picks_witnessed": 15,
+          "new_correct_when_both_picks_witnessed": 15,
+          "new_top_bus_anchored_by_gps": 7,
+          "first_departure_time_changed": 12,
+          "changed_all": 9,
+          "both_wrong_after_change": 2,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 44,
+          "one_complete_line": 47,
+          "no_complete_line": 58,
+          "close_observations": 33
+        },
+        "distinct_winning_lines": 97,
+        "scored_boarding_poles": 100
+      }
+    },
+    "2026-10-29": {
+      "board": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 93,
+          "old_correct": 17,
+          "new_correct": 16,
+          "old_pick_without_complete_witness": 52,
+          "new_pick_without_complete_witness": 53,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_picks_fully_witnessed": 40,
+          "old_correct_when_both_picks_witnessed": 17,
+          "new_correct_when_both_picks_witnessed": 16,
+          "both_wrong_after_change": 4,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 37,
+          "no_complete_line": 66,
+          "one_complete_line": 53,
+          "close_observations": 39
+        },
+        "distinct_winning_lines": 88,
+        "scored_boarding_poles": 89
+      },
+      "exit": {
+        "counts": {
+          "queries": 288,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 95,
+          "old_correct": 17,
+          "new_correct": 17,
+          "old_pick_without_complete_witness": 54,
+          "new_pick_without_complete_witness": 56,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 16,
+          "changed_all": 14,
+          "both_picks_fully_witnessed": 39,
+          "old_correct_when_both_picks_witnessed": 17,
+          "new_correct_when_both_picks_witnessed": 17,
+          "both_wrong_after_change": 5,
+          "right_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 41,
+          "no_complete_line": 66,
+          "one_complete_line": 53,
+          "close_observations": 33
+        },
+        "distinct_winning_lines": 89,
+        "scored_boarding_poles": 91
+      }
+    }
+  },
+  "by_hour": {
+    "0": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 20,
+          "old_correct": 3,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 13,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 1,
+          "changed_all": 1,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "one_complete_line": 17,
+          "no_complete_line": 28,
+          "incomplete_early_rival": 6,
+          "close_observations": 1
+        },
+        "distinct_winning_lines": 15,
+        "scored_boarding_poles": 10
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 17,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 12,
+          "both_picks_fully_witnessed": 5,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 1,
+          "changed_all": 1
+        },
+        "unscored": {
+          "one_complete_line": 17,
+          "no_complete_line": 28,
+          "incomplete_early_rival": 8,
+          "close_observations": 2
+        },
+        "distinct_winning_lines": 14,
+        "scored_boarding_poles": 9
+      }
+    },
+    "1": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 2,
+          "old_correct": 0,
+          "new_correct": 0,
+          "old_pick_without_complete_witness": 1,
+          "new_pick_without_complete_witness": 1,
+          "both_picks_fully_witnessed": 1,
+          "old_correct_when_both_picks_witnessed": 0,
+          "new_correct_when_both_picks_witnessed": 0,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2
+        },
+        "unscored": {
+          "no_complete_line": 49,
+          "one_complete_line": 18,
+          "close_observations": 1,
+          "incomplete_early_rival": 2
+        },
+        "distinct_winning_lines": 2,
+        "scored_boarding_poles": 2
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 3,
+          "old_correct": 0,
+          "new_correct": 0,
+          "old_pick_without_complete_witness": 1,
+          "new_pick_without_complete_witness": 1,
+          "both_picks_fully_witnessed": 2,
+          "old_correct_when_both_picks_witnessed": 0,
+          "new_correct_when_both_picks_witnessed": 0,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2
+        },
+        "unscored": {
+          "no_complete_line": 49,
+          "one_complete_line": 18,
+          "incomplete_early_rival": 2
+        },
+        "distinct_winning_lines": 2,
+        "scored_boarding_poles": 2
+      }
+    },
+    "2": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 15,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 7,
+          "new_pick_without_complete_witness": 7,
+          "both_picks_fully_witnessed": 8,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2
+        },
+        "unscored": {
+          "one_complete_line": 33,
+          "no_complete_line": 23,
+          "close_observations": 1
+        },
+        "distinct_winning_lines": 10,
+        "scored_boarding_poles": 8
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 13,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 6,
+          "new_pick_without_complete_witness": 6,
+          "both_picks_fully_witnessed": 7,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2
+        },
+        "unscored": {
+          "one_complete_line": 33,
+          "no_complete_line": 23,
+          "incomplete_early_rival": 2,
+          "close_observations": 1
+        },
+        "distinct_winning_lines": 9,
+        "scored_boarding_poles": 7
+      }
+    },
+    "3": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 9,
+          "old_correct": 5,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 3,
+          "new_pick_without_complete_witness": 3,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "first_departure_time_changed": 3,
+          "changed_all": 2,
+          "new_top_bus_anchored_by_gps": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "one_complete_line": 14,
+          "no_complete_line": 48,
+          "close_observations": 1
+        },
+        "distinct_winning_lines": 7,
+        "scored_boarding_poles": 5
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 8,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 3,
+          "new_pick_without_complete_witness": 3,
+          "both_picks_fully_witnessed": 5,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "first_departure_time_changed": 3,
+          "changed_all": 2,
+          "new_top_bus_anchored_by_gps": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "one_complete_line": 14,
+          "no_complete_line": 48,
+          "close_observations": 1,
+          "incomplete_early_rival": 1
+        },
+        "distinct_winning_lines": 6,
+        "scored_boarding_poles": 4
+      }
+    },
+    "4": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 17,
+          "old_correct": 5,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 11,
+          "new_pick_without_complete_witness": 11,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "new_top_bus_anchored_by_gps": 1
+        },
+        "unscored": {
+          "one_complete_line": 21,
+          "no_complete_line": 31,
+          "close_observations": 2,
+          "incomplete_early_rival": 1
+        },
+        "distinct_winning_lines": 11,
+        "scored_boarding_poles": 10
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 18,
+          "old_correct": 5,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 12,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "new_top_bus_anchored_by_gps": 1
+        },
+        "unscored": {
+          "one_complete_line": 21,
+          "no_complete_line": 31,
+          "close_observations": 1,
+          "incomplete_early_rival": 1
+        },
+        "distinct_winning_lines": 12,
+        "scored_boarding_poles": 10
+      }
+    },
+    "5": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 34,
+          "old_correct": 7,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 14,
+          "both_picks_fully_witnessed": 20,
+          "old_correct_when_both_picks_witnessed": 7,
+          "new_correct_when_both_picks_witnessed": 7,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 1,
+          "changed_all": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 8,
+          "one_complete_line": 16,
+          "close_observations": 8,
+          "no_complete_line": 6
+        },
+        "distinct_winning_lines": 25,
+        "scored_boarding_poles": 25
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 34,
+          "old_correct": 7,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 14,
+          "both_picks_fully_witnessed": 20,
+          "old_correct_when_both_picks_witnessed": 7,
+          "new_correct_when_both_picks_witnessed": 7,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 1,
+          "changed_all": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 10,
+          "one_complete_line": 16,
+          "close_observations": 6,
+          "no_complete_line": 6
+        },
+        "distinct_winning_lines": 26,
+        "scored_boarding_poles": 26
+      }
+    },
+    "6": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 34,
+          "old_correct": 9,
+          "new_correct": 9,
+          "old_pick_without_complete_witness": 17,
+          "new_pick_without_complete_witness": 14,
+          "both_picks_fully_witnessed": 17,
+          "old_correct_when_both_picks_witnessed": 9,
+          "new_correct_when_both_picks_witnessed": 8,
+          "new_top_bus_anchored_by_gps": 4,
+          "first_departure_time_changed": 5,
+          "changed_all": 5,
+          "both_wrong_after_change": 2,
+          "right_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 10,
+          "close_observations": 10,
+          "one_complete_line": 11,
+          "no_complete_line": 7
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 33
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 29,
+          "old_correct": 8,
+          "new_correct": 10,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 12,
+          "both_picks_fully_witnessed": 15,
+          "old_correct_when_both_picks_witnessed": 8,
+          "new_correct_when_both_picks_witnessed": 9,
+          "new_top_bus_anchored_by_gps": 4,
+          "first_departure_time_changed": 5,
+          "changed_all": 5,
+          "both_wrong_after_change": 1,
+          "right_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 15,
+          "close_observations": 10,
+          "one_complete_line": 11,
+          "no_complete_line": 7
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 29
+      }
+    },
+    "7": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 10,
+          "changed_all": 8,
+          "scored": 23,
+          "old_correct": 2,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 15,
+          "both_wrong_after_change": 4,
+          "both_picks_fully_witnessed": 8,
+          "old_correct_when_both_picks_witnessed": 2,
+          "new_correct_when_both_picks_witnessed": 3,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 14,
+          "incomplete_early_rival": 13,
+          "one_complete_line": 12,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 23,
+        "scored_boarding_poles": 23
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 10,
+          "changed_all": 8,
+          "scored": 21,
+          "old_correct": 2,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 13,
+          "new_pick_without_complete_witness": 14,
+          "both_wrong_after_change": 4,
+          "both_picks_fully_witnessed": 7,
+          "old_correct_when_both_picks_witnessed": 2,
+          "new_correct_when_both_picks_witnessed": 3,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 14,
+          "incomplete_early_rival": 15,
+          "one_complete_line": 12,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 21,
+        "scored_boarding_poles": 21
+      }
+    },
+    "8": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 9,
+          "changed_all": 5,
+          "scored": 32,
+          "old_correct": 5,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 18,
+          "new_pick_without_complete_witness": 18,
+          "new_top_bus_anchored_by_gps": 3,
+          "both_picks_fully_witnessed": 13,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 11,
+          "close_observations": 10,
+          "one_complete_line": 12,
+          "no_complete_line": 7
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 32
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 9,
+          "changed_all": 5,
+          "scored": 32,
+          "old_correct": 5,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 20,
+          "new_pick_without_complete_witness": 20,
+          "new_top_bus_anchored_by_gps": 3,
+          "both_picks_fully_witnessed": 11,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 11,
+          "close_observations": 10,
+          "one_complete_line": 12,
+          "no_complete_line": 7
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 32
+      }
+    },
+    "9": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 29,
+          "old_correct": 6,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 13,
+          "new_pick_without_complete_witness": 12,
+          "both_picks_fully_witnessed": 16,
+          "old_correct_when_both_picks_witnessed": 6,
+          "new_correct_when_both_picks_witnessed": 6,
+          "new_top_bus_anchored_by_gps": 3,
+          "first_departure_time_changed": 6,
+          "changed_all": 5,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 9,
+          "close_observations": 18,
+          "no_complete_line": 7,
+          "one_complete_line": 9
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 29
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 27,
+          "old_correct": 6,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 11,
+          "both_picks_fully_witnessed": 15,
+          "old_correct_when_both_picks_witnessed": 6,
+          "new_correct_when_both_picks_witnessed": 6,
+          "new_top_bus_anchored_by_gps": 3,
+          "first_departure_time_changed": 6,
+          "changed_all": 5,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 9,
+          "no_complete_line": 7,
+          "one_complete_line": 9,
+          "close_observations": 20
+        },
+        "distinct_winning_lines": 26,
+        "scored_boarding_poles": 27
+      }
+    },
+    "10": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 32,
+          "old_correct": 7,
+          "new_correct": 8,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 11,
+          "both_picks_fully_witnessed": 20,
+          "old_correct_when_both_picks_witnessed": 7,
+          "new_correct_when_both_picks_witnessed": 7,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 8,
+          "changed_all": 4,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 14,
+          "close_observations": 12,
+          "one_complete_line": 10,
+          "no_complete_line": 4
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 32
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 28,
+          "old_correct": 8,
+          "new_correct": 8,
+          "old_pick_without_complete_witness": 7,
+          "new_pick_without_complete_witness": 7,
+          "both_picks_fully_witnessed": 21,
+          "old_correct_when_both_picks_witnessed": 8,
+          "new_correct_when_both_picks_witnessed": 8,
+          "new_top_bus_anchored_by_gps": 6,
+          "first_departure_time_changed": 8,
+          "changed_all": 4,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 14,
+          "one_complete_line": 10,
+          "incomplete_early_rival": 16,
+          "no_complete_line": 4
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 28
+      }
+    },
+    "11": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 33,
+          "old_correct": 7,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 9,
+          "new_pick_without_complete_witness": 9,
+          "both_picks_fully_witnessed": 24,
+          "old_correct_when_both_picks_witnessed": 7,
+          "new_correct_when_both_picks_witnessed": 7,
+          "new_top_bus_anchored_by_gps": 4,
+          "first_departure_time_changed": 6,
+          "changed_all": 6,
+          "right_after_change": 1,
+          "both_wrong_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 16,
+          "one_complete_line": 6,
+          "incomplete_early_rival": 6,
+          "no_complete_line": 11
+        },
+        "distinct_winning_lines": 33,
+        "scored_boarding_poles": 32
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 28,
+          "old_correct": 6,
+          "new_correct": 7,
+          "old_pick_without_complete_witness": 10,
+          "new_pick_without_complete_witness": 9,
+          "both_picks_fully_witnessed": 18,
+          "old_correct_when_both_picks_witnessed": 6,
+          "new_correct_when_both_picks_witnessed": 6,
+          "new_top_bus_anchored_by_gps": 4,
+          "first_departure_time_changed": 6,
+          "changed_all": 6,
+          "right_after_change": 2,
+          "both_wrong_after_change": 1,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 14,
+          "close_observations": 13,
+          "one_complete_line": 6,
+          "no_complete_line": 11
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 27
+      }
+    },
+    "12": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 22,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 14,
+          "both_picks_fully_witnessed": 8,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "first_departure_time_changed": 8,
+          "changed_all": 6,
+          "new_top_bus_anchored_by_gps": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 13,
+          "close_observations": 16,
+          "one_complete_line": 11,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 21,
+        "scored_boarding_poles": 22
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 18,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 6,
+          "new_pick_without_complete_witness": 8,
+          "both_picks_fully_witnessed": 10,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "first_departure_time_changed": 8,
+          "changed_all": 6,
+          "new_top_bus_anchored_by_gps": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 18,
+          "close_observations": 15,
+          "one_complete_line": 11,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 17,
+        "scored_boarding_poles": 18
+      }
+    },
+    "13": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 28,
+          "old_correct": 6,
+          "new_correct": 6,
+          "old_pick_without_complete_witness": 13,
+          "new_pick_without_complete_witness": 13,
+          "both_picks_fully_witnessed": 14,
+          "old_correct_when_both_picks_witnessed": 6,
+          "new_correct_when_both_picks_witnessed": 6,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "close_observations": 13,
+          "no_complete_line": 6,
+          "one_complete_line": 14,
+          "incomplete_early_rival": 11
+        },
+        "distinct_winning_lines": 26,
+        "scored_boarding_poles": 28
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 26,
+          "old_correct": 6,
+          "new_correct": 6,
+          "old_pick_without_complete_witness": 12,
+          "new_pick_without_complete_witness": 12,
+          "both_picks_fully_witnessed": 13,
+          "old_correct_when_both_picks_witnessed": 6,
+          "new_correct_when_both_picks_witnessed": 6,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "close_observations": 15,
+          "no_complete_line": 6,
+          "one_complete_line": 14,
+          "incomplete_early_rival": 11
+        },
+        "distinct_winning_lines": 24,
+        "scored_boarding_poles": 26
+      }
+    },
+    "14": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 34,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 19,
+          "new_pick_without_complete_witness": 19,
+          "both_picks_fully_witnessed": 15,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "no_complete_line": 14,
+          "one_complete_line": 11,
+          "incomplete_early_rival": 7,
+          "close_observations": 6
+        },
+        "distinct_winning_lines": 31,
+        "scored_boarding_poles": 34
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 28,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 16,
+          "new_pick_without_complete_witness": 16,
+          "both_picks_fully_witnessed": 12,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "incomplete_early_rival": 11,
+          "close_observations": 8,
+          "no_complete_line": 14,
+          "one_complete_line": 11
+        },
+        "distinct_winning_lines": 26,
+        "scored_boarding_poles": 28
+      }
+    },
+    "15": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 30,
+          "old_correct": 6,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 15,
+          "new_pick_without_complete_witness": 17,
+          "both_picks_fully_witnessed": 13,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "new_top_bus_anchored_by_gps": 3,
+          "first_departure_time_changed": 5,
+          "changed_all": 4,
+          "wrong_after_change": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 9,
+          "incomplete_early_rival": 7,
+          "one_complete_line": 6,
+          "no_complete_line": 20
+        },
+        "distinct_winning_lines": 29,
+        "scored_boarding_poles": 29
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 27,
+          "old_correct": 6,
+          "new_correct": 5,
+          "old_pick_without_complete_witness": 15,
+          "new_pick_without_complete_witness": 16,
+          "both_picks_fully_witnessed": 11,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 5,
+          "new_top_bus_anchored_by_gps": 3,
+          "first_departure_time_changed": 5,
+          "changed_all": 4,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 8,
+          "close_observations": 11,
+          "one_complete_line": 6,
+          "no_complete_line": 20
+        },
+        "distinct_winning_lines": 27,
+        "scored_boarding_poles": 26
+      }
+    },
+    "16": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 42,
+          "old_correct": 9,
+          "new_correct": 10,
+          "old_pick_without_complete_witness": 18,
+          "new_pick_without_complete_witness": 18,
+          "both_picks_fully_witnessed": 24,
+          "old_correct_when_both_picks_witnessed": 9,
+          "new_correct_when_both_picks_witnessed": 10,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 4,
+          "right_after_change": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 9,
+          "close_observations": 10,
+          "no_complete_line": 5,
+          "one_complete_line": 6
+        },
+        "distinct_winning_lines": 41,
+        "scored_boarding_poles": 42
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 44,
+          "old_correct": 9,
+          "new_correct": 10,
+          "old_pick_without_complete_witness": 21,
+          "new_pick_without_complete_witness": 21,
+          "both_picks_fully_witnessed": 23,
+          "old_correct_when_both_picks_witnessed": 9,
+          "new_correct_when_both_picks_witnessed": 10,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 4,
+          "right_after_change": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 9,
+          "close_observations": 8,
+          "no_complete_line": 5,
+          "one_complete_line": 6
+        },
+        "distinct_winning_lines": 43,
+        "scored_boarding_poles": 44
+      }
+    },
+    "17": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 33,
+          "old_correct": 5,
+          "new_correct": 6,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 14,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_picks_fully_witnessed": 19,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 6,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 14,
+          "no_complete_line": 12,
+          "one_complete_line": 7,
+          "incomplete_early_rival": 6
+        },
+        "distinct_winning_lines": 33,
+        "scored_boarding_poles": 33
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 30,
+          "old_correct": 5,
+          "new_correct": 6,
+          "old_pick_without_complete_witness": 13,
+          "new_pick_without_complete_witness": 13,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 2,
+          "changed_all": 2,
+          "both_picks_fully_witnessed": 17,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 6,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 13,
+          "no_complete_line": 12,
+          "one_complete_line": 7,
+          "close_observations": 10
+        },
+        "distinct_winning_lines": 30,
+        "scored_boarding_poles": 30
+      }
+    },
+    "18": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 33,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 19,
+          "new_pick_without_complete_witness": 19,
+          "both_picks_fully_witnessed": 14,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 3,
+          "changed_all": 2
+        },
+        "unscored": {
+          "close_observations": 12,
+          "incomplete_early_rival": 11,
+          "one_complete_line": 10,
+          "no_complete_line": 6
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 33
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 34,
+          "old_correct": 5,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 19,
+          "new_pick_without_complete_witness": 19,
+          "both_picks_fully_witnessed": 15,
+          "old_correct_when_both_picks_witnessed": 5,
+          "new_correct_when_both_picks_witnessed": 4,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 3,
+          "changed_all": 2,
+          "wrong_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 14,
+          "close_observations": 8,
+          "one_complete_line": 10,
+          "no_complete_line": 6
+        },
+        "distinct_winning_lines": 33,
+        "scored_boarding_poles": 34
+      }
+    },
+    "19": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 33,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 19,
+          "new_pick_without_complete_witness": 18,
+          "both_picks_fully_witnessed": 14,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "close_observations": 8,
+          "no_complete_line": 14,
+          "one_complete_line": 9,
+          "incomplete_early_rival": 8
+        },
+        "distinct_winning_lines": 32,
+        "scored_boarding_poles": 33
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 30,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 16,
+          "new_pick_without_complete_witness": 15,
+          "both_picks_fully_witnessed": 14,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "new_top_bus_anchored_by_gps": 2,
+          "first_departure_time_changed": 4,
+          "changed_all": 3,
+          "both_wrong_after_change": 2
+        },
+        "unscored": {
+          "close_observations": 7,
+          "no_complete_line": 14,
+          "one_complete_line": 9,
+          "incomplete_early_rival": 12
+        },
+        "distinct_winning_lines": 29,
+        "scored_boarding_poles": 30
+      }
+    },
+    "20": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 31,
+          "old_correct": 4,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 14,
+          "new_pick_without_complete_witness": 14,
+          "both_picks_fully_witnessed": 17,
+          "old_correct_when_both_picks_witnessed": 4,
+          "new_correct_when_both_picks_witnessed": 4,
+          "first_departure_time_changed": 1,
+          "changed_all": 1
+        },
+        "unscored": {
+          "close_observations": 10,
+          "incomplete_early_rival": 10,
+          "one_complete_line": 11,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 31,
+        "scored_boarding_poles": 30
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 27,
+          "old_correct": 3,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 13,
+          "new_pick_without_complete_witness": 13,
+          "both_picks_fully_witnessed": 14,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "first_departure_time_changed": 1,
+          "changed_all": 1
+        },
+        "unscored": {
+          "close_observations": 11,
+          "incomplete_early_rival": 13,
+          "one_complete_line": 11,
+          "no_complete_line": 10
+        },
+        "distinct_winning_lines": 27,
+        "scored_boarding_poles": 26
+      }
+    },
+    "21": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 4,
+          "changed_all": 5,
+          "new_top_bus_anchored_by_gps": 2,
+          "scored": 27,
+          "old_correct": 2,
+          "new_correct": 3,
+          "old_pick_without_complete_witness": 20,
+          "new_pick_without_complete_witness": 19,
+          "right_after_change": 1,
+          "both_picks_fully_witnessed": 7,
+          "old_correct_when_both_picks_witnessed": 2,
+          "new_correct_when_both_picks_witnessed": 2
+        },
+        "unscored": {
+          "close_observations": 16,
+          "one_complete_line": 11,
+          "incomplete_early_rival": 9,
+          "no_complete_line": 9
+        },
+        "distinct_winning_lines": 27,
+        "scored_boarding_poles": 27
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "first_departure_time_changed": 4,
+          "changed_all": 5,
+          "new_top_bus_anchored_by_gps": 2,
+          "scored": 28,
+          "old_correct": 3,
+          "new_correct": 4,
+          "old_pick_without_complete_witness": 19,
+          "new_pick_without_complete_witness": 19,
+          "right_after_change": 1,
+          "both_picks_fully_witnessed": 8,
+          "old_correct_when_both_picks_witnessed": 3,
+          "new_correct_when_both_picks_witnessed": 3,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 16,
+          "one_complete_line": 11,
+          "incomplete_early_rival": 8,
+          "no_complete_line": 9
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 28
+      }
+    },
+    "22": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 31,
+          "old_correct": 1,
+          "new_correct": 2,
+          "old_pick_without_complete_witness": 25,
+          "new_pick_without_complete_witness": 24,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 1,
+          "new_correct_when_both_picks_witnessed": 1,
+          "first_departure_time_changed": 3,
+          "changed_all": 3,
+          "new_top_bus_anchored_by_gps": 2,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 10,
+          "close_observations": 11,
+          "no_complete_line": 11,
+          "one_complete_line": 9
+        },
+        "distinct_winning_lines": 31,
+        "scored_boarding_poles": 29
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 28,
+          "old_correct": 1,
+          "new_correct": 2,
+          "old_pick_without_complete_witness": 22,
+          "new_pick_without_complete_witness": 21,
+          "both_picks_fully_witnessed": 6,
+          "old_correct_when_both_picks_witnessed": 1,
+          "new_correct_when_both_picks_witnessed": 1,
+          "first_departure_time_changed": 3,
+          "changed_all": 3,
+          "new_top_bus_anchored_by_gps": 2,
+          "right_after_change": 1
+        },
+        "unscored": {
+          "incomplete_early_rival": 15,
+          "close_observations": 9,
+          "no_complete_line": 11,
+          "one_complete_line": 9
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 27
+      }
+    },
+    "23": {
+      "board": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 31,
+          "old_correct": 0,
+          "new_correct": 0,
+          "old_pick_without_complete_witness": 23,
+          "new_pick_without_complete_witness": 23,
+          "both_picks_fully_witnessed": 8,
+          "old_correct_when_both_picks_witnessed": 0,
+          "new_correct_when_both_picks_witnessed": 0,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 2,
+          "changed_all": 1,
+          "both_wrong_after_change": 1
+        },
+        "unscored": {
+          "close_observations": 6,
+          "incomplete_early_rival": 5,
+          "no_complete_line": 15,
+          "one_complete_line": 15
+        },
+        "distinct_winning_lines": 28,
+        "scored_boarding_poles": 26
+      },
+      "exit": {
+        "counts": {
+          "queries": 72,
+          "no_before_pick": 0,
+          "no_after_pick": 0,
+          "lost_only_after": 0,
+          "gained_only_after": 0,
+          "scored": 27,
+          "old_correct": 0,
+          "new_correct": 0,
+          "old_pick_without_complete_witness": 20,
+          "new_pick_without_complete_witness": 20,
+          "both_picks_fully_witnessed": 7,
+          "old_correct_when_both_picks_witnessed": 0,
+          "new_correct_when_both_picks_witnessed": 0,
+          "new_top_bus_anchored_by_gps": 1,
+          "first_departure_time_changed": 2,
+          "changed_all": 1
+        },
+        "unscored": {
+          "close_observations": 7,
+          "incomplete_early_rival": 8,
+          "no_complete_line": 15,
+          "one_complete_line": 15
+        },
+        "distinct_winning_lines": 24,
+        "scored_boarding_poles": 22
+      }
+    }
+  }
+}

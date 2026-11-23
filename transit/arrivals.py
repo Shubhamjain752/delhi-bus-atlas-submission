@@ -62,7 +62,7 @@ def platform_departures(query, board):
 
 
 def boarding_predictions(router, when, board, overlay=None):
-    query = _Query(router, when, {"eta":overlay} if overlay is not None else {})
+    query = _Query(router, when, {"eta":overlay or router.eta, "use_position_board_times":False})
     return [(wait,source) for wait,source,_ in platform_departures(query,board)]
 
 
@@ -95,7 +95,8 @@ def platform_estimate(router, overlay, stop, route, when):
              and not router.patterns[pid].pickups[i] and i < len(router.patterns[pid].stops) - 1]
     if not board:
         raise ValueError("This route has no boardable service at the selected platform.")
-    query = _Query(router, when, {"eta":overlay})
+    # This endpoint already estimates and identifies its source observation below.
+    query = _Query(router, when, {"eta":overlay, "use_position_board_times":False})
     next_departures = platform_departures(query,board)
     fresh = [p for p in query.position_passages()
              if p["route_id"] == route and overlay.can_approach(p, stop, when)]

@@ -4,6 +4,8 @@ We compared the previously prepared submission with the revised planner using th
 
 The check covers 29 requests. Four are the recorded AIIMS, Punjabi Bagh, Kashmere Gate and Rohini journeys. Three use the overnight 012(NS)UP, 502UP and 604UP vehicle recordings. Eleven use platform pairs on different Delhi corridors at 08:30, 13:00 or 17:30. Another eleven use nearby street pins fixed before the comparison. The 27 walking checks comprise five previously investigated access or transfer paths and both ends of those eleven corridors. The corridors and clock bands are a targeted regression set. They do not estimate citywide accuracy.
 
+We also checked the 711 and 392 using the packets available at the time. By 3 p.m., the provider was predicting a 711 at AIIMS at 3:05:30 and a 392 at 3:11:10. Later GPS put the 711 beside the boarding stop at 3:05:34. Its official stopping pattern conflicted with the provider’s stop list, and the trace missed the Lajpat exit. The 392 was the first direct line we could verify at both stops. Its first AIIMS entry fell between 3:11:42 and 3:12:26. The 711 result in the table below came from the earlier walking-fix replay with historical travel times. [Evidence available at departure](../data/aiims-departure-evidence.json) · [Subsequent GPS observations](../data/aiims-observed-order.json) · [Delhi-wide ranking test](first-direct-bus.md)
+
 ## What changed
 
 | Result on the same inputs | Submitted planner | Revised planner |

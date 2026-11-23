@@ -3,7 +3,7 @@
   "info": {
     "title": "Delhi Bus Atlas",
     "description": "Plan fixed-route bus journeys in Delhi. Times include a UTC offset. Durations are seconds. See the [API guide](/api-guide) for a runnable coordinate query and response interpretation.",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "paths": {
     "/status": {
@@ -553,6 +553,33 @@
         ],
         "title": "BoardingAlert"
       },
+      "BoardingPosition": {
+        "properties": {
+          "observed_stop_id": {
+            "type": "string",
+            "title": "Observed Stop Id",
+            "description": "Upstream platform where this dated service was seen."
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Received At",
+            "description": "Local receipt time of the position evidence used."
+          }
+        },
+        "type": "object",
+        "required": [
+          "observed_stop_id",
+          "observed_at",
+          "received_at"
+        ],
+        "title": "BoardingPosition"
+      },
       "Bus": {
         "properties": {
           "from": {
@@ -618,6 +645,17 @@
           "trip_id": {
             "type": "string",
             "title": "Trip Id"
+          },
+          "boarding_position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardingPosition"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Upstream position used to predict boarding time for this trip."
           },
           "live_run_id": {
             "anyOf": [
@@ -1096,6 +1134,16 @@
             "type": "string",
             "title": "Departure Source"
           },
+          "boarding_position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardingPosition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "boarding_stop": {
             "$ref": "#/components/schemas/Place"
           },
@@ -1320,6 +1368,16 @@
           "departure_source": {
             "type": "string",
             "title": "Departure Source"
+          },
+          "boarding_position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardingPosition"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",

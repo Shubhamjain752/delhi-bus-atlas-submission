@@ -93,6 +93,12 @@ class Wait(Leg):
     transfer_buffer_seconds: int = Field(description="Minimum change allowance already included in this wait.")
 
 
+class BoardingPosition(BaseModel):
+    observed_stop_id: str = Field(description="Upstream platform where this dated service was seen.")
+    observed_at: AwareDatetime
+    received_at: AwareDatetime = Field(description="Local receipt time of the position evidence used.")
+
+
 class PlatformService(BaseModel):
     route_id: str
     route: str
@@ -100,6 +106,7 @@ class PlatformService(BaseModel):
     departure_at: AwareDatetime
     alight_at: AwareDatetime
     departure_source: str
+    boarding_position: BoardingPosition | None = None
 
 
 class Bus(Leg):
@@ -108,6 +115,7 @@ class Bus(Leg):
     route: str = Field(description="Route label shown to the rider.")
     agency: str
     trip_id: str
+    boarding_position: BoardingPosition | None = Field(default=None, description="Upstream position used to predict boarding time for this trip.")
     live_run_id: str | None = Field(default=None, description="Opaque vehicle-run identifier when multiple corroborated vehicles share this scheduled trip.")
     geometry_source: Literal["gtfs_shape", "ordered_stops"]
     model_sources: dict[str, int] = Field(description="Count of route intervals by timing source.")

@@ -23,6 +23,7 @@ In the virtual environment from the README, install the build dependencies. Thes
 ```sh
 python -m pip install -r requirements-build.txt
 python -m unittest discover -s tests -p test_router.py -v
+python -m unittest discover -s tests -p test_journey_positions.py -v
 python -m unittest discover -s tests -p test_boarding_alerts.py -v
 python -m unittest discover -s tests -p test_walking.py -v
 ```
