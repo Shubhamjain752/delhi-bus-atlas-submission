@@ -19,6 +19,10 @@ The serving map adds documented stair approaches to mapped pedestrian crossings.
 
 The pedestrian profile and signal assumptions are documented with measured pin attachment statistics. A route that cannot connect through mapped topology produces an explicit coverage warning. Endpoints given as named stops may have more than one platform with the same name. Use a specific ID or map pin for reproducible comparisons. [Walking model](walking.md)
 
+We also check the map offline for entrance stairs that lead underground but lack a short connection to a nearby crossing. The audit reproduced both estimated approaches to Rajiv Chowk Gate 7. Two other gates need evidence of a continuous public walking path before their links can be used. [Gate audit and reproduction steps](gate-audit/README.md)
+
+The passenger map labels a scheduled run as confirmed once GPS places that bus at the first passenger stop and then at the second, using reports received by the time of the search. A run without that evidence stays available as unconfirmed. The records do not establish the time the vehicle left the depot yard. [November example and October study](november-departure-audit.md#an-example-of-a-departure-gps-could-confirm)
+
 ## What the judge can try
 
 The web map calls the same `GET /journeys` API another passenger app can use. Supply a starting place, destination and departure time. The JSON reply gives boarding and exit stops, a route for each ride, any change and the walk, wait and ride times. Each time estimate identifies its source. A second departure hour can be requested on the same call. [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)

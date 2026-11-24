@@ -35,7 +35,7 @@ Under **Show routes by**, choose **Recommended** to balance walking and arrival 
 
 On a divided road, Atlas looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
 
-For a visit to Rajiv Chowk, you can select **Rajiv Chowk Metro Gate 7** to finish at the entrance on Radial Road 2. Dropping a pin inside Central Park takes the walk farther. [Try the entrance](https://iitboys-delhi-bus-atlas.vercel.app/?example=vivek-gate-7) · [Compare the two walks](docs/rajiv-chowk-walk.md)
+For a visit to Rajiv Chowk, you can select **Rajiv Chowk Metro Gate 7** to finish at the entrance on Radial Road 2. The walk from Shivaji Stadium is about five minutes to the gate and nine minutes to the pin inside Central Park. An offline map check reproduced the two Gate 7 approaches and flagged two other gates for review. [Try the entrance](https://iitboys-delhi-bus-atlas.vercel.app/?example=vivek-gate-7) · [Compare the two walks](docs/rajiv-chowk-walk.md) · [How we checked other gates](docs/gate-audit/README.md)
 
 Open a bus leg to see other lines serving the same two stops. **Check next bus at this stop** shows the next arrival estimate and its source. When GPS has tracked two buses approaching the same stop, it also shows how far apart they came. [First-bus test](docs/first-direct-bus.md) · [API fields](docs/api.md)
 

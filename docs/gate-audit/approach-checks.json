@@ -1,0 +1,153 @@
+{
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+  "extract_sha256": "d94b858e16be90416da4cd16cc21be07aa5dd53b167e909c813ee546c92ecb1a",
+  "extract_replication_utc": "2026-11-23T00:26:51Z",
+  "approaches": [
+    {
+      "gate_id": 928597613,
+      "name": "Rajiv Chowk Metro Gate No 5",
+      "crossing_node": 11462925626,
+      "crossing_ways": [
+        1234918809
+      ],
+      "metres": 22.72,
+      "mapped_obstacles": [
+        {
+          "type": "way",
+          "id": 23133486,
+          "feature": "road"
+        }
+      ],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928597613,
+      "name": "Rajiv Chowk Metro Gate No 5",
+      "crossing_node": 11462925627,
+      "crossing_ways": [
+        1234918809
+      ],
+      "metres": 27.51,
+      "mapped_obstacles": [
+        {
+          "type": "way",
+          "id": 1175380916,
+          "feature": "barrier or restricted access"
+        }
+      ],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610588,
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "crossing_node": 11462925591,
+      "crossing_ways": [
+        1234918803
+      ],
+      "metres": 11.81,
+      "mapped_obstacles": [],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610588,
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "crossing_node": 11462925592,
+      "crossing_ways": [
+        1234918803
+      ],
+      "metres": 24.72,
+      "mapped_obstacles": [
+        {
+          "type": "way",
+          "id": 23133486,
+          "feature": "road"
+        }
+      ],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610588,
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "crossing_node": 11462925588,
+      "crossing_ways": [
+        1234918802
+      ],
+      "metres": 26.27,
+      "mapped_obstacles": [],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610588,
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "crossing_node": 11462925589,
+      "crossing_ways": [
+        1234918802
+      ],
+      "metres": 35.15,
+      "mapped_obstacles": [
+        {
+          "type": "way",
+          "id": 24577488,
+          "feature": "road"
+        }
+      ],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610590,
+      "name": "Rajiv Chowk Metro Gate No 8",
+      "crossing_node": 11462925623,
+      "crossing_ways": [
+        1234918808
+      ],
+      "metres": 10.16,
+      "mapped_obstacles": [],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 928610590,
+      "name": "Rajiv Chowk Metro Gate No 8",
+      "crossing_node": 11462925624,
+      "crossing_ways": [
+        1234918808
+      ],
+      "metres": 26.29,
+      "mapped_obstacles": [
+        {
+          "type": "way",
+          "id": 23133486,
+          "feature": "road"
+        }
+      ],
+      "covering_pedestrian_areas": []
+    },
+    {
+      "gate_id": 3560199031,
+      "name": "New Delhi Metro Station Gate 3",
+      "crossing_node": 13078602842,
+      "crossing_ways": [
+        976603096
+      ],
+      "metres": 27.36,
+      "mapped_obstacles": [],
+      "covering_pedestrian_areas": []
+    }
+  ],
+  "incomplete_areas": [
+    {
+      "type": "relation",
+      "id": 5246793,
+      "located": false
+    },
+    {
+      "type": "relation",
+      "id": 12935323,
+      "located": false
+    },
+    {
+      "type": "relation",
+      "id": 20679150,
+      "located": false
+    }
+  ]
+}

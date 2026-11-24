@@ -1,0 +1,665 @@
+{
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+  "extract_sha256": "d94b858e16be90416da4cd16cc21be07aa5dd53b167e909c813ee546c92ecb1a",
+  "extract_replication_utc": "2026-11-23T00:26:51Z",
+  "release_graph_source_md5": "66d5470f8fe1bce0b8820e8b99000c6b",
+  "radius_metres": 40.0,
+  "counts": {
+    "release_indexed_gates": 149,
+    "release_only_underground": 10,
+    "tagged_gates_in_extract": 471,
+    "eligible_gates_in_extract": 447,
+    "eligible_gates_matching_release": 129,
+    "marked_crossing_ways": 307,
+    "gates_near_crossing": 18,
+    "matched_gates_near_crossing": 13,
+    "only_underground_near_crossing": 4
+  },
+  "gates_near_crossing": [
+    {
+      "id": 928592947,
+      "name": "Rajiv Chowk Metro Gate No 2",
+      "coord": [
+        28.6340158,
+        77.2193402
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11462925632,
+          "ways": [
+            1234918811
+          ],
+          "coord": [
+            28.6339431,
+            77.2194196
+          ],
+          "metres": 11.2
+        },
+        {
+          "node": 11462925633,
+          "ways": [
+            1234918811
+          ],
+          "coord": [
+            28.6338412,
+            77.2194417
+          ],
+          "metres": 21.8
+        }
+      ]
+    },
+    {
+      "id": 928597607,
+      "name": "Rajiv Chowk Metro Gate No 3",
+      "coord": [
+        28.6336414,
+        77.2207506
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 928597607,
+          "ways": [
+            164675823
+          ],
+          "coord": [
+            28.6336414,
+            77.2207506
+          ],
+          "metres": 0.0
+        },
+        {
+          "node": 6761961061,
+          "ways": [
+            164675823
+          ],
+          "coord": [
+            28.6335262,
+            77.2205798
+          ],
+          "metres": 21.03
+        }
+      ]
+    },
+    {
+      "id": 928597611,
+      "name": "4",
+      "coord": [
+        28.6330365,
+        77.2210877
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11462925635,
+          "ways": [
+            1234918813
+          ],
+          "coord": [
+            28.6329805,
+            77.2210693
+          ],
+          "metres": 6.48
+        },
+        {
+          "node": 11462925636,
+          "ways": [
+            1234918813
+          ],
+          "coord": [
+            28.6329613,
+            77.2208997
+          ],
+          "metres": 20.17
+        }
+      ]
+    },
+    {
+      "id": 928597613,
+      "name": "Rajiv Chowk Metro Gate No 5",
+      "coord": [
+        28.6316211,
+        77.2202119
+      ],
+      "matched": true,
+      "only_underground": true,
+      "endpoints": [
+        {
+          "node": 11462925626,
+          "ways": [
+            1234918809
+          ],
+          "coord": [
+            28.6318246,
+            77.2202327
+          ],
+          "metres": 22.72
+        },
+        {
+          "node": 11462925627,
+          "ways": [
+            1234918809
+          ],
+          "coord": [
+            28.6314681,
+            77.2204333
+          ],
+          "metres": 27.51
+        }
+      ]
+    },
+    {
+      "id": 928597615,
+      "name": "Rajiv Chowk Metro Gate No 6",
+      "coord": [
+        28.6315921,
+        77.2192365
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 1762945086,
+          "ways": [
+            1306311540
+          ],
+          "coord": [
+            28.6316925,
+            77.2191722
+          ],
+          "metres": 12.81
+        },
+        {
+          "node": 12098409817,
+          "ways": [
+            1306311540
+          ],
+          "coord": [
+            28.631792,
+            77.2192176
+          ],
+          "metres": 22.3
+        },
+        {
+          "node": 11462925608,
+          "ways": [
+            1234918805
+          ],
+          "coord": [
+            28.6315384,
+            77.2188665
+          ],
+          "metres": 36.61
+        },
+        {
+          "node": 10248567772,
+          "ways": [
+            1306311528
+          ],
+          "coord": [
+            28.6313277,
+            77.2194931
+          ],
+          "metres": 38.63
+        }
+      ]
+    },
+    {
+      "id": 928610585,
+      "name": "Rajiv Chowk Metro Gate No 1",
+      "coord": [
+        28.6337363,
+        77.2187521
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11462925630,
+          "ways": [
+            1234918810
+          ],
+          "coord": [
+            28.6336531,
+            77.2187479
+          ],
+          "metres": 9.26
+        },
+        {
+          "node": 11462925631,
+          "ways": [
+            1234918810
+          ],
+          "coord": [
+            28.6335546,
+            77.2188421
+          ],
+          "metres": 22.03
+        }
+      ]
+    },
+    {
+      "id": 928610588,
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "coord": [
+        28.6323385,
+        77.2183526
+      ],
+      "matched": true,
+      "only_underground": true,
+      "endpoints": [
+        {
+          "node": 11462925591,
+          "ways": [
+            1234918803
+          ],
+          "coord": [
+            28.6322838,
+            77.2184563
+          ],
+          "metres": 11.81
+        },
+        {
+          "node": 11462925592,
+          "ways": [
+            1234918803
+          ],
+          "coord": [
+            28.6323323,
+            77.2186057
+          ],
+          "metres": 24.72
+        },
+        {
+          "node": 11462925588,
+          "ways": [
+            1234918802
+          ],
+          "coord": [
+            28.632171,
+            77.2181628
+          ],
+          "metres": 26.27
+        },
+        {
+          "node": 11462925589,
+          "ways": [
+            1234918802
+          ],
+          "coord": [
+            28.6320435,
+            77.2182232
+          ],
+          "metres": 35.15
+        }
+      ]
+    },
+    {
+      "id": 928610590,
+      "name": "Rajiv Chowk Metro Gate No 8",
+      "coord": [
+        28.6329347,
+        77.2182419
+      ],
+      "matched": true,
+      "only_underground": true,
+      "endpoints": [
+        {
+          "node": 11462925623,
+          "ways": [
+            1234918808
+          ],
+          "coord": [
+            28.6329444,
+            77.2183454
+          ],
+          "metres": 10.16
+        },
+        {
+          "node": 11462925624,
+          "ways": [
+            1234918808
+          ],
+          "coord": [
+            28.6329289,
+            77.2185111
+          ],
+          "metres": 26.29
+        }
+      ]
+    },
+    {
+      "id": 3560199031,
+      "name": "New Delhi Metro Station Gate 3",
+      "coord": [
+        28.6446782,
+        77.2234077
+      ],
+      "matched": true,
+      "only_underground": true,
+      "endpoints": [
+        {
+          "node": 13078602842,
+          "ways": [
+            976603096
+          ],
+          "coord": [
+            28.6449162,
+            77.2234787
+          ],
+          "metres": 27.36
+        }
+      ]
+    },
+    {
+      "id": 3643733168,
+      "name": "Lok Kalyan Marg Metro Gate No. 2",
+      "coord": [
+        28.5972488,
+        77.2108969
+      ],
+      "matched": false,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 10542997946,
+          "ways": [
+            1131170216
+          ],
+          "coord": [
+            28.5974426,
+            77.2107896
+          ],
+          "metres": 23.96
+        },
+        {
+          "node": 11446721748,
+          "ways": [
+            1131170219
+          ],
+          "coord": [
+            28.5971592,
+            77.2111875
+          ],
+          "metres": 30.07
+        },
+        {
+          "node": 433484652,
+          "ways": [
+            1131170216
+          ],
+          "coord": [
+            28.5975229,
+            77.2107498
+          ],
+          "metres": 33.69
+        }
+      ]
+    },
+    {
+      "id": 3643733191,
+      "name": "Lok Kalyan Marg Metro Gate No 1",
+      "coord": [
+        28.5980331,
+        77.2114948
+      ],
+      "matched": false,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 6680797467,
+          "ways": [
+            1131170217
+          ],
+          "coord": [
+            28.5978391,
+            77.2114716
+          ],
+          "metres": 21.69
+        },
+        {
+          "node": 11446721751,
+          "ways": [
+            1131170218
+          ],
+          "coord": [
+            28.597992,
+            77.2112045
+          ],
+          "metres": 28.71
+        },
+        {
+          "node": 6680797463,
+          "ways": [
+            1131170217
+          ],
+          "coord": [
+            28.5977708,
+            77.2115052
+          ],
+          "metres": 29.18
+        }
+      ]
+    },
+    {
+      "id": 5677933259,
+      "name": "Seva Teerth Metro Station Gate Number 2",
+      "coord": [
+        28.610759,
+        77.2124173
+      ],
+      "matched": false,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 7615444988,
+          "ways": [
+            1148133607
+          ],
+          "coord": [
+            28.6105418,
+            77.2125961
+          ],
+          "metres": 29.8
+        },
+        {
+          "node": 7615445007,
+          "ways": [
+            1148133607
+          ],
+          "coord": [
+            28.6104716,
+            77.2125903
+          ],
+          "metres": 36.15
+        }
+      ]
+    },
+    {
+      "id": 6651519179,
+      "name": "",
+      "coord": [
+        28.6725901,
+        77.1692212
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11698365760,
+          "ways": [
+            1258365060
+          ],
+          "coord": [
+            28.6726503,
+            77.1693469
+          ],
+          "metres": 13.98
+        }
+      ]
+    },
+    {
+      "id": 6699155481,
+      "name": "ITO Metro Gate No. 5",
+      "coord": [
+        28.6281048,
+        77.2418878
+      ],
+      "matched": false,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11448808323,
+          "ways": [
+            1233744641
+          ],
+          "coord": [
+            28.6281131,
+            77.2416872
+          ],
+          "metres": 19.61
+        },
+        {
+          "node": 11448808307,
+          "ways": [
+            1233744641
+          ],
+          "coord": [
+            28.6279963,
+            77.2416309
+          ],
+          "metres": 27.83
+        },
+        {
+          "node": 11448808328,
+          "ways": [
+            1233744638
+          ],
+          "coord": [
+            28.6279668,
+            77.2416239
+          ],
+          "metres": 29.99
+        },
+        {
+          "node": 14086452013,
+          "ways": [
+            1548719389
+          ],
+          "coord": [
+            28.6280172,
+            77.2415244
+          ],
+          "metres": 36.79
+        }
+      ]
+    },
+    {
+      "id": 6699155482,
+      "name": "ITO Metro Gate No. 6",
+      "coord": [
+        28.6276667,
+        77.2419627
+      ],
+      "matched": false,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 11448808321,
+          "ways": [
+            1233744638
+          ],
+          "coord": [
+            28.6276384,
+            77.2416723
+          ],
+          "metres": 28.53
+        }
+      ]
+    },
+    {
+      "id": 10766370142,
+      "name": "1",
+      "coord": [
+        28.6369163,
+        77.2870236
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 13723975237,
+          "ways": [
+            1498625609
+          ],
+          "coord": [
+            28.6368894,
+            77.2871026
+          ],
+          "metres": 8.27
+        },
+        {
+          "node": 6544012260,
+          "ways": [
+            1498625609
+          ],
+          "coord": [
+            28.6366834,
+            77.2872586
+          ],
+          "metres": 34.6
+        }
+      ]
+    },
+    {
+      "id": 10766370144,
+      "name": "4",
+      "coord": [
+        28.636512,
+        77.28705
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 6544012260,
+          "ways": [
+            1498625609
+          ],
+          "coord": [
+            28.6366834,
+            77.2872586
+          ],
+          "metres": 27.89
+        }
+      ]
+    },
+    {
+      "id": 10766370151,
+      "name": "5",
+      "coord": [
+        28.6367819,
+        77.2868279
+      ],
+      "matched": true,
+      "only_underground": false,
+      "endpoints": [
+        {
+          "node": 13723975237,
+          "ways": [
+            1498625609
+          ],
+          "coord": [
+            28.6368894,
+            77.2871026
+          ],
+          "metres": 29.36
+        }
+      ]
+    }
+  ]
+}
