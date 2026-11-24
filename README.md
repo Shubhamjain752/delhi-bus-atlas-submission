@@ -1,6 +1,6 @@
 # Delhi Bus Atlas
 
-A passenger enters a starting point, a destination and a departure time. Atlas shows which Delhi bus to board, where to change and when the passenger could arrive. Each option separates walking, waiting and riding.
+Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the recorded Rohini Sector 22 to Azadpur example, taking one bus saves about 12 minutes of walking and gets you there an estimated four minutes later than changing buses.
 
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
@@ -13,19 +13,13 @@ flowchart TD
     B --> C[Search direct buses and routes with one change]
     D[Delhi bus timetable and service dates] --> C
     C --> E[Estimate the walk, wait and ride]
-    F[Historical bus speeds and fresh GPS when available] --> E
+    F[Past travel times between stops and recent bus reports] --> E
     E --> G[Show route, stops and arrival time on the map]
 ```
 
-A scheduled departure, an estimate learned from GPS and a fresh observation each carry a different label. On a divided road, the planner checks whether there is a mapped path to the boarding side. It can show a bus that might still be boarding alongside a later fallback.
+Atlas lists journeys by expected arrival at the destination. On a divided road, it looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
 
-Direct buses are checked at every compatible stop within the walking limit. On a direct journey, the details also show other lines serving the same two platforms within 30 minutes of reaching the first stop. If Atlas cannot find a walking route to a nearby boarding platform, departures from that platform appear separately.
-
-Atlas orders journeys by predicted arrival at the destination. The platform list also shows which line is due first and whether its estimate comes from this bus’s GPS, an operator prediction or past running times. [How often did Atlas pick the right line?](docs/first-direct-bus.md) · [API fields](docs/api.md)
-
-If a direct bus is due before you could walk to its stop, the app can show it separately. Compare the time the bus is due with your estimated walking arrival and decide whether you can get there sooner.
-
-Open **Check next bus at this stop** for the selected line. When GPS has tracked two different buses through the same approach, Atlas shows when each passed the platform and how far apart they were. The next bus has its own arrival estimate.
+Open a bus leg to see other lines serving the same two stops. **Check next bus at this stop** shows the next arrival estimate and its source. When GPS has tracked two buses approaching the same stop, it also shows how far apart they came. [First-bus test](docs/first-direct-bus.md) · [API fields](docs/api.md)
 
 ## Run the Delhi planner
 
@@ -34,6 +28,8 @@ Open **Check next bus at this stop** for the selected line. When GPS has tracked
 3. From this folder, run the commands below. The first run builds a timetable index and can take a few minutes.
 
 Keep the included `data/walk.npz` walking network and `data/walk-crossings.json` crossing connections together in `data/`. The repository also includes the map and fitted travel-time files.
+
+The event brief describes about 10,500 stops. Atlas uses version 32 of the supplied timetable. Its stop file contains 6,862 distinct stop IDs, and all 6,862 appear in scheduled trips. The organizer’s data sheet and the supplied timetable give different totals. [Timetable details](docs/technical-note.md)
 
 **Windows PowerShell**
 
@@ -59,7 +55,7 @@ Open the [passenger map](http://127.0.0.1:8765/), [runnable API guide](http://12
 
 Near AIIMS, the original map sent a passenger on an 11 km detour to the eastbound stop. The revised map uses a mapped pedestrian underpass with stairs and short estimated links to the street. It gives a 369 m walk to the official AIIMS Ring Road platform. For a Sunday 3 p.m. request this changed the first suggestion from two buses in about 24 minutes to a direct bus in about 19 minutes. Both times are estimates. The crossing and the passenger’s actual arrival still need a check on foot. [Results on other Delhi routes](docs/journey-access-check.md)
 
-The 19-minute estimate was calculated afterwards using the corrected map. At 3 p.m. the provider predicted the 711UP first. A GPS reading put it near the AIIMS boarding stop at 3:05:34. Its published stopping pattern conflicted with the provider and its arrival at the Lajpat Nagar stop remains unverified. The 392UP was the first direct bus seen at both stops, at roughly 3:12 and 3:22. [Sunday GPS check](data/aiims-observed-order.json)
+The 19-minute estimate comes from replaying the search with the corrected map. In the 3 p.m. replay, past travel times put the 711UP first. GPS saw it near AIIMS at 3:05, but the operator and timetable disagreed about its stops. We could not verify that it reached the Lajpat Nagar stop. The operator supplied a separate prediction for the 392UP. It was the first direct line GPS saw at both stops, at about 3:12 and 3:22. [Sunday GPS check](data/aiims-observed-order.json)
 
 We also tested 1,728 departures across six October dates. GPS identified a clear first line at the boarding stop in 655 cases. The previous planner picked it 107 times. With individual bus positions, that rose to 114. Ten picks improved and three regressed. In the hourly checks from 12:10 a.m. through 4:10 a.m., correct picks rose from 17 to 18 out of 63. [Delhi results and limitations](docs/first-direct-bus.md)
 
