@@ -4,9 +4,9 @@ At 10:57 a.m. on 24 November 2026, the original planner offered three ways from 
 
 The passenger could reach 24 boarding platforms on foot. The original search checked the nearest 12 for a journey with a change. Yojna Vihar ranked 20th, a 779 m walk away. Starting there opened up an earlier connection. The next version put three journeys with 22–25 minutes of walking among its five suggestions. We changed how journeys are selected so that finding more buses also gives riders a choice of shorter walks.
 
-## What a passenger sees
+## The earlier search to the timetable’s Rajiv Chowk Metro Station point
 
-We kept the same departure time, destination at Rajiv Chowk Metro Station and October travel-time estimates. The map shows three route cards when available, with up to two more under “More options”. Total walking includes the approach, any walk at the change and the final walk. All times below are Atlas forecasts.
+This table preserves the search before the street-level walking and ranking corrections. It used the timetable’s Rajiv Chowk Metro Station point (stop 9561). The later comparison uses the passenger’s shared station pin and a separate entrance in A Block. [See the two walking routes and current choices](rajiv-chowk-walk.md)
 
 | Where it appears | Buses | Total walking | Expected arrival |
 | --- | --- | ---: | ---: |
@@ -22,7 +22,7 @@ The passenger can choose among three routes with between 10½ and 14 minutes of 
 
 Google showed the 971 from Surya Nagar, a change to the 943 at Maharaj Pur Check Post and arrival at 12:05 p.m. Both bus lines and their shared stop are in Delhi’s timetable. We checked that connection separately using Atlas’s time estimates. Atlas allowed about 44 minutes on the 943. Google allowed 40 minutes and showed that bus leaving the change stop six minutes earlier.
 
-Google’s destination was labelled Rajiv Chowk, Inner Circle, Block B. Its final walk was 300 m. Atlas’s selected timetable point was Rajiv Chowk Metro Station, a mapped walk of 716 m from the Shivaji Stadium stop on the 943. The Google screenshot did not give the exact coordinates. Our GPS recording began at 5:09 p.m. that day. We have no morning observations of either bus journey or the passenger’s walk.
+Google’s destination was labelled Rajiv Chowk, Inner Circle, Block B. Its final walk was 300 m. Atlas originally selected GTFS stop 9561, a mapped walk of 716 m from the Shivaji Stadium stop on the 943. The passenger later supplied the Google place link and the detailed walking map. The blue walking line ends near Metro Gate 7. The station marker lies farther inside Central Park. Our 24 November GPS recording began at 5:09 p.m. We have no morning observations of either bus journey or the passenger’s walk. [Trace the final walk](rajiv-chowk-walk.md)
 
 ## What changed across Delhi
 

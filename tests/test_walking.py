@@ -6,10 +6,36 @@ from pathlib import Path
 import numpy as np
 
 from transit.walking import Walking, project
-from tools.build_walk import foot_directions, blocked_node
+from tools.build_walk import foot_directions, blocked_node, below_street_level
 
 
 class WalkRoutingTest(unittest.TestCase):
+    def test_unlevelled_pins_use_the_street_but_can_enter_a_tunnel_at_its_gate(self):
+        with tempfile.TemporaryDirectory() as directory:
+            data = Path(directory)
+            coords = [[28.60,77.20], [28.60,77.201], [28.6001,77.201],
+                      [28.59998,77.2005], [28.59998,77.201], [28.59998,77.202]]
+            np.savez(data/'walk.npz', coords=coords, edges=[[0,1],[1,2],[3,4],[4,5],[4,1]],
+                     directions=[3]*5, factors=[1.]*5, delays=[0.]*5, barriers=[])
+            (data/'walk-meta.json').write_text(json.dumps({'input_md5':'test'}))
+            (data/'walk-surface.json').write_text(json.dumps({
+                'source_md5':'test', 'edge_count':5,'below_grade_edges':[2,3,4],
+                'ground_entrance_nodes':[1,5]
+            }))
+            walk = Walking(data)
+            road = walk.route(coords[0], coords[3])
+            self.assertEqual(road['distance_m'],51)
+            self.assertGreater(road['destination_snap_m'],2)
+            subway = walk.route(coords[0], coords[5])
+            self.assertIn(coords[4],subway['geometry'])
+            self.assertEqual(subway['destination_snap_m'],0)
+
+    def test_subway_level_tags_and_building_passages(self):
+        for tags in ({'level':'-1'}, {'level':'0;-1'}, {'location':'underground'},
+                     {'tunnel':'yes'}):
+            self.assertTrue(below_street_level(tags))
+        for tags in ({}, {'level':'0'}, {'tunnel':'building_passage','level':'0'}, {'layer':'-1'}, {'bridge':'yes'}):
+            self.assertFalse(below_street_level(tags))
     def setUp(self):
         self.work = tempfile.TemporaryDirectory()
         # Two parallel pavements joined at the east end by a marked crossing.
@@ -119,6 +145,19 @@ class DelhiGraphTest(unittest.TestCase):
         # Check both sides of the physical crossing, not just a short estimate.
         self.assertIn([28.5689344,77.2117954],trip['geometry'])
         self.assertIn([28.5693055,77.211831],trip['geometry'])
+
+    def test_shivaji_stadium_to_rajiv_gate_and_surface_pin(self):
+        stop = (28.6323,77.2165)
+        gate = (28.6323385,77.2183526)
+        park = (28.632986,77.219374)
+        gate_walk = self.walk.route(stop,gate)
+        park_walk = self.walk.route(stop,park)
+        self.assertTrue(320 <= gate_walk['distance_m'] <= 345)
+        self.assertEqual(gate_walk['inferred_crossing_access_m'],26)
+        self.assertIn([28.6321017,77.2181956],gate_walk['geometry'])  # Radial Road 2 crossing
+        self.assertTrue(640 <= park_walk['distance_m'] <= 665)
+        self.assertTrue(20 <= park_walk['destination_snap_m'] <= 25)
+        self.assertNotIn([28.632589,77.2195934],park_walk['geometry'])  # Underground fare gate
 
     def test_unconfirmed_nehru_place_street_estimate(self):
         a = (28.54857609786973,77.24913317314967)

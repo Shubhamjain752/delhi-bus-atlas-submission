@@ -29,7 +29,7 @@
           "Journey planning"
         ],
         "summary": "Stops",
-        "description": "Find boarding platforms by name or identifier.",
+        "description": "Find boarding platforms by name or identifier, with optional station entrances.",
         "operationId": "stops_stops_get",
         "parameters": [
           {
@@ -54,6 +54,18 @@
               "default": 10,
               "title": "Limit"
             }
+          },
+          {
+            "name": "include_entrances",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include mapped metro street entrances alongside bus platforms.",
+              "default": false,
+              "title": "Include Entrances"
+            },
+            "description": "Include mapped metro street entrances alongside bus platforms."
           }
         ],
         "responses": {
@@ -97,13 +109,13 @@
               "type": "string",
               "minLength": 1,
               "maxLength": 160,
-              "description": "Origin as latitude,longitude, stop ID, or stop name.",
+              "description": "Origin as latitude,longitude, stop ID or name, or a mapped entrance name or entrance_id.",
               "examples": [
                 "28.71815,77.06380"
               ],
               "title": "From"
             },
-            "description": "Origin as latitude,longitude, stop ID, or stop name."
+            "description": "Origin as latitude,longitude, stop ID or name, or a mapped entrance name or entrance_id."
           },
           {
             "name": "to",
@@ -2195,6 +2207,30 @@
             ],
             "title": "Via Stop",
             "description": "A common next stop on routes boarding here. This helps distinguish platforms with the same name."
+          },
+          "entrance_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entrance Id",
+            "description": "Named pedestrian entrance identifier for use as a journey endpoint. Only returned when include_entrances=true."
+          },
+          "street": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Street",
+            "description": "Street or landmark at a mapped pedestrian entrance."
           }
         },
         "type": "object",

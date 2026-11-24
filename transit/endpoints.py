@@ -2,7 +2,7 @@
 from collections import Counter
 from itertools import product
 
-from .router import approximate_m, coords
+from .router import approximate_m, coords, normalized
 
 
 SAME_NAME_RADIUS_M = 250
@@ -11,7 +11,7 @@ NEARBY_ALIGHTING_RADIUS_M = 400
 MAX_NEARBY_EXIT_SEARCHES = 3
 
 
-def suggestions(router, query, limit):
+def suggestions(router, query, limit, *, include_entrances=False):
     matches = router.search(query, limit)
     for stop in matches:
         onward = Counter()
@@ -23,7 +23,15 @@ def suggestions(router, query, limit):
                     onward[name] += 1
         if onward:
             stop["via_stop"] = onward.most_common(1)[0][0]
-    return matches
+    if include_entrances:
+        name = normalized(query)
+        gate_ids = dict.fromkeys(gate for alias, gate in router.entrance_names.items() if name and name in alias)
+        if gate_ids:
+            exact_count = sum(stop["id"] == query or normalized(stop["name"]) == name for stop in matches)
+            # Keep a station query's first platform. A fully typed gate can take first place.
+            insert_at = exact_count or (0 if name in router.entrance_names else min(1, len(matches)))
+            matches[insert_at:insert_at] = [router.entrances[gate].copy() for gate in gate_ids]
+    return matches[:limit]
 
 
 def nearby_names(router, text, chosen):

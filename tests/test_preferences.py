@@ -4,6 +4,30 @@ from transit.preferences import balanced_selection
 
 
 class JourneyPreferenceTests(unittest.TestCase):
+    def test_comparable_walks_trade_one_second_on_foot_for_one_second_of_arrival(self):
+        for saved, first in [(43, 0), (44, 0), (45, 1)]:
+            with self.subTest(saved=saved):
+                # The shorter walk arrives 44 seconds later; an exact tie goes to the earlier arrival.
+                order, _ = balanced_selection([(4958, 884, 1), (5002, 884-saved, 1)], 5)
+                self.assertEqual(order[0], first)
+
+    def test_vivek_inner_circle_places_the_short_walk_above_the_close_arrival(self):
+        choices = [(4379, 1469, 1), (4958, 884, 1), (5002, 618, 1),
+                   (5002, 800, 1), (5163, 618, 1)]
+        order, policy = balanced_selection(choices, 5)
+        self.assertEqual(order, [0, 2, 4, 3, 1])
+        self.assertEqual(policy["faster_index"], 0)
+        self.assertEqual(policy["less_walking_index"], 1)
+        self.assertEqual(policy["time_saved_seconds"], 623)
+        self.assertEqual(policy["extra_walk_seconds"], 851)
+
+    def test_keep_the_earliest_comparable_service_among_five_choices(self):
+        choices = [(2000, 390, 1), (2010, 200, 1), (2020, 210, 1),
+                   (2030, 220, 1), (2040, 230, 1), (2050, 240, 1)]
+        order, _ = balanced_selection(choices, 5)
+        self.assertEqual(order, [1, 2, 3, 4, 0])
+        self.assertEqual(balanced_selection(choices, 3)[0], order[:3])
+
     def test_ten_percent_uses_unrounded_door_to_door_seconds(self):
         for faster, leader in [(1799, 0), (1800, 0), (1801, 1)]:
             with self.subTest(faster=faster):
@@ -14,7 +38,8 @@ class JourneyPreferenceTests(unittest.TestCase):
 
     def test_five_minutes_defines_longer_walk_even_on_a_direct_bus(self):
         for extra, leader in [(299, 0), (300, 1)]:
-            order, _ = balanced_selection([(1870, 500, 0), (2000, 500-extra, 1)], 5)
+            # Saving 320 seconds outweighs both walks but falls short of 10%.
+            order, _ = balanced_selection([(3680, 500, 0), (4000, 500-extra, 1)], 5)
             self.assertEqual(order[0], leader)
 
     def test_vivek_keeps_original_three_and_one_earlier_walk(self):
@@ -24,13 +49,13 @@ class JourneyPreferenceTests(unittest.TestCase):
                    (5019, 635, 1), (5019, 817, 1), (5019, 1180, 1),
                    (5180, 635, 1), (5240, 901, 1), (15000, 5, 0)]
         order, policy = balanced_selection(choices, 5)
-        self.assertEqual(order, [3, 4, 6, 0, 7])
+        self.assertEqual(order, [3, 6, 4, 0, 7])
         self.assertEqual(policy, {"primary_count": 3, "faster_index": 3, "less_walking_index": 0,
                                   "time_saved_seconds": 463, "extra_walk_seconds": 690})
 
     def test_no_pointless_longer_walk_to_fill_spare_slots(self):
         choices = [(2000, 1200, 1), (2001, 150, 1), (2010, 140, 1), (2800, 1250, 0)]
-        self.assertEqual(balanced_selection(choices, 5), ([1, 2], {"primary_count": 2}))
+        self.assertEqual(balanced_selection(choices, 5), ([2, 1], {"primary_count": 2}))
         for saving, included in [(119, False), (120, True)]:
             order, _ = balanced_selection([(2000-saving, 1200, 1), (2000, 150, 1)], 5)
             self.assertEqual(0 in order, included)
@@ -71,7 +96,7 @@ class JourneyPreferenceTests(unittest.TestCase):
                    (1770, 990, 1), (1800, 800, 0),
                    (2000, 400, 1), (2010, 440, 1), (2020, 410, 1)]
         order, policy = balanced_selection(choices, 5)
-        self.assertEqual(order, [0, 5, 6, 7, 2])
+        self.assertEqual(order, [0, 5, 7, 6, 2])
         self.assertEqual(policy["faster_index"], 0)
         self.assertEqual(policy["primary_count"], 3)
 
@@ -92,7 +117,7 @@ class JourneyPreferenceTests(unittest.TestCase):
     def test_no_walk_comparison_badge_for_a_one_second_difference(self):
         # Relative to the shortest walk, these are in different groups.
         # The two fastest options themselves differ by only one second on foot.
-        choices = [(1800, 400, 1), (2040, 399, 1), (2100, 100, 1)]
+        choices = [(1800, 400, 1), (2040, 399, 1), (2500, 100, 1)]
         order, policy = balanced_selection(choices, 5)
         self.assertEqual(order, [0, 1, 2])
         self.assertEqual(policy, {"primary_count": 3})

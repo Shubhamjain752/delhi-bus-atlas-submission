@@ -143,15 +143,16 @@ def status():
     return app.state.planner.info()
 
 
-@app.get("/stops", response_model=StopMatches, response_model_exclude_none=True, tags=["Journey planning"])
-def stops(q: str = Query(min_length=1, max_length=150), limit: int = Query(10, ge=1, le=30)):
-    """Find boarding platforms by name or identifier."""
-    return {"stops":suggestions(app.state.planner.router, q.strip(), limit)}
+@app.get("/stops", response_model=StopMatches, response_model_exclude_unset=True, tags=["Journey planning"])
+def stops(q: str = Query(min_length=1, max_length=150), limit: int = Query(10, ge=1, le=30),
+          include_entrances: bool = Query(False, description="Include mapped metro street entrances alongside bus platforms.")):
+    """Find boarding platforms by name or identifier, with optional station entrances."""
+    return {"stops":suggestions(app.state.planner.router, q.strip(), limit, include_entrances=include_entrances)}
 
 
 @app.get("/journeys", response_model=JourneyResult, response_model_exclude_unset=True, tags=["Journey planning"])
 def journeys(origin: str = Query(alias="from", min_length=1, max_length=160,
-                                 description="Origin as latitude,longitude, stop ID, or stop name.", examples=["28.71815,77.06380"]),
+                                 description="Origin as latitude,longitude, stop ID or name, or a mapped entrance name or entrance_id.", examples=["28.71815,77.06380"]),
              destination: str = Query(alias="to", min_length=1, max_length=160,
                                       description="Destination in the same formats.", examples=["28.70700,77.17890"]),
              depart: str | None = Query(None, max_length=40, description="ISO 8601 departure. A timezone-free value uses Delhi time. Defaults to now.",

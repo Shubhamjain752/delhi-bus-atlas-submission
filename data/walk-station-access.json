@@ -1,0 +1,36 @@
+{
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+  "source": "https://download.openstreetmap.fr/extracts/asia/india/national_capital_territory_of_delhi.osm.pbf",
+  "source_replication_utc": "2026-11-23T00:26:51Z",
+  "source_sha256": "d94b858e16be90416da4cd16cc21be07aa5dd53b167e909c813ee546c92ecb1a",
+  "entrances": [
+    {
+      "name": "Rajiv Chowk Metro Gate No 7",
+      "note": "Two estimated approaches connect the surface entrance to the near curbs of the marked Inner Circle and Radial Road 2 crossings. The source has no surface carriageway, fence, wall or above-ground building across either approach. Crossing a road still requires the mapped crossing. Access was not surveyed.",
+      "approaches": [
+        {
+          "landing_node": 928610588,
+          "landing": [28.6323385, 77.2183526],
+          "steps_way": 582349042,
+          "steps_neighbour": [28.632468, 77.2182842],
+          "street_node": 11462925591,
+          "street": [28.6322838, 77.2184563],
+          "street_way": 1234918803,
+          "street_neighbour": [28.6323119, 77.2185397],
+          "estimated_metres": 11.8
+        },
+        {
+          "landing_node": 928610588,
+          "landing": [28.6323385, 77.2183526],
+          "steps_way": 582349042,
+          "steps_neighbour": [28.632468, 77.2182842],
+          "street_node": 11462925588,
+          "street": [28.632171, 77.2181628],
+          "street_way": 1234918802,
+          "street_neighbour": [28.6321017, 77.2181956],
+          "estimated_metres": 26.3
+        }
+      ]
+    }
+  ]
+}

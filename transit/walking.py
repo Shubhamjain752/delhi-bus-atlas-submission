@@ -64,12 +64,26 @@ class Walking:
             self.obstacles = SegmentIndex(project(barriers[:,:2]), project(barriers[:,2:]))
         info_path = data_dir/'walk-meta.json'
         self.metadata = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
+        self.below_grade = np.zeros(len(self.edges),dtype=bool)
+        self.ground_entrances = set()
+        surface = data_dir/'walk-surface.json'
+        if surface.is_file():
+            access = json.loads(surface.read_text(encoding='utf-8'))
+            if (access['source_md5'] != self.metadata.get('input_md5')
+                    or access['edge_count'] != len(self.edges)):
+                raise ValueError('The street-level walking data belongs to a different map extract')
+            self.below_grade[access['below_grade_edges']] = True
+            self.ground_entrances.update(access['ground_entrance_nodes'])
         estimates = data_dir/'walk-estimates.json'
         self.street_estimates = json.loads(estimates.read_text(encoding='utf-8')) if estimates.is_file() else None
         self.mapped_edge_count = len(self.edges)
         evidence = data_dir/'walk-crossings.json'
-        if use_crossing_access and evidence.is_file():
-            self._add_crossing_approaches(json.loads(evidence.read_text(encoding='utf-8')))
+        if use_crossing_access:
+            crossings = json.loads(evidence.read_text(encoding='utf-8'))['crossings'] if evidence.is_file() else []
+            entrances = data_dir/'walk-station-access.json'
+            if entrances.is_file():
+                crossings += json.loads(entrances.read_text(encoding='utf-8'))['entrances']
+            self._add_crossing_approaches({'crossings':crossings})
         # CSR-style adjacency stores edges compactly while preserving parallel
         # ways and foot-only direction even when two roads share endpoints.
         forward = np.flatnonzero(self.directions & 1)
@@ -152,6 +166,18 @@ class Walking:
         fractions = np.clip(np.divide(numer,lengths,out=np.zeros_like(numer),where=lengths>0),0,1)
         mapped = starts + vectors * fractions[:,None]
         distances = np.linalg.norm(mapped - point,axis=1)
+        # Unlevelled GPS pins describe a place at street level. An underground
+        # passage remains available through its entrances. A pin placed on
+        # a tagged surface landing can enter the stairway there.
+        for i in np.flatnonzero(self.below_grade[candidates]):
+            distances[i] = math.inf
+            for end, node in enumerate(self.edges[candidates[i]]):
+                if node in self.ground_entrances:
+                    distance = np.linalg.norm(self.xy[node]-point)
+                    if distance <= 1. and distance < distances[i]:
+                        distances[i] = distance
+                        mapped[i] = self.xy[node]
+                        fractions[i] = end
         for i in np.argsort(distances):
             if distances[i] > MAX_SNAP:
                 break

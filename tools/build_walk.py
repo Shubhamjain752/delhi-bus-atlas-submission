@@ -75,12 +75,29 @@ def inside(lat, lon):
     return BOUNDS[0] <= lat <= BOUNDS[2] and BOUNDS[1] <= lon <= BOUNDS[3]
 
 
+def below_street_level(tags):
+    """Keep underground walks traversable without treating their interiors as street entrances."""
+    if tags.get('tunnel') in {'yes','culvert'} or tags.get('location') == 'underground':
+        return True
+    levels = tags.get('level')
+    if not levels:
+        return False
+    for level in levels.split(';'):
+        try:
+            if float(level) < 0:
+                return True
+        except ValueError:
+            continue
+    return False
+
+
 def build(pbf, output, source_url, checksum):
     import osmium
 
     nodes = {}
     coords, edges, directions, factors, delays, barriers, centerlines = [], [], [], [], [], [], []
     blocked, signals = set(), set()
+    entrances, below_grade_edges = set(), []
     classes = Counter()
     objects = (osmium.FileProcessor(str(pbf)).with_locations()
                .with_filter(osmium.filter.KeyFilter('highway','barrier','railway','waterway','access','foot','crossing')))
@@ -90,6 +107,9 @@ def build(pbf, output, source_url, checksum):
                 continue
             if blocked_node(obj.tags):
                 blocked.add(obj.id)
+            elif (obj.tags.get('railway') == 'subway_entrance'
+                  and not below_street_level(obj.tags) and obj.tags.get('level', '0') == '0'):
+                entrances.add(obj.id)
             if obj.tags.get('crossing') == 'traffic_signals' or obj.tags.get('crossing:signals') == 'yes':
                 signals.add(obj.id)
             continue
@@ -97,6 +117,7 @@ def build(pbf, output, source_url, checksum):
             continue
         tags = obj.tags
         direction = foot_directions(tags)
+        below_grade = bool(direction) and below_street_level(tags)
         barrier = barrier_way(tags) and tags.get('tunnel') != 'yes' and tags.get('bridge') != 'yes'
         if not (direction or barrier):
             continue
@@ -117,6 +138,8 @@ def build(pbf, output, source_url, checksum):
                             nodes[osm_id] = len(coords)
                             coords.append((lat,lon))
                         pair.append(nodes[osm_id])
+                    if below_grade:
+                        below_grade_edges.append(len(edges))
                     edges.append(pair)
                     directions.append(direction)
                     factors.append(1.5 if tags.get('highway') == 'steps' else 1.)
@@ -138,6 +161,9 @@ def build(pbf, output, source_url, checksum):
                             delays=np.array(delays,dtype='f4'), barriers=np.array(barriers,dtype='f8').reshape(-1,4),
                             centerlines=np.asarray(centerlines,dtype='bool'))
     os.replace(temp_name, output/'walk.npz')
+    access = {'source_md5':checksum, 'edge_count':len(edges), 'below_grade_edges':below_grade_edges,
+              'ground_entrance_nodes':sorted(nodes[osm_id] for osm_id in entrances if osm_id in nodes)}
+    (output/'walk-surface.json').write_text(json.dumps(access,separators=(',',':'))+'\n',encoding='utf-8')
     metadata = {'attribution':'© OpenStreetMap contributors, extract by Geofabrik',
                 'license':'ODbL 1.0', 'license_url':'https://www.openstreetmap.org/copyright',
                 'source':source_url, 'input_md5':checksum, 'clip_bounds_swne':BOUNDS,

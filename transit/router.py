@@ -12,6 +12,7 @@ from dataclasses import dataclass, replace
 from datetime import date, datetime, timedelta, timezone
 from functools import cached_property, lru_cache
 from inspect import signature
+from pathlib import Path
 
 from .schedule import cache_schedule, rows
 from .preferences import balanced_selection
@@ -112,6 +113,15 @@ class Router:
             self.names[s] = normalized(val["name"])
             self.exact[self.names[s]].append(s)
             self.grid[self._cell(coords(val))].append(s)
+        self.entrances, self.entrance_names = {}, {}
+        entrance_file = Path(data_dir) / "metro-entrances.json"
+        if entrance_file.is_file():
+            for row in json.loads(entrance_file.read_text(encoding="utf-8")):
+                entrance_id = f"osm:node:{row['osm_node']}"
+                point = {key: row[key] for key in ("name", "street", "lat", "lon")}
+                self.entrances[entrance_id] = {"id": None, "entrance_id": entrance_id, **point}
+                for alias in (row["name"], *row["aliases"]):
+                    self.entrance_names[normalized(alias)] = entrance_id
         self.max_service = max((p.starts[-1]+p.departures[-1] for p in self.patterns),default=0)
 
     @staticmethod
@@ -145,6 +155,8 @@ class Router:
         if isinstance(value, dict):
             if str(value.get("id")) in self.stops:
                 return self.stops[str(value["id"])]
+            if value.get("entrance_id") in self.entrances:
+                return self.entrances[value["entrance_id"]]
             value = (value["lat"], value["lon"])
         if isinstance(value, str) and value in self.stops:
             return self.stops[value]
@@ -158,6 +170,12 @@ class Router:
                 if not (-90 <= lat <= 90 and -180 <= lon <= 180):
                     raise ValueError("Coordinates are outside the valid latitude/longitude range.")
                 return {"id": None, "name": f"{lat:.5f}, {lon:.5f}", "lat":lat,"lon":lon}
+        if isinstance(value, str):
+            if value in self.entrances:
+                return self.entrances[value]
+            name = normalized(value)
+            if name not in self.exact and name in self.entrance_names:
+                return self.entrances[self.entrance_names[name]]
         result = self.search(str(value),1)
         if not result:
             raise ValueError(f"Could not find a GTFS stop named '{value}'. Use a stop name, ID or latitude,longitude.")

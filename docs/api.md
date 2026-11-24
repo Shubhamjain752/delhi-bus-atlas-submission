@@ -9,11 +9,13 @@ Start the planner and open the [runnable guide](http://127.0.0.1:8765/api-guide)
 | Request | Result |
 | --- | --- |
 | `GET /stops?q=AIIMS` | Matching boarding platforms and their coordinates |
+| `GET /stops?q=Rajiv%20Chowk&include_entrances=true` | Includes the mapped street entrance at Metro Gate 7. The passenger can select it as a destination. |
 | `GET /journeys?from=2839&to=2363&depart=2026-11-22T15:00` | Earliest estimated destination arrivals between these platforms |
-| `GET /journeys?from=2433&to=9561&depart=2026-11-24T10:57&preference=balanced&limit=5` | Compare an earlier arrival with a shorter walk from Vivek Vihar to Rajiv Chowk |
+| `GET /journeys?from=2433&to=9561&depart=2026-11-24T10:57&preference=balanced&limit=5` | Journeys from Vivek Vihar to the GTFS platform named Rajiv Chowk Metro Station |
+| `GET /journeys?from=2433&to=Rajiv%20Chowk%20Metro%20Gate%207&depart=2026-11-24T10:57&preference=balanced&limit=5` | Journeys ending at the street entrance in A Block. A coordinate destination stays at the specified pin. |
 | `GET /arrivals?stop=2839&route=1882` | A platform estimate for this route at the current time |
 
-The API normally lists the earliest estimated arrival first. The passenger map requests `preference=balanced`. Atlas looks at routes arriving within 15 minutes of the earliest one to find a realistic shorter walk. Its shorter-walk group includes routes with less than five extra minutes on foot compared with the shortest walk in that window. Within that group, earlier arrivals take priority. Atlas also keeps a place for a direct bus when available.
+The API normally lists the earliest estimated arrival first. The passenger map requests `preference=balanced`. Atlas looks at routes arriving within 15 minutes of the earliest one to find a realistic shorter walk. Its shorter-walk group includes routes with less than five extra minutes on foot compared with the shortest walk in that window. Within that group, walking four minutes less is worth arriving up to four minutes later. An exact tie favours the earlier arrival. The score is the journey duration plus the walking duration, both in seconds. Displayed journey times count each walk once. Atlas also keeps a place for a direct bus when available.
 
 Atlas can offer up to two routes that ask for a longer walk. Each must save at least two minutes or 10% of the full trip compared with the earliest shorter-walk choice. Only a saving of at least 10% can put a longer walk first. A second longer-walk option must reduce walking by at least five minutes or require fewer changes than the first. These comparisons use seconds before rounding. The separate `compare_hour` result gives the fastest journey at that hour.
 

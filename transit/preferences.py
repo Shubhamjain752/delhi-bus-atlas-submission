@@ -27,18 +27,25 @@ def balanced_selection(choices, limit):
                  if latest < duration <= fallback_latest and walk < walk_cutoff]
         if later:
             short, _ = shorter_walk_choices(choices, [*short, *later])
-    reference = short[0]
-    ref_duration, ref_walk, _ = choices[reference]
+    # Compare longer walks to the quickest short-walk journey, even if
+    # another member of that group ranks higher for its easier walk.
+    quickest_short = short[0]
+    short_duration = choices[quickest_short][0]
+    def walking_preference(i):
+        duration, walk, _ = choices[i]
+        # Extra walking must buy at least as many seconds of earlier arrival.
+        return duration + walk, duration
+    short.sort(key=walking_preference)
 
     # A longer walk needs to buy time. A second one must offer something
     # different from the fastest one, such as fewer changes or less walking.
     earlier = []
     for i in nearby_in_time:
-        if i >= reference:
+        if i >= quickest_short:
             break
         duration, walk, changes = choices[i]
-        gain = ref_duration - duration
-        if gain <= 0 or (gain < MIN_SAVING_SECONDS and 10 * gain < ref_duration):
+        gain = short_duration - duration
+        if gain <= 0 or (gain < MIN_SAVING_SECONDS and 10 * gain < short_duration):
             continue
         if earlier:
             _, first_walk, first_changes = choices[earlier[0]]
@@ -48,7 +55,7 @@ def balanced_selection(choices, limit):
         if len(earlier) == 2:
             break
 
-    fast_first = bool(earlier and 10 * (ref_duration - choices[earlier[0]][0]) >= ref_duration)
+    fast_first = bool(earlier and 10 * (short_duration - choices[earlier[0]][0]) >= short_duration)
     head = short[:2 if fast_first else 3]
     direct = next((i for i in short if choices[i][0] <= latest and choices[i][2] == 0), None)
     if direct is not None and all(choices[i][2] for i in head):
@@ -64,9 +71,10 @@ def balanced_selection(choices, limit):
     # A middle ground can be useful with very few short options. It must
     # arrive within the initial window and walk less than a faster choice.
     if len(short) < 3 and earlier:
-        moderate = [i for i in nearby_in_time if i > reference and i not in short
+        moderate = [i for i in nearby_in_time if i > quickest_short and i not in short
                     and choices[i][1] <= MODERATE_WALK_SECONDS
                     and any(choices[i][1] < choices[j][1] for j in earlier)]
+        moderate.sort(key=walking_preference)
         order.extend(moderate[:3-len(short)])
 
     if len(order) < 3:
@@ -74,12 +82,20 @@ def balanced_selection(choices, limit):
         # help. Use it only to fill an empty place among the first three.
         backups = [i for i, (duration, walk, _) in enumerate(choices)
                    if i not in order and duration <= fallback_latest and walk <= MODERATE_WALK_SECONDS]
+        backups.sort(key=walking_preference)
         order.extend(backups[:3-len(order)])
 
+    # Keep the earliest eligible short-walk service available in More options
+    # if five other routes outrank it and none arrives equally soon.
+    if quickest_short == 0 and all(choices[i][0] > fastest for i in order[:5]):
+        order.remove(quickest_short)
+        order.insert(4, quickest_short)
     selected = order[:min(limit, 5)]
     policy = {"primary_count": min(len(selected), 3)}
     # The cutoff uses the minimum walk in the whole group. Label the two
     # displayed options only if their own walking times differ meaningfully.
+    reference = short[0]
+    ref_duration, ref_walk, _ = choices[reference]
     if earlier and choices[earlier[0]][1] - ref_walk >= EXTRA_WALK_SECONDS:
         faster = earlier[0]
         duration, walk, _ = choices[faster]

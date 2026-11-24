@@ -14,6 +14,8 @@ class Place(BaseModel):
 
 class StopSuggestion(Place):
     via_stop: str | None = Field(default=None, description="A common next stop on routes boarding here. This helps distinguish platforms with the same name.")
+    entrance_id: str | None = Field(default=None, description="Named pedestrian entrance identifier for use as a journey endpoint. Only returned when include_entrances=true.")
+    street: str | None = Field(default=None, description="Street or landmark at a mapped pedestrian entrance.")
 
 
 class StopMatches(BaseModel):

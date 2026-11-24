@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -25,8 +26,31 @@ class StopNamesTest(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         root = Path(temp.name)
         feed(root / "feed.zip", extra_platforms)
+        (root / "metro-entrances.json").write_text(json.dumps([{
+            "osm_node": 123, "name": "Clock Tower Metro Gate 7", "street": "Market Road",
+            "aliases": ["Clock Tower Gate 7", "Clock Tower"], "lat": 28.6002, "lon": 77.24
+        }]), encoding="utf-8")
         self.router = Router(root / "feed.zip", root, None, None)
         self.at = datetime(2026, 10, 15, 7, 57, tzinfo=IST)
+
+    def test_station_and_street_entrance_are_distinct_picker_choices(self):
+        places = suggestions(self.router, "Clock Tower", 10, include_entrances=True)
+        self.assertEqual(places[0]["id"], "Q")
+        entrance = next(point for point in places if point.get("entrance_id"))
+        self.assertIsNone(entrance["id"])
+        self.assertEqual(entrance["street"], "Market Road")
+        self.assertFalse(any(point.get("entrance_id") for point in suggestions(self.router, "Clock Tower", 10)))
+        self.assertEqual(suggestions(self.router, "Clock Tower Gate 7", 1, include_entrances=True), [entrance])
+        self.assertEqual(self.router._place("Clock Tower")["id"], "Q")
+        self.assertEqual(self.router._place("Q")["id"], "Q")
+        self.assertEqual(self.router._place("28.6002,77.24")["name"], "28.60020, 77.24000")
+        for value in (entrance["name"], "Clock Tower Gate 7", entrance["entrance_id"]):
+            with self.subTest(value=value):
+                for origin, destination, side in (("A",value,"destination"),(value,"A","origin")):
+                    place = plan_with_stop_names(self.router, origin, destination, self.at)[side]
+                    self.assertEqual((place["name"], place["id"], place["lat"], place["lon"]),
+                                     (entrance["name"], None, 28.6002, 77.24))
+
 
     def test_free_text_keeps_a_served_same_name_platform(self):
         self.assertEqual(self.router.search("clock tower")[0]["id"], "Q")

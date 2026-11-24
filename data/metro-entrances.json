@@ -1,0 +1,16 @@
+[
+  {
+    "osm_node": 928610588,
+    "name": "Rajiv Chowk Metro Gate 7",
+    "street": "A Block, Radial Road 2",
+    "lat": 28.6323385,
+    "lon": 77.2183526,
+    "station_source": "https://delhimetrorail.com/station/RCK",
+    "aliases": [
+      "Rajiv Chowk Gate 7",
+      "Rajiv Chowk Metro Station Gate 7",
+      "Rajiv Chowk Metro Gate No. 7",
+      "Rajiv Chowk Metro Station Gate No. 7"
+    ]
+  }
+]

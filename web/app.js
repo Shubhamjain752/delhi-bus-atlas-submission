@@ -255,10 +255,11 @@ function useCurrentLocation() {
 
 function endpointValue(id) {
   return points[id] && $(id).value === points[id].name
-    ? String(points[id].id ?? (points[id].lat+","+points[id].lon)) : $(id).value.trim();
+    ? String(points[id].entrance_id ?? points[id].id ?? (points[id].lat+","+points[id].lon)) : $(id).value.trim();
 }
 
 function platformDetail(stop, matches) {
+  if (stop.entrance_id) return "Metro entrance · " + stop.street;
   const detail = "Stop " + stop.id;
   if (stop.via_stop) return detail + " · Some buses continue to " + stop.via_stop;
   const peers = matches.filter(item => item.name.trim().toLowerCase() === stop.name.trim().toLowerCase());
@@ -332,14 +333,15 @@ function enableStopSearch(id) {
       request = controller;
       tell("Looking up stops…");
       try {
-        const data = await getJSON("/stops", {q:query}, controller.signal);
+        const data = await getJSON("/stops", {q:query,include_entrances:true}, controller.signal);
         if (controller.signal.aborted || input.value.trim() !== query || document.activeElement !== input) return;
         items = data.stops || [];
         if (!items.length) {
           tell("No matching stops. Try a shorter name or use the map pin.");
           return;
         }
-        tell(items.length === 1 ? "Choose this stop" : "Choose a stop");
+        tell(items.some(item => item.entrance_id) ? "Choose a stop or station entrance" :
+          items.length === 1 ? "Choose this stop" : "Choose a stop");
         items.forEach((item, i) => {
           const li = element("li");
           li.id = id + "-suggestion-" + i;
@@ -1369,9 +1371,15 @@ function initialize() {
     setPoint("origin",{name:"Rohini Sector 22",lat:28.71815,lon:77.06380});
     setPoint("destination",{name:"Near Azadpur Terminal",lat:28.70700,lon:77.17890});
     $("depart").value="2026-11-24T17:30";
-  } else if (example==="vivek") {
+  } else if (["vivek", "vivek-inner-circle", "vivek-gate-7"].includes(example)) {
     $("origin").value="Girls School Vivek Vihar";
-    $("destination").value="Rajiv Chowk Metro Station";
+    if (example==="vivek-inner-circle") {
+      setPoint("destination",{name:"Rajiv Chowk, Inner Circle (Block B)",lat:28.632986,lon:77.219374});
+    } else if (example==="vivek-gate-7") {
+      $("destination").value="Rajiv Chowk Metro Gate 7";
+    } else {
+      $("destination").value="Rajiv Chowk Metro Station";
+    }
     $("depart").value="2026-11-24T10:57";
   }
   for (const id of ["origin","destination"]) {

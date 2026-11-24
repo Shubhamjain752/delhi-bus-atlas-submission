@@ -13,7 +13,7 @@ DESTINATION = "Rajiv Chowk Metro Station"
 DEPARTURE = "2026-11-24T10:57"
 SHORT_WALK = ("243DOWN", "943UP")
 EARLIER = ("473UP", "317DOWN")
-PRACTICAL = [SHORT_WALK, ("267UP", "943UP"), ("243DOWN", "352DOWN")]
+PRACTICAL = [SHORT_WALK, ("243DOWN", "352DOWN"), ("267UP", "943UP")]
 
 
 def is_test_search(response):
@@ -79,8 +79,8 @@ def check(browser, base, width, output):
         assert choices[3][0] == EARLIER and earlier["walk_seconds"] > short["walk_seconds"]
         assert choices[4][0] == ("243DOWN", "85UP")
         assert [(trip["arrival"][11:19], trip["walk_seconds"]) for _, trip in choices] == [
-            ("12:20:39", 635), ("12:20:39", 817), ("12:23:20", 635),
-            ("12:12:56", 1325), ("12:24:20", 901),
+            ("12:19:44", 580), ("12:22:25", 580), ("12:19:44", 762),
+            ("12:12:01", 1270), ("12:23:25", 846),
         ]
         assert all(trip["walk_seconds"] < short["walk_seconds"] + 300
                    for routes, trip in choices if routes != EARLIER)
@@ -118,6 +118,19 @@ def check(browser, base, width, output):
         first.click()
         expect(first).to_have_attribute("aria-pressed", "true")
         expect(page.locator("#details")).to_contain_text(SHORT_WALK[1])
+        page.locator("#destination").fill("Rajiv Chowk")
+        gate = page.get_by_role("option", name="Rajiv Chowk Metro Gate 7", exact=False)
+        expect(gate).to_contain_text("Metro entrance · A Block, Radial Road 2")
+        gate.click()
+        with page.expect_response(lambda r: urlsplit(r.url).path == "/journeys" and
+                                  parse_qs(urlsplit(r.url).query).get("to") == ["osm:node:928610588"],
+                                  timeout=120000) as gate_search:
+            page.get_by_role("button", name="Find journeys").click()
+        assert gate_search.value.ok
+        gate_trip = gate_search.value.json()
+        assert gate_trip["journeys"] and gate_trip["destination"]["id"] is None
+        assert gate_trip["destination"]["name"] == "Rajiv Chowk Metro Gate 7"
+        assert (gate_trip["destination"]["lat"], gate_trip["destination"]["lon"]) == (28.6323385, 77.2183526)
         assert not errors, errors
         return {"width": width, "url": response.url, "visible_cards": visible_cards,
                 "choices": [{"routes": routes, "arrival": trip["arrival"], "walk_seconds": trip["walk_seconds"],
