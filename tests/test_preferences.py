@@ -32,10 +32,15 @@ class JourneyPreferenceTests(unittest.TestCase):
         self.assertEqual(balanced_selection(values, 1), ([1], {
             "primary_count": 1, "less_walking_index": 0, "time_saved_seconds": 50, "extra_walk_seconds": 300}))
         self.assertEqual(balanced_selection([], 5), ([], {"primary_count":0}))
-        similar = [(1000+i*50, 500+i, 1) for i in range(10)]
-        order, policy = balanced_selection(similar, 5)
-        self.assertEqual(order, [0,1,2])
-        self.assertEqual(policy["primary_count"], 1)
+
+    def test_show_first_three_then_two_more_within_requested_limit(self):
+        for count in range(1, 7):
+            choices = [(1000+i*50, 500+i, 1) for i in range(count)]
+            for limit in range(1, 7):
+                with self.subTest(available=count, requested=limit):
+                    order, policy = balanced_selection(choices, limit)
+                    self.assertEqual(order, list(range(min(count, limit, 5))))
+                    self.assertEqual(policy["primary_count"], min(count, limit, 3))
 
     def test_three_competitive_lower_walk_choices_put_fastest_under_more(self):
         choices = [(900, 1000, 1), (920, 650, 1), (925, 675, 1),
@@ -46,8 +51,8 @@ class JourneyPreferenceTests(unittest.TestCase):
         self.assertEqual(policy["faster_index"],3)
         self.assertEqual(policy["less_walking_index"],0)
 
-    def test_two_useful_choices_both_show_even_when_there_are_similar_routes(self):
+    def test_first_two_keep_their_order_and_third_visible_slot_is_filled(self):
         order, policy = balanced_selection([(4556,1325,1), (4667,1486,1),
                                            (4949,1486,1), (5019,635,1)], 5)
-        self.assertEqual(order[:2], [3,0])
-        self.assertEqual(policy["primary_count"],2)
+        self.assertEqual(order, [3,0,1,2])
+        self.assertEqual(policy["primary_count"],3)

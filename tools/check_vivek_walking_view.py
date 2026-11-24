@@ -1,4 +1,4 @@
-"""Exercise both walking choices through the passenger form in a clean browser."""
+"""Check all five Vivek Vihar options through the public passenger form."""
 
 import argparse
 import json
@@ -73,7 +73,13 @@ def check(browser, base, width, output):
         expect(faster).to_contain_text("8 min sooner")
         expect(faster).to_contain_text("12 min more walking")
         visible_cards = page.locator("#alternatives .journey-choice:visible").all_inner_texts()
-        assert len(visible_cards) == policy["primary_count"] == 2
+        assert len(visible_cards) == policy["primary_count"] == 3, visible_cards
+        assert len(by_routes) == len(choices) == 5
+        assert choices[1][0] == EARLIER
+        for index, (routes, _) in enumerate(choices[:3]):
+            expect(cards.nth(index)).to_be_visible()
+            for route in routes:
+                expect(cards.nth(index)).to_contain_text(route)
         if output:
             output.mkdir(exist_ok=True, parents=True)
             page.locator("#alternatives").screenshot(path=output / f"journey-choices-{width}.png")
@@ -82,11 +88,19 @@ def check(browser, base, width, output):
         assert hidden_cards.count() == len(trips) - len(visible_cards) == 2
         expect(hidden_cards.first).to_be_hidden()
         disclosure.locator("summary").click()
-        expect(hidden_cards.first).to_be_visible()
-        hidden_cards.first.click()
-        expect(hidden_cards.first).to_have_attribute("aria-pressed", "true")
+        for index, (routes, _) in enumerate(choices[3:]):
+            card = hidden_cards.nth(index)
+            expect(card).to_be_visible()
+            card.click()
+            expect(card).to_have_attribute("aria-pressed", "true")
+            for route in routes:
+                expect(page.locator("#details")).to_contain_text(route)
         disclosure.locator("summary").click()
         expect(hidden_cards.first).to_be_hidden()
+        cards.nth(2).click()
+        expect(cards.nth(2)).to_have_attribute("aria-pressed", "true")
+        for route in choices[2][0]:
+            expect(page.locator("#details")).to_contain_text(route)
         faster.click()
         expect(faster).to_have_attribute("aria-pressed", "true")
         expect(page.locator("#details")).to_contain_text(EARLIER[1])

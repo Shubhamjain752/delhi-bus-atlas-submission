@@ -443,7 +443,7 @@
             "maximum": 3.0,
             "minimum": 0.0,
             "title": "Primary Count",
-            "description": "Show these first journeys immediately. The remaining journeys are additional alternatives."
+            "description": "Number of immediately visible choices. Three are shown whenever the response contains at least three distinct feasible journeys. Up to two more follow."
           },
           "faster_index": {
             "anyOf": [

@@ -2,16 +2,19 @@
 
 At 10:57 a.m. on 24 November 2026, someone starting at Girls School Vivek Vihar could reach 24 boarding platforms on foot. The previous planner checked the nearest 12 for journeys with a change. Yojna Vihar ranked 20th, although it was only a 779 m walk. Starting there made an earlier connection possible.
 
-## Two choices for the same passenger
+## What a passenger sees
 
-We kept the same departure time, destination at Rajiv Chowk Metro Station and October travel-time estimates. These are Atlas forecasts. Total walking includes the walks at both ends and any walk at the change.
+We kept the same departure time, destination at Rajiv Chowk Metro Station and October travel-time estimates. The map shows three route cards when available, with up to two more under “More options”. Total walking includes the approach, any walk at the change and the final walk. All times below are Atlas forecasts.
 
-| Journey | Buses | Total walking | Expected arrival |
+| Where it appears | Buses | Total walking | Expected arrival |
 | --- | --- | ---: | ---: |
-| Shorter walk | 243DOWN, then 943UP | 10 min 35 sec | 12:20:39 p.m. |
-| Earlier arrival | Walk to Yojna Vihar, take 473UP and change to 317DOWN at Karkardooma Crossing | 22 min 5 sec | 12:12:56 p.m. |
+| First card · shorter walk | 243DOWN, then 943UP | 10 min 35 sec | 12:20:39 p.m. |
+| Second card · earliest arrival | Walk to Yojna Vihar, take 473UP and change to 317DOWN at Karkardooma Crossing | 22 min 5 sec | 12:12:56 p.m. |
+| Third card | 473UP, then 85EXTUP | 24 min 46 sec | 12:14:47 p.m. |
+| More options | 473UP, then 85UP | 24 min 46 sec | 12:19:29 p.m. |
+| More options | 267UP, then 943UP | 13 min 37 sec | 12:20:39 p.m. |
 
-The passenger would spend 11 min 30 sec more on foot to arrive 7 min 43 sec earlier. That saves 9.2% of the whole trip. The map shows the shorter walk first and keeps the earlier option visible. When the fastest route adds at least five minutes of walking, Atlas compares it with the earliest alternative that saves that walking time and requires no extra bus changes. It gives the fastest route priority when it saves at least 10% of the alternative’s door-to-door time. These thresholds express a rider preference that can be tested.
+The first two cards show the main choice. The passenger would spend 11 min 30 sec more on foot to arrive 7 min 43 sec earlier. That saves 9.2% of the whole trip. The shorter walk comes first because the time saved is below the map’s 10% threshold for recommending a route that adds at least five minutes of walking. Both routes have the same number of changes. We obtained these five estimates in a later replay.
 
 ## What the Google Maps comparison tells us
 

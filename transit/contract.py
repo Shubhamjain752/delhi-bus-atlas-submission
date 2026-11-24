@@ -234,7 +234,7 @@ class NearbyAlightingOption(BaseModel):
 
 
 class BalancedChoices(BaseModel):
-    primary_count: int = Field(ge=0, le=3, description="Show these first journeys immediately. The remaining journeys are additional alternatives.")
+    primary_count: int = Field(ge=0, le=3, description="Number of immediately visible choices. Three are shown whenever the response contains at least three distinct feasible journeys. Up to two more follow.")
     faster_index: int | None = Field(default=None, description="Index in journeys of the faster option in the walking comparison.")
     less_walking_index: int | None = Field(default=None, description="Index in journeys of the option with at least five minutes less total walking and no extra transfer.")
     time_saved_seconds: int | None = None

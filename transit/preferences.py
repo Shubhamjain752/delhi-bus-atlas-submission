@@ -37,20 +37,17 @@ def balanced_selection(choices, limit):
     direct = next((i for i, (_, _, n) in enumerate(choices) if n == 0), None)
     if len(primary) < 3 and direct is not None and all(choices[i][2] for i in primary):
         primary.append(direct)
-    # A third headline choice should offer a meaningful new trade-off. Keep
-    # the earliest option for each improvement, with other routes still available.
+    # Give a distinct walking or transfer trade-off priority before filling
+    # the remaining places in order of arrival.
     for i, (_, walk, n) in enumerate(choices):
         if len(primary) == 3:
             break
         duration = choices[i][0]
         if 10 * (duration-fastest) < duration and all(walk <= choices[j][1] - 300 and n <= choices[j][2] for j in primary):
             primary.append(i)
-    primary = primary[:limit]
-    other_count = min(2, limit-len(primary))
-    extras = dict.fromkeys([0, direct, *range(len(choices))])
-    others = [i for i in extras if i is not None and i not in primary][:other_count]
-    selected = primary + others
-    policy["primary_count"] = len(primary)
+    priority = dict.fromkeys([*primary, 0, direct, *range(len(choices))])
+    selected = [i for i in priority if i is not None][:min(limit, 5)]
+    policy["primary_count"] = min(len(selected), 3)
     if less_walk is not None:
         if 0 in selected:
             policy["faster_index"] = selected.index(0)
