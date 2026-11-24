@@ -163,36 +163,62 @@ function useCurrentLocation() {
   resetLocationRequest();
   const revision = originRevision;
   const button = $("use-location"), status = $("location-status");
-  const fallback = "Enter a Delhi stop or choose a point on the map.";
+  const fallback = "Enter a Delhi stop or use the map pin beside From.";
   if (!window.isSecureContext || !navigator.geolocation) {
     status.textContent = "Location is unavailable in this browser. " + fallback;
     return;
   }
   button.disabled = true;
   status.textContent = "Finding your location…";
-  function failed(error) {
-    if (revision !== originRevision) return;
-    button.disabled = false;
-    const reason = error?.code === 1 ? "Location permission was denied."
-      : error?.code === 3 ? "The location request timed out." : "Your device could not find your location.";
-    status.textContent = reason + " " + fallback;
-  }
-  try {
-    navigator.geolocation.getCurrentPosition(position => {
+  function locate(retry) {
+    const options = retry
+      ? {enableHighAccuracy:true, timeout:20000, maximumAge:0}
+      : {enableHighAccuracy:false, timeout:15000, maximumAge:60000};
+
+    function failed(error) {
       if (revision !== originRevision) return;
+      if (!retry && (error?.code === 2 || error?.code === 3)) {
+        status.textContent = "Still looking for your location. You can also use the map pin beside From.";
+        locate(true);
+        return;
+      }
       button.disabled = false;
+      const reason = error?.code === 1 ? "Location permission was denied. You can allow it in your browser settings."
+        : error?.code === 3 ? "Your device did not return a location in time. Check that device location is on and try again."
+        : "Your device could not provide a recent location. Check that device location is on and try again.";
+      status.textContent = reason + " " + fallback;
+    }
+
+    function found(position) {
+      if (revision !== originRevision) return;
       const {latitude, longitude, accuracy} = position.coords;
-      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {failed(); return;}
+      const ageMs = Date.now() - position.timestamp;
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+          !Number.isFinite(position.timestamp) || ageMs < 0 || ageMs > 60000) {
+        failed({code:2});
+        return;
+      }
+      button.disabled = false;
       // Bounds of the Delhi pedestrian map in data/walk-meta.json (south, west, north, east).
       if (latitude < 28.25 || latitude > 28.96 || longitude < 76.78 || longitude > 77.55) {
         status.textContent = "Your location is outside the Delhi map. " + fallback;
         return;
       }
       setPoint("origin",{lat:Number(latitude.toFixed(5)),lon:Number(longitude.toFixed(5)),name:"Current location"});
-      const precision = Number.isFinite(accuracy) && accuracy > 0 ? " (within about " + Math.ceil(accuracy) + " m)" : "";
-      status.textContent = "Starting point set" + precision + ". Choose Find journeys to use it.";
-    }, failed, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
-  } catch {failed();}
+      const hasAccuracy = Number.isFinite(accuracy) && accuracy > 0;
+      const precision = hasAccuracy ? " (within about " + Math.ceil(accuracy) + " m)" : "";
+      const ageSeconds = Math.floor(ageMs / 1000);
+      const age = ageSeconds >= 5 ? " The reading is " + ageSeconds + " seconds old." : "";
+      const guidance = !hasAccuracy || accuracy > 100
+        ? " This estimate could be on a different street. Use the map pin beside From to choose your exact starting point."
+        : " Choose Find journeys to use it.";
+      status.textContent = "Starting point set" + precision + "." + age + guidance;
+    }
+
+    try {navigator.geolocation.getCurrentPosition(found, failed, options);}
+    catch {failed();}
+  }
+  locate(false);
 }
 
 function endpointValue(id) {
