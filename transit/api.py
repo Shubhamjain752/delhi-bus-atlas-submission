@@ -46,7 +46,7 @@ class Planner:
         self.directory = root / "data"
         schedule = Path(os.getenv("DELHI_GTFS_ZIP") or root / "delhi_buses_static_gtfs_v1.zip")
         self.walking = Walking(self.directory, use_crossing_access=True)
-        self.model = EtaModel.load(self.directory)
+        self.model = EtaModel.load(self.directory, include_forward=True)
         self.live = ObservationOverlay(self.model, self.directory)
         self.router = Router(schedule, self.directory, self.walking, self.live)
         self.live.bind(self.router)

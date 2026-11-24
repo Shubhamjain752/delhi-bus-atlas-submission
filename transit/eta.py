@@ -38,10 +38,14 @@ class EtaModel:
         self.route_ratios = fitted.get("routes", {})
         self.metadata = fitted.get("metadata", {})
         self.weekend = None
+        self.earlier = None
         dates = self.metadata.get("train", [])
         self.last_train_day = date.fromisoformat(max(dates)) if dates else None
-        self.trained_through = (int((datetime.fromisoformat(max(dates)).replace(tzinfo=IST)
-                                      + timedelta(days=1)).timestamp()) if dates else None)
+        cutoff = self.metadata.get("cutoff_exclusive")
+        self.available_from = (date.fromisoformat(cutoff) if cutoff else
+                               self.last_train_day + timedelta(days=1) if self.last_train_day else None)
+        self.trained_through = (int(datetime.combine(self.available_from, datetime.min.time(), IST).timestamp())
+                                if self.available_from else None)
         self.passages = sorted((replay or {}).get("passages", []))
         self.passage_clock = [p[0] for p in self.passages]
         self.recent = defaultdict(list)
@@ -53,17 +57,25 @@ class EtaModel:
             self.recent_clock[key] = [v[0] for v in values]
 
     @classmethod
-    def load(cls, data_dir: Path):
+    def load(cls, data_dir: Path, *, include_forward=False):
+        """Load the named research fit. The journey planner also loads its dated successor."""
         directory = Path(data_dir)
+        monthly = directory / "from-2026-11"
+        use_monthly = include_forward and monthly.is_dir()
 
         def load_folder(folder):
             model_file = folder / "eta_model.json.gz"
             replay_file = folder / "eta_replay.json.gz"
-            return cls(read_data(model_file) if model_file.is_file() else None,
-                       read_data(replay_file) if replay_file.is_file() else None)
+            original = read_data(model_file) if model_file.is_file() else None
+            replay = read_data(replay_file) if replay_file.is_file() else None
+            if use_monthly:
+                model = cls(read_data(monthly / folder.relative_to(directory) / "eta_model.json.gz"), replay)
+                model.earlier = cls(original)
+                return model
+            return cls(original, replay)
 
         model = load_folder(directory)
-        if (directory / "weekend" / "eta_model.json.gz").is_file():
+        if use_monthly or (directory / "weekend" / "eta_model.json.gz").is_file():
             model.weekend = load_folder(directory / "weekend")
             model.metadata = {**model.metadata,
                               "day_types":{"weekday":model.metadata,"weekend":model.weekend.metadata}}
@@ -83,21 +95,25 @@ class EtaModel:
             asof_day = datetime.fromtimestamp(now,IST).date()
         day = target or asof_day
         profile = self.weekend if self.weekend is not None and day and day.weekday() >= 5 else self
-        if (target is not None and profile.last_train_day is not None and target <= profile.last_train_day or
-                now is not None and profile.trained_through is not None and now < profile.trained_through):
-            return max(1,int(scheduled_seconds)), "timetable"
+        history = profile
+        while history.available_from and (
+                target is not None and target < history.available_from or
+                now is not None and now < history.trained_through):
+            history = history.earlier
+            if history is None:
+                return max(1,int(scheduled_seconds)), "timetable"
         # A retrospective/advance query for a different day can use its prior.
         # Receipts from another service date must not appear as live evidence.
         recent_clock = None if target and asof_day != target else now
-        return profile._estimate(route_id,from_stop,to_stop,service_second,scheduled_seconds,recent_clock)
+        return profile._estimate(route_id,from_stop,to_stop,service_second,scheduled_seconds,recent_clock,history)
 
-    def _estimate(self,route_id,from_stop,to_stop,service_second,scheduled_seconds,now):
+    def _estimate(self,route_id,from_stop,to_stop,service_second,scheduled_seconds,now,history):
         base = max(1,int(scheduled_seconds))
         route = str(route_id)
         start, end = str(from_stop), str(to_stop)
         time_bin = str((int(service_second) % 86400) // BIN_SECONDS)
-        ratio = self.route_ratios.get(route)
-        pair = self.pairs.get("|".join((route, start, end)))
+        ratio = history.route_ratios.get(route)
+        pair = history.pairs.get("|".join((route, start, end)))
         estimate = float(base)
         source = "timetable"
         if ratio:

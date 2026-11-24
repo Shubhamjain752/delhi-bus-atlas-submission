@@ -29,6 +29,11 @@ __pycache__/
 !/data/observed-service-gaps.json
 !/data/map-context.geojson.gz
 !/data/eta_model.json.gz
+!/data/from-2026-11/
+/data/from-2026-11/**
+!/data/from-2026-11/eta_model.json.gz
+!/data/from-2026-11/weekend/
+!/data/from-2026-11/weekend/eta_model.json.gz
 !/data/eta_metrics.json
 !/data/october-eta-comparison.json
 !/data/public-field-results.json
