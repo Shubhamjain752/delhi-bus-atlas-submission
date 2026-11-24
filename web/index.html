@@ -14,6 +14,7 @@
   <a class="skip" href="#planner">Skip to journey planner</a>
   <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
     <symbol id="ico-bus" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="15" rx="3"/><path d="M5 11h14M8 18.5v2m8-2v2M8.5 14.5h1m5 0h1M9 6.5h6"/></symbol>
+    <symbol id="ico-clear" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
     <symbol id="ico-swap" viewBox="0 0 24 24"><path d="M8 19V5m-4 4 4-4 4 4m4-4v14m4-4-4 4-4-4"/></symbol>
     <symbol id="ico-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.4"/></symbol>
     <symbol id="ico-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 6.5v6l3.5 2"/></symbol>
@@ -46,19 +47,31 @@
                 <span class="point-symbol start" aria-hidden="true"></span>
                 <div class="point-input">
                   <div class="origin-label"><label for="origin">From</label><button id="use-location" type="button">Use my location</button></div>
-                  <input id="origin" placeholder="Stop name or lat, lon" role="combobox" aria-expanded="false" aria-controls="origin-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Kashmere Gate City Bus Terminal" required>
+                  <div class="point-value">
+                    <input id="origin" placeholder="Stop name or coordinates" role="combobox" aria-expanded="false" aria-controls="origin-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Kashmere Gate City Bus Terminal" required>
+                    <button class="clear-point" id="origin-clear" type="button" aria-label="Clear From" title="Clear From"><svg class="ico" aria-hidden="true"><use href="#ico-clear"/></svg></button>
+                  </div>
                 </div>
                 <button class="square pick" id="origin-map" type="button" title="Pick origin on map" aria-label="Pick origin on map" aria-pressed="false"><svg class="ico"><use href="#ico-pin"/></svg></button>
-                <ul id="origin-list" class="suggestions" role="listbox" aria-label="Origin stops" hidden></ul>
+                <div class="stop-picker" id="origin-picker" hidden>
+                  <p class="stop-search-status" id="origin-search-status" role="status"></p>
+                  <ul id="origin-list" class="suggestions" role="listbox" aria-label="Origin stops" hidden></ul>
+                </div>
               </div>
               <div class="point-row">
                 <span class="point-symbol end" aria-hidden="true"></span>
                 <div class="point-input">
                   <label for="destination">To</label>
-                  <input id="destination" placeholder="Stop name or lat, lon" role="combobox" aria-expanded="false" aria-controls="destination-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Nehru Place Terminal" required>
+                  <div class="point-value">
+                    <input id="destination" placeholder="Stop name or coordinates" role="combobox" aria-expanded="false" aria-controls="destination-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Nehru Place Terminal" required>
+                    <button class="clear-point" id="destination-clear" type="button" aria-label="Clear To" title="Clear To"><svg class="ico" aria-hidden="true"><use href="#ico-clear"/></svg></button>
+                  </div>
                 </div>
                 <button class="square pick" id="destination-map" type="button" title="Pick destination on map" aria-label="Pick destination on map" aria-pressed="false"><svg class="ico"><use href="#ico-pin"/></svg></button>
-                <ul id="destination-list" class="suggestions" role="listbox" aria-label="Destination stops" hidden></ul>
+                <div class="stop-picker" id="destination-picker" hidden>
+                  <p class="stop-search-status" id="destination-search-status" role="status"></p>
+                  <ul id="destination-list" class="suggestions" role="listbox" aria-label="Destination stops" hidden></ul>
+                </div>
               </div>
             </div>
             <button class="square swap" id="swap" type="button" aria-label="Swap origin and destination" title="Swap stops"><svg class="ico"><use href="#ico-swap"/></svg></button>
@@ -76,11 +89,13 @@
       <section id="options" class="options-section" aria-labelledby="options-title" tabindex="-1">
         <div class="section-title"><h2 id="options-title">Journey options</h2><span id="option-count" hidden></span></div>
         <p id="result-context" class="result-context" hidden></p>
+        <p id="platform-choice" hidden></p>
         <div id="message" role="status" aria-live="polite"></div>
         <section id="boarding-options" aria-label="Possible boarding and later bus" hidden></section>
         <div id="boarding-alerts" role="status" aria-live="polite" aria-atomic="true"></div>
         <div id="walking-option" hidden></div>
         <div id="alternatives"></div>
+        <section id="nearby-alighting" class="details-card" aria-labelledby="nearby-alighting-title" hidden></section>
         <details id="earlier-departures" hidden>
           <summary>Earlier buses if you can reach the stop sooner</summary>
           <div id="earlier-departure-list"></div>

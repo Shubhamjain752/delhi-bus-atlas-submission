@@ -995,6 +995,54 @@
         ],
         "title": "EarlierBoardingOption"
       },
+      "EstimatedStreetWalk": {
+        "properties": {
+          "distance_m": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Distance M"
+          },
+          "seconds": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Seconds"
+          },
+          "geometry": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Geometry"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "warning": {
+            "type": "string",
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "distance_m",
+          "seconds",
+          "geometry",
+          "source",
+          "warning"
+        ],
+        "title": "EstimatedStreetWalk"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1146,6 +1194,17 @@
               }
             ]
           },
+          "nearby_alighting_option": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NearbyAlightingOption"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A usable bus ride ending near the chosen destination when no complete mapped journey was found."
+          },
           "direct_from_nearby_platforms": {
             "items": {
               "$ref": "#/components/schemas/NearbyDirectDeparture"
@@ -1207,6 +1266,45 @@
           "source"
         ],
         "title": "JourneyResult"
+      },
+      "NearbyAlightingOption": {
+        "properties": {
+          "journey": {
+            "$ref": "#/components/schemas/Itinerary",
+            "description": "From the requested origin through the last bus stop only."
+          },
+          "alighting_stop": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Place"
+          },
+          "straight_line_distance_m": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Straight Line Distance M",
+            "description": "Point-to-point separation, not walking distance."
+          },
+          "estimated_walk": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EstimatedStreetWalk"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Independently mapped street route when available; pedestrian access is uncertain."
+          }
+        },
+        "type": "object",
+        "required": [
+          "journey",
+          "alighting_stop",
+          "destination",
+          "straight_line_distance_m"
+        ],
+        "title": "NearbyAlightingOption"
       },
       "NearbyDirectDeparture": {
         "properties": {
@@ -1741,7 +1839,7 @@
           "endpoint_stops_considered": {
             "type": "integer",
             "title": "Endpoint Stops Considered",
-            "description": "Maximum number of nearby endpoint platforms considered for transfer journeys."
+            "description": "Maximum number of reachable platforms retained at each endpoint for transfer journeys."
           },
           "direct_endpoints": {
             "anyOf": [
@@ -1847,7 +1945,7 @@
         "properties": {
           "stops": {
             "items": {
-              "$ref": "#/components/schemas/Place"
+              "$ref": "#/components/schemas/StopSuggestion"
             },
             "type": "array",
             "title": "Stops"
@@ -1858,6 +1956,54 @@
           "stops"
         ],
         "title": "StopMatches"
+      },
+      "StopSuggestion": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Official GTFS platform ID, or null for a map pin."
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "via_stop": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Via Stop",
+            "description": "A common next stop on routes boarding here. This helps distinguish platforms with the same name."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "lat",
+          "lon"
+        ],
+        "title": "StopSuggestion"
       },
       "ValidationError": {
         "properties": {

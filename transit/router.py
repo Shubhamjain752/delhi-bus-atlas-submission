@@ -289,11 +289,13 @@ class _Query:
         if place["id"] in self.r.at:
             nearby = [(0,place["id"])] + [e for e in nearby if e[1] != place["id"]]
         result = {}
-        for _,s in nearby[:TRANSFER_ENDPOINT_LIMIT]:
+        for _,s in nearby:
             stop = self.r.stops[s]
             w = self.walk(place,stop) if outgoing else self.walk(stop,place)
             if w and w["distance_m"] <= self.max_walk:
                 result[s] = w
+                if len(result) >= TRANSFER_ENDPOINT_LIMIT:
+                    break
         return result
 
     def timeline(self, pid, k, day, offset, instance=None, boarding_index=None, position=None):

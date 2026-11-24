@@ -1,5 +1,9 @@
 # Using the journey API
 
+A typed stop name can refer to several nearby platforms. If the first match returns no bus, Atlas checks up to two more platforms at each end with the same official name within 250 metres of that match. The response gives the selected platform IDs and flags an ambiguous name. Passing a stop ID or coordinates fixes that endpoint. The other-hour comparison uses the same resolved endpoints. In the stop picker, `via_stop` names a common next stop on services boarding there when one is available.
+
+If the planner cannot route the last walk to a chosen pin or platform, `nearby_alighting_option` may contain a bus itinerary ending near it. Its arrival time is at the alighting stop. The distance remaining is measured in a straight line. If an independently mapped street route is available, `estimated_walk` adds its walking distance, duration and crossing warning.
+
 Start the planner and open the [runnable guide](http://127.0.0.1:8765/api-guide). The first example accepts two places, a departure time, and returns routes, stops and a breakdown of walking, waiting and riding.
 
 | Request | Result |

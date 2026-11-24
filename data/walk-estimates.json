@@ -1,0 +1,113 @@
+{
+  "source": "FOSSGIS pedestrian router / OpenStreetMap",
+  "checked_date": "2026-11-24",
+  "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+  "warning": "The route follows the mapped road and turns at a junction. A continuous pavement and a pedestrian crossing have not been confirmed.",
+  "osm_ways": [
+    77363935,
+    1541278191,
+    77363996
+  ],
+  "routes": [
+    {
+      "from_stop": "2559",
+      "to_stop": "2563",
+      "from_coordinate": [
+        28.54857609786973,
+        77.24913317314967
+      ],
+      "to_coordinate": [
+        28.54755,
+        77.249444
+      ],
+      "request": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/77.24913317314967,28.54857609786973;77.249444,28.54755?overview=full&geometries=geojson&steps=true&annotations=nodes",
+      "response_sha256": "bf25814cb6bb9014443ee24136103f0dc26d70560ecff12b1969205bf6ab2edf",
+      "network_distance_m": 314.2,
+      "returned_duration_s": 251.2,
+      "geometry": [
+        [
+          28.548573,
+          77.249126
+        ],
+        [
+          28.549346,
+          77.248752
+        ],
+        [
+          28.549304,
+          77.248645
+        ],
+        [
+          28.549012,
+          77.248785
+        ],
+        [
+          28.548421,
+          77.24907
+        ],
+        [
+          28.547563,
+          77.24948
+        ]
+      ],
+      "osm_nodes": [
+        2307254553,
+        910665041,
+        910664952,
+        7222736999,
+        1041938544,
+        5377411221
+      ]
+    },
+    {
+      "from_stop": "2563",
+      "to_stop": "2559",
+      "from_coordinate": [
+        28.54755,
+        77.249444
+      ],
+      "to_coordinate": [
+        28.54857609786973,
+        77.24913317314967
+      ],
+      "request": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/77.249444,28.54755;77.24913317314967,28.54857609786973?overview=full&geometries=geojson&steps=true&annotations=nodes",
+      "response_sha256": "87acb230601bfed74d1147953014af1749112f57af769ea0c4f0a0d657fe9808",
+      "network_distance_m": 314.2,
+      "returned_duration_s": 251.2,
+      "geometry": [
+        [
+          28.547563,
+          77.24948
+        ],
+        [
+          28.548421,
+          77.24907
+        ],
+        [
+          28.549012,
+          77.248785
+        ],
+        [
+          28.549304,
+          77.248645
+        ],
+        [
+          28.549346,
+          77.248752
+        ],
+        [
+          28.548573,
+          77.249126
+        ]
+      ],
+      "osm_nodes": [
+        5377411221,
+        1041938544,
+        7222736999,
+        910664952,
+        910665041,
+        2307254553
+      ]
+    }
+  ]
+}

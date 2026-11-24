@@ -120,6 +120,27 @@ class DelhiGraphTest(unittest.TestCase):
         self.assertIn([28.5689344,77.2117954],trip['geometry'])
         self.assertIn([28.5693055,77.211831],trip['geometry'])
 
+    def test_unconfirmed_nehru_place_street_estimate(self):
+        a = (28.54857609786973,77.24913317314967)
+        b = (28.54755,77.249444)
+        for start, end in ((a,b),(b,a)):
+            with self.subTest(start=start):
+                self.assertIsNone(self.walk.route(start,end))
+                walk = self.walk.estimated_route(start,end,max_distance_m=350)
+                self.assertEqual((walk['distance_m'], walk['seconds']), (319,255))
+                self.assertEqual((walk['geometry'][0], walk['geometry'][-1]), (list(start),list(end)))
+                self.assertGreater(len(walk['geometry']), 6)
+                self.assertIn('FOSSGIS', walk['source'])
+                self.assertIn('crossing', walk['warning'])
+                self.assertIsNone(self.walk.estimated_route(start,end,max_distance_m=310))
+        self.assertIsNotNone(self.walk.estimated_route((28.54858,77.24913),b))
+        # Reflect 2559 over the foot router's road line. The two-metre move is
+        # within the pin tolerance but reverses the side of the carriageway.
+        self.assertIsNone(self.walk.estimated_route((28.54856990213027,77.24911882685033),b))
+        self.assertIsNone(self.walk.estimated_route((a[0]+.0001,a[1]),b))
+        self.assertIsNone(self.walk.estimated_route(a,(28.54732266056635,77.2538969382967)))
+        self.assertIsNone(self.walk.estimated_route((28.669372,77.227137),b))
+
     def test_kashmere_gate_and_nehru_place(self):
         # Published stop coordinates, correct to rounding within a metre.
         pairs = [((28.668535,77.226647),(28.666960,77.227456)),

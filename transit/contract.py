@@ -12,8 +12,12 @@ class Place(BaseModel):
     lon: float
 
 
+class StopSuggestion(Place):
+    via_stop: str | None = Field(default=None, description="A common next stop on routes boarding here. This helps distinguish platforms with the same name.")
+
+
 class StopMatches(BaseModel):
-    stops: list[Place]
+    stops: list[StopSuggestion]
 
 
 class ReplayInfo(BaseModel):
@@ -157,7 +161,7 @@ class SearchLimits(BaseModel):
     max_walk_m: int
     transfer_walk_m: int
     transfer_buffer_seconds: int
-    endpoint_stops_considered: int = Field(description="Maximum number of nearby endpoint platforms considered for transfer journeys.")
+    endpoint_stops_considered: int = Field(description="Maximum number of reachable platforms retained at each endpoint for transfer journeys.")
     direct_endpoints: Literal["all_in_walking_radius"] | None = Field(default=None, description="Direct-service searches consider connecting stops throughout the walking radius.")
     max_transfer_candidates: int
 
@@ -213,6 +217,22 @@ class EarlierBoardingOption(PlatformService):
     egress_walk_seconds: int = Field(ge=0)
 
 
+class EstimatedStreetWalk(BaseModel):
+    distance_m: int = Field(ge=0)
+    seconds: int = Field(ge=0)
+    geometry: list[tuple[float, float]]
+    source: str
+    warning: str
+
+
+class NearbyAlightingOption(BaseModel):
+    journey: Itinerary = Field(description="From the requested origin through the last bus stop only.")
+    alighting_stop: Place
+    destination: Place
+    straight_line_distance_m: int = Field(ge=0, description="Point-to-point separation, not walking distance.")
+    estimated_walk: EstimatedStreetWalk | None = Field(default=None, description="Independently mapped street route when available; pedestrian access is uncertain.")
+
+
 class JourneyResult(BaseModel):
     origin: Place
     replay: ReplayInfo | None = None
@@ -221,6 +241,7 @@ class JourneyResult(BaseModel):
     issued_asof: AwareDatetime = Field(description="Cutoff for receiving observations used in this forecast or replay.")
     journeys: list[Itinerary] = Field(description="Ranked alternatives. Empty if no usable path was found within the search limits.")
     walking_alternative: WalkingAlternative | None = None
+    nearby_alighting_option: NearbyAlightingOption | None = Field(default=None, description="A usable bus ride ending near the chosen destination when no complete mapped journey was found.")
     direct_from_nearby_platforms: list[NearbyDirectDeparture] = Field(default_factory=list, description="Direct services from nearby platforms when the walk to board cannot be verified within the search limit. Times start at the boarding platform. These services are separate from the ranked door-to-door journeys.")
     boarding_alerts: list[BoardingAlert] = Field(default_factory=list, description="Direct services whose fresh live estimate just precedes the rider’s platform arrival. These are excluded from feasible itineraries.")
     earlier_boarding_options: list[EarlierBoardingOption] = Field(default_factory=list, description="Upcoming direct departures before the mapped walk to board can finish. One upcoming departure per platform and line. Board only if you can reach that exact stop by its predicted departure; the planner does not time an alternative first mile.")

@@ -64,6 +64,8 @@ class Walking:
             self.obstacles = SegmentIndex(project(barriers[:,:2]), project(barriers[:,2:]))
         info_path = data_dir/'walk-meta.json'
         self.metadata = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
+        estimates = data_dir/'walk-estimates.json'
+        self.street_estimates = json.loads(estimates.read_text(encoding='utf-8')) if estimates.is_file() else None
         self.mapped_edge_count = len(self.edges)
         evidence = data_dir/'walk-crossings.json'
         if use_crossing_access and evidence.is_file():
@@ -166,6 +168,40 @@ class Walking:
         if max_distance_m is not None and max_distance_m < 0:
             return None
         return self._cached_route(start,end,max_distance_m)
+
+    def estimated_route(self, origin, destination, max_distance_m=None):
+        """An independently routed street estimate, only for reviewed endpoint pairs."""
+        if not self.street_estimates:
+            return None
+        start, end = list(origin), list(destination)
+        if not all(math.isfinite(value) for value in (*start,*end)):
+            return None
+        for entry in self.street_estimates['routes']:
+            line = entry['geometry']
+            distances = []
+            # Restrict reuse to a few metres on the same side of each road. The
+            # API's rounded map pins can then use the same reviewed junction.
+            for pin, registered, snap, neighbour in (
+                    (start, entry['from_coordinate'], line[0], line[1]),
+                    (end, entry['to_coordinate'], line[-1], line[-2])):
+                point, anchor, road, adjacent = project([pin, registered, snap, neighbour])
+                if np.linalg.norm(point - anchor) > 3:
+                    break
+                distance = np.linalg.norm(point - road)
+                tangent = adjacent - road
+                if (cross(tangent, point-road) * cross(tangent, anchor-road) < 0 or
+                        self._crosses_barrier(point, road, distance)):
+                    break
+                distances.append(distance)
+            if len(distances) != 2:
+                continue
+            distance = entry['network_distance_m'] + sum(distances)
+            if max_distance_m is not None and distance > max_distance_m:
+                return None
+            return {'distance_m':round(distance), 'seconds':round(distance / SPEED),
+                    'geometry':[start, *line, end], 'source':self.street_estimates['source'],
+                    'warning':self.street_estimates['warning']}
+        return None
 
     def _ends(self, match, arriving):
         edge, t, _, _ = match

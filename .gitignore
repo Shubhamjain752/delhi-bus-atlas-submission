@@ -16,6 +16,7 @@ __pycache__/
 !/data/walk.npz
 !/data/walk-meta.json
 !/data/walk-crossings.json
+!/data/walk-estimates.json
 !/data/crossing-access-check.json
 !/data/direct-journey-gps-check.json
 !/data/journey-access-check.json

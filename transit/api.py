@@ -21,6 +21,7 @@ from .contract import JourneyResult, StopMatches
 from .eta import EtaModel, IST
 from .field_trials import field_results
 from .router import Router
+from .endpoints import nearby_alighting_option, plan_with_stop_names, suggestions
 from .replay import load_november_capture
 from .route_observation import ObservationOverlay,PlatformResponse,recorded_restrictions,route_observation
 from .walking import Walking
@@ -92,15 +93,19 @@ class Planner:
         self.last_interest = time.monotonic()
         self.interest.set()
 
-    def query(self, origin, destination, dt, limit, transfers, replay=None):
+    def query(self, origin, destination, dt, limit, transfers, replay=None, *, include_nearby=True):
         now = datetime.now(IST)
         if not replay and abs((dt - now).total_seconds()) < 3600:
             self.touch()
         # A near-future journey can use observations received by the actual query time.
         issue = now if not replay and timedelta(0) <= dt-now <= timedelta(minutes=45) else dt
         overlay, recording = self.archived_feed(int(issue.timestamp())) if replay else (self.live, None)
-        result = self.router.journeys(origin, destination, dt, limit=limit,
-                                      max_transfers=transfers, asof=issue, eta=overlay)
+        options = dict(limit=limit, max_transfers=transfers, asof=issue, eta=overlay)
+        result = plan_with_stop_names(self.router, origin, destination, dt, **options)
+        if include_nearby and not result["journeys"]:
+            nearby = nearby_alighting_option(self.router, result, dt, **options)
+            if nearby:
+                result["nearby_alighting_option"] = nearby
         if recording:
             result["replay"] = recording
         result["walking_alternative"] = walking_alternative(self.walking, result)
@@ -138,10 +143,10 @@ def status():
     return app.state.planner.info()
 
 
-@app.get("/stops", response_model=StopMatches, tags=["Journey planning"])
+@app.get("/stops", response_model=StopMatches, response_model_exclude_none=True, tags=["Journey planning"])
 def stops(q: str = Query(min_length=1, max_length=150), limit: int = Query(10, ge=1, le=30)):
     """Find boarding platforms by name or identifier."""
-    return {"stops":app.state.planner.router.search(q.strip(), limit)}
+    return {"stops":suggestions(app.state.planner.router, q.strip(), limit)}
 
 
 @app.get("/journeys", response_model=JourneyResult, response_model_exclude_unset=True, tags=["Journey planning"])
@@ -164,7 +169,7 @@ def journeys(origin: str = Query(alias="from", min_length=1, max_length=160,
         result = planner.query(origin.strip(), destination.strip(), dt, limit, max_transfers, replay)
         if compare_hour is not None:
             other = dt.replace(hour=compare_hour, minute=0, second=0, microsecond=0)
-            compare = planner.query(origin.strip(), destination.strip(), other, 1, max_transfers)
+            compare = planner.query(result["origin"], result["destination"], other, 1, max_transfers, include_nearby=False)
             fastest = next(iter(compare["journeys"]), {})
             result["comparison"] = {"departure":other.isoformat(), "fastest_seconds":fastest.get("duration_seconds"),
                                     "arrival":fastest.get("arrival"), "warnings":compare.get("warnings", [])}

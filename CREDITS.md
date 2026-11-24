@@ -10,4 +10,6 @@ The browser uses [Leaflet](web/vendor/leaflet/LICENSE) and [Swagger UI](web/vend
 
 The [pedestrian crossing file](data/walk-crossings.json) is also derived from OpenStreetMap and distributed under ODbL 1.0. Its Delhi extract comes from OpenStreetMap France. The file records the source URL, checksum, mapped crossings and estimated street connections used by the planner. [Crossing builder](tools/build_crossing_access.py)
 
+The [FOSSGIS walking router](https://routing.openstreetmap.de/) supplied the separate street estimate for the two Nehru Place platforms. Its [route geometry and source requests](data/walk-estimates.json) use OpenStreetMap data under ODbL 1.0.
+
 The [MIT License](LICENSE) covers the original Atlas code and documentation by Shubham Jain, Akhil Goyal and Keshav Gilra of Team IITBOYS. Materials in `data/`, external comparison material and third-party software remain subject to their respective publishers’ terms and notices.

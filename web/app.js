@@ -226,71 +226,148 @@ function endpointValue(id) {
     ? String(points[id].id ?? (points[id].lat+","+points[id].lon)) : $(id).value.trim();
 }
 
-function enableStopSearch(id) {
-  const input=$(id), list=$(id+"-list");
-  let items=[], chosen=-1, timer, searchController;
-  function close() {
-    list.hidden=true;
-    input.setAttribute("aria-expanded","false");
-    input.removeAttribute("aria-activedescendant");
-    chosen=-1;
-  }
-  function select(i) {
-    if (items[i]) setPoint(id,items[i]);
-    close();
-  }
-  function highlight(i) {
-    chosen=i;
-    Array.from(list.children).forEach((node,j) => node.setAttribute("aria-selected",String(i===j)));
-    if (list.children[i]) {
-      input.setAttribute("aria-activedescendant",list.children[i].id);
-      list.children[i].scrollIntoView({block:"nearest"});
+function platformDetail(stop, matches) {
+  const detail = "Stop " + stop.id;
+  if (stop.via_stop) return detail + " · Some buses continue to " + stop.via_stop;
+  const peers = matches.filter(item => item.name.trim().toLowerCase() === stop.name.trim().toLowerCase());
+  if (peers.length < 2) return detail;
+  if (peers.length === 2) {
+    const other = peers.find(item => item.id !== stop.id);
+    if (other) {
+      const north = (stop.lat - other.lat) * 111320;
+      const east = (stop.lon - other.lon) * 111320 * Math.cos(stop.lat * Math.PI / 180);
+      const metres = Math.hypot(north, east);
+      if (metres >= 5) {
+        const directions = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"];
+        const bearing = Math.round(Math.atan2(east, north) / (Math.PI / 4));
+        return detail + " · " + distanceText(metres) + " " + directions[(bearing + 8) % 8] + " of the other stop";
+      }
     }
   }
-  function refresh() {
+  return detail + " · " + stop.lat.toFixed(5) + ", " + stop.lon.toFixed(5);
+}
+
+function enableStopSearch(id) {
+  const input = $(id), list = $(id + "-list"), picker = $(id + "-picker");
+  const status = $(id + "-search-status");
+  let items = [], chosen = -1, timer, request;
+  let selectOnClick = false, justSelected = false;
+
+  function close() {
     clearTimeout(timer);
-    if (searchController) searchController.abort();
+    request?.abort();
+    request = null;
+    items = [];
+    chosen = -1;
+    picker.hidden = true;
+    list.hidden = true;
+    list.replaceChildren();
+    status.textContent = "";
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  }
+
+  function tell(text) {
+    picker.hidden = false;
+    status.textContent = text;
+  }
+
+  function select(i) {
+    setPoint(id, items[i]);
     close();
-    const query=input.value.trim();
-    if (query.length<2 || /^[-+]?\d+(?:\.\d+)?\s*,/.test(query)) return;
-    timer=setTimeout(async () => {
-      searchController=new AbortController();
+    justSelected = true;
+  }
+
+  function highlight(i) {
+    chosen = i;
+    Array.from(list.children).forEach((node, j) => node.setAttribute("aria-selected", String(i === j)));
+    const option = list.children[i];
+    input.setAttribute("aria-activedescendant", option.id);
+    option.scrollIntoView({block:"nearest"});
+  }
+
+  function refresh(initialArrow) {
+    close();
+    const query = input.value.trim();
+    if (!query || /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)\s*,/.test(query)) return;
+    if (points[id] && !points[id].id && input.value === points[id].name) return;
+    if (query.length < 2) {
+      tell("Type at least two characters to find a stop.");
+      return;
+    }
+    timer = setTimeout(async () => {
+      const controller = new AbortController();
+      request = controller;
+      tell("Looking up stops…");
       try {
-        const data=await getJSON("/stops",{q:query},searchController.signal);
-        if (input.value.trim()!==query || document.activeElement!==input) return;
-        items=data.stops || [];
-        list.replaceChildren();
-        items.forEach((item,i) => {
-          const li=element("li",null,item.name);
-          li.id=id+"-suggestion-"+i;
-          li.setAttribute("role","option");
-          li.setAttribute("aria-selected","false");
-          li.append(element("small",null,"Stop "+item.id+" · "+Number(item.lat).toFixed(3)+", "+Number(item.lon).toFixed(3)));
+        const data = await getJSON("/stops", {q:query}, controller.signal);
+        if (controller.signal.aborted || input.value.trim() !== query || document.activeElement !== input) return;
+        items = data.stops || [];
+        if (!items.length) {
+          tell("No matching stops. Try a shorter name or use the map pin.");
+          return;
+        }
+        tell(items.length === 1 ? "Choose this stop" : "Choose a stop");
+        items.forEach((item, i) => {
+          const li = element("li");
+          li.id = id + "-suggestion-" + i;
+          li.setAttribute("role", "option");
+          li.setAttribute("aria-selected", "false");
+          li.append(element("strong", null, item.name), element("small", null, platformDetail(item, items)));
           li.addEventListener("pointerdown", e => e.preventDefault());
           li.addEventListener("click", () => select(i));
           list.append(li);
         });
-        list.hidden=!items.length;
-        input.setAttribute("aria-expanded",String(Boolean(items.length)));
-      } catch { close(); }
-    },200);
+        list.hidden = false;
+        input.setAttribute("aria-expanded", "true");
+        if (initialArrow) highlight(initialArrow === "ArrowDown" ? 0 : items.length - 1);
+      } catch {
+        if (!controller.signal.aborted) tell("Couldn’t load stops. Try again or use the map pin.");
+      }
+    }, 180);
   }
-  input.addEventListener("input",() => {
-    if (id === "origin") resetLocationRequest();
-    points[id]=null; input.removeAttribute("aria-invalid"); refresh();
+
+  input.addEventListener("pointerdown", () => {
+    selectOnClick = document.activeElement !== input || justSelected;
+    justSelected = false;
   });
-  input.addEventListener("blur",() => setTimeout(close,100));
-  input.addEventListener("keydown",event => {
-    if (list.hidden) return;
-    if (event.key==="ArrowDown" || event.key==="ArrowUp") {
+  input.addEventListener("focus", () => {
+    if (ui.picking) cancelPick();
+    input.select();
+    refresh();
+  });
+  input.addEventListener("click", () => {
+    // Some browsers place the caret after the focus event on the first tap.
+    if (selectOnClick) input.select();
+    selectOnClick = false;
+  });
+  input.addEventListener("input", () => {
+    if (id === "origin") resetLocationRequest();
+    points[id] = null;
+    justSelected = false;
+    input.removeAttribute("aria-invalid");
+    refresh();
+  });
+  $(id + "-clear").addEventListener("click", () => {
+    input.value = "";
+    input.focus();
+    input.dispatchEvent(new Event("input", {bubbles:true}));
+  });
+  input.addEventListener("blur", close);
+  input.form.addEventListener("submit", close);
+  input.addEventListener("keydown", event => {
+    if (event.isComposing) return;
+    if (event.key === "Escape") { close(); return; }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const next=chosen<0 ? (event.key==="ArrowDown"?0:items.length-1) :
-        (chosen+(event.key==="ArrowDown"?1:-1)+items.length)%items.length;
+      if (!items.length) { refresh(event.key); return; }
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const next = chosen < 0 ? (step === 1 ? 0 : items.length - 1) : (chosen + step + items.length) % items.length;
       highlight(next);
-    } else if (event.key==="Enter" && chosen>=0) {
+    } else if (event.key === "Enter" && chosen >= 0) {
       event.preventDefault();
       select(chosen);
-    } else if (event.key==="Escape") close();
+    }
   });
 }
 
@@ -480,9 +557,9 @@ function selectedSummary(journey) {
   }
   panel.append(directions);
 }
-function showRoute(journey) {
+function showRoute(journey, nearbyStop=null) {
   routeLegend(journey);
-  selectedSummary(journey);
+  selectedSummary(nearbyStop ? null : journey);
   if (!map) return;
   routeLayer.clearLayers();
   const bounds=L.latLngBounds([]);
@@ -511,6 +588,11 @@ function showRoute(journey) {
       }
     }
   });
+  if (nearbyStop) {
+    L.circleMarker([nearbyStop.lat,nearbyStop.lon],{pane:"atlasRoutes",radius:7,weight:2,color:"#263650",fillColor:"#fff",fillOpacity:1})
+      .addTo(routeLayer).bindTooltip(element("span",null,"Get off at "+nearbyStop.name),{permanent:true,direction:"top"});
+    bounds.extend([nearbyStop.lat,nearbyStop.lon]);
+  }
   const shared=sameLocation(journey);
   for (const id of shared?["origin"]:["origin","destination"]) {
     const point=ui.data?.[id];
@@ -544,8 +626,10 @@ function choices() {
   const hasWalk=!!ui.data?.walking_alternative;
   const hasNearby=!!ui.data?.direct_from_nearby_platforms?.length;
   const hasEarly=!!ui.data?.earlier_boarding_options?.length;
-  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding && !hasNearby && !hasEarly;
-  $("mobile-results").textContent=(hasNearby || hasEarly) && !options.length && !hasWalk?"View departures ↓":
+  const hasPartial=!!ui.data?.nearby_alighting_option && !options.length;
+  $("mobile-results").hidden=!options.length && !hasWalk && !ui.boarding && !hasNearby && !hasEarly && !hasPartial;
+  $("mobile-results").textContent=hasPartial && !hasWalk && !ui.boarding?"View bus to nearby stop ↓":
+    (hasNearby || hasEarly) && !options.length && !hasWalk?"View departures ↓":
     ui.boarding?"View bus options ↓":hasWalk?(options.length?"View options ↓":"View walk ↓"):
     atDestination?"View result ↓":"View "+options.length+" journey"+(options.length!==1?"s":"")+" ↓";
   $("option-count").hidden=!options.length || atDestination || !!ui.boarding;
@@ -594,6 +678,42 @@ function choices() {
     if (others) choice.append(element("div","choice-boarding",others+" other direct "+(others===1?"line serves":"lines serve")+" both stops"));
     box.append(choice);
   });
+}
+function nearbyAlightingChoice() {
+  const box=$("nearby-alighting"), option=ui.data?.nearby_alighting_option;
+  box.replaceChildren();
+  box.hidden=!option || !!ui.data.journeys?.length;
+  if (box.hidden) return;
+  const {journey, alighting_stop:stop, destination, straight_line_distance_m:distance, estimated_walk:walk}=option;
+  const sameName=stop.name===destination.name && stop.id!==destination.id;
+  const stopLabel=sameName && stop.id?stop.name+" (stop "+stop.id+")":stop.name;
+  const destinationLabel=sameName && destination.id?destination.name+" (stop "+destination.id+")":destination.name;
+  const heading=element("h3",null,"Bus to "+stopLabel);
+  heading.id="nearby-alighting-title";
+  box.append(heading,element("p","boarding-context",
+    "Estimated arrival at this stop: "+arrivalText(journey.departure,journey.arrival)+" ("+duration(journey.duration_seconds)+" from your start)."));
+  const steps=element("ol","platform-services");
+  for (const leg of journey.legs) {
+    if (leg.mode==="bus") {
+      steps.append(element("li",null,"Take "+(leg.route || leg.route_id)+" from "+leg.from.name+" at "+
+        arrivalText(journey.departure,leg.departure)+" to "+leg.to.name+"."));
+    } else if (leg.mode==="walk" && leg.seconds>0) {
+      steps.append(element("li",null,"Walk "+duration(leg.seconds)+" to "+leg.to.name+"."));
+    } else if (leg.mode==="wait" && leg.seconds>0) {
+      steps.append(element("li",null,"Allow "+waitDuration(leg.seconds)+" to wait at "+leg.from.name+"."));
+    }
+  }
+  box.append(steps);
+  const separation=destinationLabel+" is "+distanceText(distance)+" from this stop in a straight line.";
+  if (walk) {
+    const finish=new Date(Date.parse(journey.arrival)+walk.seconds*1000).toISOString();
+    box.append(element("p","boarding-guidance","Estimated final walk: about "+duration(walk.seconds)+
+      " ("+distanceText(walk.distance_m)+"). If this walking route is usable, you could reach "+
+      destinationLabel+" around "+arrivalText(journey.departure,finish)+"."),
+      element("p","boarding-context",separation+" Walking estimate: "+sourceName(walk.source)+". "+walk.warning));
+  } else {
+    box.append(element("p","boarding-context",separation+" Atlas could not verify a walking route or estimate when you would reach your destination."));
+  }
 }
 function walkingChoice() {
   const box=$("walking-option"), walk=ui.data?.walking_alternative;
@@ -1055,8 +1175,12 @@ function showWarnings(warnings) {
   const section=$("notes"), list=section.querySelector("ul");
   list.replaceChildren();
   const valid=[...new Set((warnings || []).filter(Boolean))];
-  valid.forEach(note=>list.append(element("li",null,note)));
-  section.hidden=!valid.length;
+  const platformNotes = valid.filter(note => note.startsWith("Several platforms share"));
+  $("platform-choice").textContent = platformNotes.join(" ");
+  $("platform-choice").hidden = !platformNotes.length;
+  const remaining = valid.filter(note => !platformNotes.includes(note));
+  remaining.forEach(note=>list.append(element("li",null,note)));
+  section.hidden=!remaining.length;
 }
 function showBoardingAlerts(alerts) {
   const panel=$("boarding-alerts");
@@ -1096,7 +1220,7 @@ async function searchJourney(submittedByRider=false) {
   const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30"};
   if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
   ui.data=null; ui.submitted=null; ui.boarding=null;
-  choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
+  choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();nearbyAlightingChoice();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
   $("options").setAttribute("aria-busy","true");
   $("journey-form").querySelector(".submit").disabled=true;
   showMessage("Finding catchable buses and walking connections…");
@@ -1105,13 +1229,20 @@ async function searchJourney(submittedByRider=false) {
     if (ticket!==ui.request) return;
     ui.data=data;ui.submitted=params;ui.selected=0;
     ui.boarding=actionableBoarding(data.boarding_alerts);
-    choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();
+    choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();nearbyAlightingChoice();
     if (showConditionalFirst(ui.boarding)) selectBoarding("conditional_itinerary");
     else if (ui.boarding && sameBoardingJourney(data.journeys?.[0],ui.boarding.fallback_itinerary)) selectBoarding("fallback_itinerary");
     else if (!data.journeys?.length && data.walking_alternative) selectWalk();
+    else if (!data.journeys?.length && data.nearby_alighting_option) {
+      showRoute(data.nearby_alighting_option.journey,data.nearby_alighting_option.alighting_stop);
+    }
     else selectJourney(0);
     showWarnings(data.warnings);showBoardingAlerts(data.boarding_alerts);resultContext(params.depart);
-    if (!data.journeys?.length && !ui.boarding && data.direct_from_nearby_platforms?.length) {
+    if (!data.journeys?.length && !ui.boarding && data.nearby_alighting_option) {
+      showMessage(data.nearby_alighting_option.estimated_walk?
+        "This bus gets you close. Check the estimated final walk below.":
+        "This bus gets you part of the way. The final walk is unverified.");
+    } else if (!data.journeys?.length && !ui.boarding && data.direct_from_nearby_platforms?.length) {
       showMessage("The planner could not map a complete bus journey from your start. Nearby departures are listed below.");
     } else if (!data.journeys?.length && !ui.boarding && data.earlier_boarding_options?.length) {
       showMessage("The earlier departures below require reaching the boarding stop sooner than the estimated walk.");
