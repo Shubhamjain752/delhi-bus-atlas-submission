@@ -2,7 +2,7 @@
 
 Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the 8:45 a.m. Rohini Sector 22 to Azadpur example, Atlas estimates that taking the direct 102DOWN saves 12 minutes of walking and gets you there about three minutes later than changing buses.
 
-[Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
+[Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Demo video · 1 min 9 sec (MP4)](submission/03-demo-recut.mp4) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
 
 Travelling now? Choose **Use my location** beside **From**, allow location access, then choose **Now** and **Find journeys**. You can also type a stop or pick a point on the map.
 
