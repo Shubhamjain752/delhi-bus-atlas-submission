@@ -4,6 +4,8 @@ Enter two places in Delhi and the time you want to leave. Atlas shows where to w
 
 [Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
 
+Travelling now? Choose **Use my location** beside **From**, allow location access, then choose **Now** and **Find journeys**. You can also type a stop or pick a point on the map.
+
 [Proposal (PDF)](submission/01-proposal.pdf) · [Technical note (PDF)](submission/02-technical-note.pdf) · [Validation report (PDF)](submission/05-validation.pdf)
 
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  

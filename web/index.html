@@ -30,7 +30,7 @@
     <div class="header-view"><svg class="ico"><use href="#ico-map"/></svg> Journey planner</div>
     <a class="api-link" href="/api-guide">API guide <span aria-hidden="true">↗</span></a>
     <div class="status-wrap">
-      <button type="button" class="feed-status" id="feed-toggle" aria-controls="feed-panel" aria-expanded="false"><span class="status-dot"></span><span id="feed-text">Data status</span><span id="feed-short">Data status</span><svg class="ico"><use href="#ico-chevron"/></svg></button>
+      <button type="button" class="feed-status" id="feed-toggle" aria-controls="feed-panel" aria-expanded="false"><span class="status-dot"></span><span id="feed-text">Checking bus GPS</span><span id="feed-short">Checking GPS</span><svg class="ico"><use href="#ico-chevron"/></svg></button>
       <div id="feed-panel" class="status-popover" hidden></div>
     </div>
   </header>
@@ -45,7 +45,7 @@
               <div class="point-row">
                 <span class="point-symbol start" aria-hidden="true"></span>
                 <div class="point-input">
-                  <label for="origin">From</label>
+                  <div class="origin-label"><label for="origin">From</label><button id="use-location" type="button">Use my location</button></div>
                   <input id="origin" placeholder="Stop name or lat, lon" role="combobox" aria-expanded="false" aria-controls="origin-list" aria-describedby="point-help" aria-autocomplete="list" autocomplete="off" value="Kashmere Gate City Bus Terminal" required>
                 </div>
                 <button class="square pick" id="origin-map" type="button" title="Pick origin on map" aria-label="Pick origin on map" aria-pressed="false"><svg class="ico"><use href="#ico-pin"/></svg></button>
@@ -63,6 +63,7 @@
             </div>
             <button class="square swap" id="swap" type="button" aria-label="Swap origin and destination" title="Swap stops"><svg class="ico"><use href="#ico-swap"/></svg></button>
           </div>
+          <p id="location-status" role="status" aria-live="polite"></p>
           <div class="departure-label"><label for="depart">Leave at</label><span id="time-zone">India Standard Time · UTC+05:30</span></div>
           <div class="departure-row">
             <input id="depart" type="datetime-local" aria-describedby="time-zone" value="2026-10-15T08:45" required>

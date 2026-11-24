@@ -433,6 +433,29 @@ h1 {
   font-weight:650;
 }
 
+.origin-label {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+#use-location {
+  min-height:24px;
+  background:transparent;
+  color:var(--indigo);
+  border:0;
+  padding:2px 3px;
+  font:inherit;
+  font-size:12px;
+  font-weight:650;
+}
+
+#use-location:hover {text-decoration:underline}
+#use-location:disabled {color:var(--muted)}
+#location-status {margin:-8px 0 14px; color:#485675; font-size:13px; line-height:1.45}
+#location-status:empty {margin:0}
+
 .point-input input {
   padding:0;
   width:100%;

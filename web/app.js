@@ -8,6 +8,7 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matc
 const timeFormat = new Intl.DateTimeFormat("en-GB", {timeZone:"Asia/Kolkata", hour:"2-digit", minute:"2-digit"});
 const exactFormat = new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit"});
 const opens502Replay = new URLSearchParams(location.search).get("replay")==="502";
+let originRevision = 0;
 let map, routeLayer, labelLayer, roadLayer, comparisonRequest;
 const svgNS = "http://www.w3.org/2000/svg";
 
@@ -146,10 +147,54 @@ function resultContext(departure) {
   }
 }
 function setPoint(which, item) {
+  if (which === "origin") resetLocationRequest();
   points[which] = item;
   $(which).value = item.name;
   $(which).removeAttribute("aria-invalid");
 }
+function resetLocationRequest() {
+  originRevision++;
+  $("use-location").disabled = false;
+  $("location-status").textContent = "";
+}
+
+function useCurrentLocation() {
+  cancelPick();
+  resetLocationRequest();
+  const revision = originRevision;
+  const button = $("use-location"), status = $("location-status");
+  const fallback = "Enter a Delhi stop or choose a point on the map.";
+  if (!window.isSecureContext || !navigator.geolocation) {
+    status.textContent = "Location is unavailable in this browser. " + fallback;
+    return;
+  }
+  button.disabled = true;
+  status.textContent = "Finding your location…";
+  function failed(error) {
+    if (revision !== originRevision) return;
+    button.disabled = false;
+    const reason = error?.code === 1 ? "Location permission was denied."
+      : error?.code === 3 ? "The location request timed out." : "Your device could not find your location.";
+    status.textContent = reason + " " + fallback;
+  }
+  try {
+    navigator.geolocation.getCurrentPosition(position => {
+      if (revision !== originRevision) return;
+      button.disabled = false;
+      const {latitude, longitude, accuracy} = position.coords;
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {failed(); return;}
+      // Bounds of the Delhi pedestrian map in data/walk-meta.json (south, west, north, east).
+      if (latitude < 28.25 || latitude > 28.96 || longitude < 76.78 || longitude > 77.55) {
+        status.textContent = "Your location is outside the Delhi map. " + fallback;
+        return;
+      }
+      setPoint("origin",{lat:Number(latitude.toFixed(5)),lon:Number(longitude.toFixed(5)),name:"Current location"});
+      const precision = Number.isFinite(accuracy) && accuracy > 0 ? " (within about " + Math.ceil(accuracy) + " m)" : "";
+      status.textContent = "Starting point set" + precision + ". Choose Find journeys to use it.";
+    }, failed, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
+  } catch {failed();}
+}
+
 function endpointValue(id) {
   return points[id] && $(id).value === points[id].name
     ? String(points[id].id ?? (points[id].lat+","+points[id].lon)) : $(id).value.trim();
@@ -204,7 +249,10 @@ function enableStopSearch(id) {
       } catch { close(); }
     },200);
   }
-  input.addEventListener("input",() => {points[id]=null; input.removeAttribute("aria-invalid");refresh();});
+  input.addEventListener("input",() => {
+    if (id === "origin") resetLocationRequest();
+    points[id]=null; input.removeAttribute("aria-invalid"); refresh();
+  });
   input.addEventListener("blur",() => setTimeout(close,100));
   input.addEventListener("keydown",event => {
     if (list.hidden) return;
@@ -266,6 +314,7 @@ function pickPoint(latlng) {
   $(target+"-map").focus({preventScroll:true});
 }
 function startPick(target) {
+  if (target === "origin") resetLocationRequest();
   if (!map) {
     showMessage("Map selection is unavailable. Enter a stop or latitude, longitude instead.",true);
     return;
@@ -1006,6 +1055,7 @@ function showBoardingAlerts(alerts) {
   }
 }
 async function searchJourney(submittedByRider=false) {
+  if (submittedByRider && $("use-location").disabled) resetLocationRequest();
   const from=endpointValue("origin"), to=endpointValue("destination"), depart=$("depart").value;
   if (!from || !to || !depart) {
     const name=!from?"origin":!to?"destination":"depart";
@@ -1063,13 +1113,13 @@ async function loadStatus() {
     const live=["active","live","fresh","available","online"].includes(state);
     $("feed-text").textContent=live?"Live feed available":state==="stale"?"Live feed delayed":
       state==="fresh_no_match"?"No matched live trips":"Live feed offline";
-    $("feed-short").textContent=live?"Live feed":state==="stale"?"Delayed feed":state==="fresh_no_match"?"No live match":"Offline";
+    $("feed-short").textContent=live?"Live GPS":state==="stale"?"GPS delayed":state==="fresh_no_match"?"No live match":"GPS offline";
     $("feed-toggle").setAttribute("aria-label","Current feed status. "+$("feed-text").textContent);
     document.querySelector(".status-dot").classList.toggle("online",live);
     panel.replaceChildren(element("strong",null,"Current feed status"),element("p",null,
       "Delhi bus timetable"+(data.feed_version?" · "+data.feed_version:"")+". "+
       (live?"Current service updates are available. Each journey leg shows the data used for its departure time.":
-        "The timetable and archived GPS replay are available for journey planning.")));
+        "You can still plan a journey using the timetable and past bus travel times.")));
     if (data.live?.timestamp) {
       const observed = new Date(data.live.timestamp*1000).toLocaleString("en-GB",{
         timeZone:"Asia/Kolkata",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
@@ -1077,7 +1127,7 @@ async function loadStatus() {
     }
   } catch {
     $("feed-text").textContent="Data status unavailable";
-    $("feed-short").textContent="Unavailable";
+    $("feed-short").textContent="Status unknown";
     $("feed-toggle").setAttribute("aria-label","Current feed status unavailable");
     document.querySelector(".status-dot").classList.remove("online");
     panel.replaceChildren(element("p",null,"The planner could not check the local data service."));
@@ -1097,7 +1147,9 @@ function initialize() {
     enableStopSearch(id);
     $(id+"-map").addEventListener("click",()=>startPick(id));
   }
+  $("use-location").addEventListener("click",useCurrentLocation);
   $("swap").addEventListener("click",()=>{
+    resetLocationRequest();
     [points.origin,points.destination]=[points.destination,points.origin];
     const a=$("origin"),b=$("destination");
     [a.value,b.value]=[b.value,a.value];
