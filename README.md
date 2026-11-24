@@ -6,7 +6,7 @@ Enter two places in Delhi and the time you want to leave. Atlas shows where to w
 
 Travelling now? Choose **Use my location** beside **From**, allow location access, then choose **Now** and **Find journeys**. You can also type a stop or pick a point on the map.
 
-[Proposal (PDF)](submission/01-proposal.pdf) · [Technical note (PDF)](submission/02-technical-note.pdf) · [Validation report (PDF)](submission/05-validation.pdf)
+[Proposal (PDF)](submission/01-proposal.pdf) · [Technical note (PDF)](submission/02-technical-note.pdf) · [Validation report (PDF)](submission/05-validation.pdf) · [How the October GPS was used](docs/october-gps-coverage.md)
 
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
@@ -69,7 +69,7 @@ We also tested 1,728 departures across six October dates. GPS identified a clear
 
 For 304 searches, GPS also showed when both planners' suggested lines passed. For someone already at the stop, the median extra wait compared with the first verified line fell from 3 minutes 32 seconds to about 3 minutes 5 seconds. [Wait comparison](data/passenger-wait-cost.json)
 
-GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [comparison screen](http://127.0.0.1:8765/field-trials.html) shows where each estimate could be checked.
+GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [public journey comparisons](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html) shows where each estimate could be checked.
 
 Further work should test waits on routes with irregular service, verify road crossings near AIIMS, and repeat after-midnight boarding checks on fresh dates. [Build guide, data and test commands](AGENTS.md) · [Technical note](docs/technical-note.md) · [Credits](CREDITS.md) · [Official challenge](https://delhi.transportstack.in/hackathon/)
 

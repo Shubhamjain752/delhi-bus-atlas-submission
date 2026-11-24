@@ -19,6 +19,14 @@ The serving map adds documented stair approaches to mapped pedestrian crossings.
 
 The pedestrian profile and signal assumptions are documented with measured pin attachment statistics. A route that cannot connect through mapped topology produces an explicit coverage warning. Endpoints given as named stops may have more than one platform with the same name. Use a specific ID or map pin for reproducible comparisons. [Walking model](walking.md)
 
+## What the judge can try
+
+The web map calls the same `GET /journeys` API another passenger app can use. Supply a starting place, destination and departure time. The JSON reply gives boarding and exit stops, a route for each ride, any change and the walk, wait and ride times. Each time estimate identifies its source. A second departure hour can be requested on the same call. [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
+
+For a direct trip Atlas checks compatible stops within a default walking limit of 1.1 km at each end. For a trip with a change, it searches up to 12 reachable platforms at each end and evaluates up to 180 candidate connections. Walking uses OpenStreetMap streets, paths, stairs and crossings open to pedestrians. A platform across a divided road needs a mapped connection. The ranking uses the arrival time after the final walk. [Walking assumptions](walking.md)
+
+The hosted service loads two compressed travel-time profiles, one for weekdays and one for weekends, from its deployment package. Each stores counts and typical times between ordered stops. Four dates supplied the fitted history. All 31 October dates contributed to a separate study of boarding advice. [Training dates and test results](october-gps-coverage.md)
+
 ## Travel-time estimation
 
 The historical model learns elapsed times on directed stop pairs from GPS sequences. It keeps real signal delays and stop dwell within the observed passage intervals. Training and validation dates are separate. At prediction time, a recent completed traversal can update a historical estimate only if its receipt and observation times permit it. An archived replay evaluates all downstream predictions with the same issue clock. Sparse pairs use a route-level estimate or a timetable fallback. The ETA report defines the sample, filters, errors and catchability test. Evaluation
