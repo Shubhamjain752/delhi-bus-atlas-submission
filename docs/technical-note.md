@@ -25,7 +25,7 @@ The web map calls the same `GET /journeys` API another passenger app can use. Su
 
 For a direct trip Atlas checks compatible stops within a default walking limit of 1.1 km at each end. For a trip with a change, it searches up to 12 reachable platforms at each end and evaluates up to 180 candidate connections. Walking uses OpenStreetMap streets, paths, stairs and crossings open to pedestrians. A platform across a divided road needs a mapped connection. The ranking uses the arrival time after the final walk. [Walking assumptions](walking.md)
 
-The hosted service loads two compressed travel-time profiles, one for weekdays and one for weekends, from its deployment package. Each stores counts and typical times between ordered stops. Four dates supplied the deployed profiles. A separate month-wide travel-time experiment reduced average next-stop error from 51 to 34 seconds on seven later test dates. We also used the month to test boarding advice. [Training dates and test results](october-gps-coverage.md)
+The hosted planner uses all 31 days of October GPS for November journeys. Two compressed files in `data/from-2026-11/` hold weekday and weekend travel times. The server chooses by Delhi service date. For an October replay it reads the earlier four-day history when that history was available at the time. The separate seven-day test used a fit through 24 October so the dates being scored stayed unseen. [Training dates and results](october-gps-coverage.md)
 
 ## Travel-time estimation
 

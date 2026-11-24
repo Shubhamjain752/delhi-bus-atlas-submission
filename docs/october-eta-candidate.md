@@ -1,12 +1,12 @@
 # Testing a month of travel times
 
-The deployed version of Delhi Bus Atlas learns weekday and weekend travel times from four October dates. This experiment asks whether more history improves predictions on later days and reaches routes or hours that previously had little data.
+The first Atlas prototype learned travel times from two weekdays and two weekend days. We tested whether more GPS history improved its predictions, then trained the version for November journeys on all 31 days of October.
 
 ## What improved
 
-**Average next-stop error fell from 51 seconds to 34 seconds.** We trained the candidate on 1–24 October. It and the deployed four-day model then predicted the same 5,941,620 bus movements across 2,113 route IDs on 25–31 October. Both used history alone. The timetable averaged 55 seconds of error on these movements.
+**Average next-stop error fell from 51 seconds to 34 seconds.** A model trained on 1–24 October and the original four-day model predicted the same 5,941,620 bus movements across 2,113 route IDs on 25–31 October. Both used history alone. The timetable averaged 55 seconds of error on these movements.
 
-| Movements in the seven-day test | Observations | Current model, average error | Candidate, average error |
+| Movements in the seven-day test | Observations | Four days of history, average error | 24 days of history, average error |
 | --- | ---: | ---: | ---: |
 | All movements | 5,941,620 | 50.96 s | 34.13 s |
 | Weekday | 4,128,661 | 50.69 s | 33.47 s |
@@ -29,7 +29,7 @@ We also built a separate profile on all 31 dates for future journeys. In four of
 - For each usable movement, score the predicted seconds against elapsed time from GPS. Report the average absolute error, the error within which 90% of observations fall, signed bias and observation count. Show weekdays, weekends and overnight separately, as well as the routes or stop pairs on which only the new fit can use history.
 - Keep the published 15 and 17 October results with the four-day model. Those dates are part of the candidate’s 1–24 October fit. Only the later test dates provide fresh evidence for this comparison.
 
-After evaluation, a separate fit may use all 31 dates for forecasts in November. The October test result belongs to the 1–24 October fit. Testing the 31-day version requires subsequent trips. All candidate files are kept separate from the two profiles used on Vercel. The 5:30 p.m. Rohini forecasts remain the versions recorded before departure.
+After evaluation we fitted the same method on all 31 dates. Those weekday and weekend files ship with the public planner for journeys from 1 November onward. October replays use the earlier profiles so they cannot see later GPS. The 34-second result belongs to the seven days set aside in the October test. The saved Rohini forecasts still show what each planner said before departure. [Inspect the running model](https://iitboys-delhi-bus-atlas.vercel.app/status)
 
 ## Reproduce the experiment
 

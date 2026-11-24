@@ -11,7 +11,7 @@ Travelling now? Choose **Use my location** beside **From**, allow location acces
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
-In a seven-day test, a candidate trained on more GPS history cut the average error between two stops from 51 seconds to 34. Both models predicted the same 5.94 million bus movements. The public planner uses the earlier model. [Results and reproduction steps](docs/october-eta-candidate.md)
+For journeys from November onward, Atlas uses bus movements from all 31 days of October. To test the approach, we first trained it on 1–24 October and predicted the next seven days. On 5.94 million rides between neighbouring stops, average error fell from 51 seconds with the original four-day model to 34 seconds. [October results](docs/october-eta-candidate.md) · [Check the running model](https://iitboys-delhi-bus-atlas.vercel.app/status)
 
 On the 5:30 p.m. Rohini to Azadpur check, we tracked a later 114DOWN for 55 minutes between the change stop and Azadpur. The same study follows the 957 and 174 that Google suggested at Budh Vihar. [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#journey-tuesday-transfer)
 
