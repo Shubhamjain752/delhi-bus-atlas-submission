@@ -30,6 +30,7 @@ __pycache__/
 !/data/map-context.geojson.gz
 !/data/eta_model.json.gz
 !/data/eta_metrics.json
+!/data/october-eta-comparison.json
 !/data/public-field-results.json
 !/data/weekend/
 /data/weekend/*
