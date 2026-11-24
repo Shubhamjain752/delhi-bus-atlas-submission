@@ -17,6 +17,8 @@ For Rohini to Azadpur at 5:30 p.m., the original Atlas forecast was 6:35 p.m. an
 
 Atlas now shows whether GPS has seen the scheduled bus in service and how far apart buses have been at the boarding stop. At the Rohini crossing, for example, the middle gap between recorded 808STDOWN movements on October weekdays from 4 to 6 p.m. was 18 min 40 sec. There were 64 measurable gaps across 22 weekdays. An earlier bus could have passed without reporting. [How Atlas checks a departure](docs/service-starts.md) · [Test results](docs/departure-history-evaluation.md)
 
+The separate October departure study is complete. GPS confirmed 18,525 scheduled starts at the first two passenger stops. For the 808STDOWN on weekdays from 4 to 6 p.m., none of 198 scheduled starts had sufficient GPS to confirm the run. A bus may have operated without a matching record. [October findings and downloadable counts](docs/service-starts.md#matching-a-scheduled-start-by-name)
+
 ## How a journey is planned
 
 ```mermaid

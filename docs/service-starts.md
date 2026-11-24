@@ -1,6 +1,6 @@
 # Did the bus start its trip?
 
-At 5:30 p.m. in Rohini, a passenger could ask when the 808STDOWN was due. The timetable listed a 5:25 p.m. start at Rohini Sector 37 E Bus Depot. That time alone could not establish that the bus had left. Atlas now shows what supports a departure and how far apart buses have been at the passenger’s stop.
+On 24 November, a passenger leaving Rohini at 5:30 p.m. could be offered the 808STDOWN. Its timetable listed a 5:25 p.m. start at Rohini Sector 37 E Bus Depot. Atlas estimated it would reach the passenger's stop around 5:45 p.m. The October study below explains what the GPS archive can tell us about this service. Confirming that particular November bus requires evidence from 24 November.
 
 ## Where does a route start?
 
@@ -22,7 +22,21 @@ The 31-day fit counted 163,185 qualifying origin movements on 1,663 route IDs. P
 
 ### Matching a scheduled start by name
 
-A separate check goes back to the original GPS records. It looks for the same physical bus and run within 45 metres of each of the first two stops, then checks the reported trip ID or unique route/start clock against the timetable. Ambiguous matches are withheld. Counts refer to scheduled starts in five-minute periods when the receiver was recording. A missing match leaves the run unresolved. The full-month run of this separate check is in progress at the time of writing. Its output lists the dates actually checked.
+We checked all 31 days of October. A start counted when the same vehicle and run appeared within 45 metres of the first two stops in order, with an unambiguous match to a scheduled trip. Each position had to reach the receiver within 90 seconds. A bus could start up to five minutes early or an hour late. We counted scheduled starts only in five-minute periods when the archive contained some GPS. Coverage could still be missing at either stop.
+
+GPS confirmed **18,525 of 2,401,829 eligible scheduled starts**, across 1,207 route IDs. Between midnight and 4 a.m. the count was 202 of 21,737. Those numbers measure how often these records could verify a run. The actual number of departures remains unknown.
+
+| Weekdays, 4–6 p.m. | Scheduled starts | Starts linked to that scheduled run |
+| --- | ---: | ---: |
+| 808STDOWN, Rohini Sec 37 E Bus Depot to Rohini Sec 36 | 198 | 0 |
+| 174DOWN, Kanjhawala Village (T) to Kanjhawala Chowk | 352 | 8 |
+| 764DOWN, Nehru Place Terminal to Paras Cinema | 418 | 25 |
+
+The 764DOWN illustrates why the two studies have different figures. The first study counted 199 movements along that stretch. The stricter study linked 25 starts to specific scheduled runs. Across Delhi in the final seven days, GPS confirmed 855 starts in groups that had recorded none in the first 24 days. A zero in October gives no basis to remove the November 808 from a passenger's choices.
+
+The compressed file groups counts by route ID, first stop ID, next stop ID, weekday or weekend, and two-hour period starting at midnight in Delhi. In each group, `observed_dates` lists dates with eligible scheduled starts. A listed date can have zero confirmed departures. The summary also gives counts by day and the number of dates with confirmations for the three examples. [Monthly summary](scheduled-starts-october.json) · [Grouped counts (GZIP, 223 KB)](../data/from-2026-11/scheduled-start-check.json.gz)
+
+Team IITBOYS calculated these statistics from the Delhi bus timetable v32 and the October 2026 DTC vehicle-position archive provided by Delhi Transport Stack and IIIT Delhi. The files contain grouped counts and coverage dates. Their SHA-256 checksum appears in the summary. [Data source](https://delhi.transportstack.in/data-services) · [Delhi Transport Stack data agreement](https://dts-backend.transportstack.in/api/document/download/1/422edd1d-4bfa-4a7d-843b-82d36e1eee6e)
 
 ## Rebuild
 

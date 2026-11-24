@@ -20,7 +20,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.month_boarding_scan import ARCHIVE, MONTH, PREVIOUS_EXTRACTS, archive_members, daily_database
-from tools.train_eta import boundary, format_clock, open_db
+from tools.train_eta import format_clock, open_db
 from transit.live import LiveOverlay
 from transit.router import IST, Router, approximate_m, coords
 
@@ -30,12 +30,63 @@ EARLY = 5*60
 LATE = 60*60
 
 
-def fix_identities(db, route, observed, received, point, midnight):
+FIX_COLUMNS = "SELECT vehicle_id,trip_id,lat,lng FROM vehicle_feed"
+FIX_FILTER = "timestamp=? AND route_id=? AND time=?"
+RANGE_SQL = FIX_COLUMNS + " NOT INDEXED WHERE rowid BETWEEN ? AND ? AND " + FIX_FILTER
+
+
+def receipt_ranges(db, block_size=32768):
+    """Read the table in bounded SQLite batches; verify exact spans even when receipt clocks reverse."""
+    first=db.execute("SELECT min(rowid) FROM vehicle_feed").fetchone()[0]
+    last=db.execute("SELECT max(rowid) FROM vehicle_feed").fetchone()[0]
+    spans=defaultdict(list)
+    if first is None:
+        return spans
+    previous=object()
+    for start in range(first,last+1,block_size):
+        end=start+block_size
+        groups=sorted(db.execute(
+            "SELECT min(rowid),max(rowid),time FROM vehicle_feed NOT INDEXED "
+            "WHERE rowid>=? AND rowid<? GROUP BY time",(start,end)))
+        if any(a[1]>=b[0] for a,b in zip(groups,groups[1:])):
+            # A was seen, then B, then A again in this block. Split exactly at
+            # each transition. Normal monotonically appended packets avoid this Python scan.
+            groups=((i,i,t) for i,t in db.execute(
+                "SELECT rowid,time FROM vehicle_feed WHERE rowid>=? AND rowid<? ORDER BY rowid",(start,end)))
+        for lo,hi,clock in groups:
+            if previous==clock:
+                lo=spans[clock][-1][0]
+                spans[clock][-1]=(lo,hi)
+            else:
+                spans[clock].append((lo,hi))
+            previous=clock
+    return spans
+
+
+def captured_periods(spans):
+    periods = set()
+    for clock in spans:
+        if not isinstance(clock,str) or len(clock)!=8:
+            continue
+        try:
+            h,m,s = map(int,clock.split(":"))
+        except ValueError:
+            continue
+        if 0<=h<24 and 0<=m<60 and 0<=s<60:
+            periods.add((h*3600+m*60+s)//300)
+    return periods
+
+
+def fix_identities(db, route, observed, received, point, midnight, spans=None):
     if not 0<=received-observed<=90 or not 0<=received-midnight<86400:
         return set()
-    rows = db.execute("SELECT vehicle_id,trip_id,lat,lng FROM vehicle_feed "
-                      "WHERE timestamp=? AND route_id=? AND time=?",
-                      (str(observed),route,format_clock(received-midnight)))
+    clock = format_clock(received-midnight)
+    params = (str(observed),route,clock)
+    if spans is None:
+        rows = db.execute(FIX_COLUMNS + " WHERE " + FIX_FILTER,params)
+    else:
+        rows = (row for start,end in spans.get(clock,())
+                for row in db.execute(RANGE_SQL,(start,end,*params)))
     vehicles = defaultdict(set)
     for bus,run,lat,lon in rows:
         if bus and run and lat and lon:
@@ -135,18 +186,20 @@ def process_day(day, options, router, members, seven, feed_hash, code_hash):
                 raise ValueError("Existing GPS database differs from source archive for "+day)
         with open_db(path) as db:
             # Exclude scheduled five-minute periods for which no receiver packet exists.
-            boundaries=[boundary(db,format_clock(t)) for t in range(0,86400,300)]
-            boundaries.append(db.execute("SELECT max(rowid)+1 FROM vehicle_feed").fetchone()[0])
-            captured={i for i,(a,b) in enumerate(zip(boundaries,boundaries[1:])) if b>a}
+            spans=receipt_ranges(db)
+            captured=captured_periods(spans)
             eligible={s for s in slots if s[0]//300 in captured}
+            plan=db.execute("EXPLAIN QUERY PLAN "+FIX_COLUMNS+" WHERE "+FIX_FILTER,
+                            ("0",0,"00:00:00")).fetchall()
+            lookup_spans=None if any("SEARCH" in r[-1] and "timestamp=?" in r[-1] for r in plan) else spans
             for row in records:
                 r,a,b,start,end,heard,confirmed=map(int,row)
                 if not midnight<=start<end<midnight+86400 or not 5<=end-start<=1200:
                     continue
-                first=fix_identities(db,r,start,heard,coords(router.stops[str(a)]),midnight)
+                first=fix_identities(db,r,start,heard,coords(router.stops[str(a)]),midnight,lookup_spans)
                 if not first:
                     continue
-                second=fix_identities(db,r,end,confirmed,coords(router.stops[str(b)]),midnight)
+                second=fix_identities(db,r,end,confirmed,coords(router.stops[str(b)]),midnight,lookup_spans)
                 for bus,raw in first & second:
                     slot=match_slot(raw,r,start-midnight,exact,clocks,(r,a,b))
                     if slot not in eligible:

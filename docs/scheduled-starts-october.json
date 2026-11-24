@@ -1,0 +1,219 @@
+{
+  "source": "Strictly matched scheduled starts in captured five-minute periods. Missing matches are unknown.",
+  "sha256": "e89c1972554a75b74baabaf47b776fd65516354eec23c5d9003a21c0d55b488b",
+  "output_bytes": 223399,
+  "dates": 31,
+  "legacy_dates_identical": 4,
+  "groups": {
+    "month": {
+      "scheduled": 2401829,
+      "matched": 18525
+    },
+    "weekday": {
+      "scheduled": 1700711,
+      "matched": 13048
+    },
+    "midnight_to_04": {
+      "scheduled": 21737,
+      "matched": 202
+    },
+    "weekend": {
+      "scheduled": 701118,
+      "matched": 5477
+    }
+  },
+  "candidate_origin_movements": 168132,
+  "ambiguous_slots": 87,
+  "total_buckets": 30870,
+  "buckets_with_at_least_one_match": 6619,
+  "scheduled_route_ids": 2522,
+  "routes_with_matches": 1207,
+  "calendar_slots": 8849,
+  "daily": {
+    "2026-10-01": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 692
+    },
+    "2026-10-02": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 693
+    },
+    "2026-10-03": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 692
+    },
+    "2026-10-04": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 732
+    },
+    "2026-10-05": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 320
+    },
+    "2026-10-06": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 624
+    },
+    "2026-10-07": {
+      "windows": 239,
+      "scheduled": 65383,
+      "matched": 539
+    },
+    "2026-10-08": {
+      "windows": 258,
+      "scheduled": 77288,
+      "matched": 677
+    },
+    "2026-10-09": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 253
+    },
+    "2026-10-10": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 537
+    },
+    "2026-10-11": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 360
+    },
+    "2026-10-12": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 578
+    },
+    "2026-10-13": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 635
+    },
+    "2026-10-14": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 630
+    },
+    "2026-10-15": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 625
+    },
+    "2026-10-16": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 657
+    },
+    "2026-10-17": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 605
+    },
+    "2026-10-18": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 700
+    },
+    "2026-10-19": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 694
+    },
+    "2026-10-20": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 667
+    },
+    "2026-10-21": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 646
+    },
+    "2026-10-22": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 632
+    },
+    "2026-10-23": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 635
+    },
+    "2026-10-24": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 604
+    },
+    "2026-10-25": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 687
+    },
+    "2026-10-26": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 605
+    },
+    "2026-10-27": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 623
+    },
+    "2026-10-28": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 530
+    },
+    "2026-10-29": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 569
+    },
+    "2026-10-30": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 524
+    },
+    "2026-10-31": {
+      "windows": 288,
+      "scheduled": 77902,
+      "matched": 560
+    }
+  },
+  "holdout_matches_in_previous_zero_match_buckets": 855,
+  "weekday_16_to_18_examples": {
+    "808STDOWN": {
+      "key": "852|468|470|weekday|8",
+      "first_passenger_stop": "Rohini Sec 37 E Bus Depot",
+      "next_stop": "Rohini Sec 36",
+      "scheduled": 198,
+      "matched": 0,
+      "eligible_dates": 22,
+      "dates_with_match": 0
+    },
+    "174DOWN": {
+      "key": "239|7578|712|weekday|8",
+      "first_passenger_stop": "Kanjhawala Village (T)",
+      "next_stop": "Kanjhawala Chowk",
+      "scheduled": 352,
+      "matched": 8,
+      "eligible_dates": 22,
+      "dates_with_match": 8
+    },
+    "764DOWN": {
+      "key": "2229|2560|5971|weekday|8",
+      "first_passenger_stop": "Nehru Place Terminal",
+      "next_stop": "Paras Cinema",
+      "scheduled": 418,
+      "matched": 25,
+      "eligible_dates": 22,
+      "dates_with_match": 17
+    }
+  }
+}
