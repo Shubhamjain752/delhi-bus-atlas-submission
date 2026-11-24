@@ -4,6 +4,8 @@ Enter two places in Delhi and the time you want to leave. Atlas shows where to w
 
 [Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
 
+[Proposal (PDF)](submission/01-proposal.pdf) · [Technical note (PDF)](submission/02-technical-note.pdf) · [Validation report (PDF)](submission/05-validation.pdf)
+
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
@@ -26,7 +28,7 @@ Open a bus leg to see other lines serving the same two stops. **Check next bus a
 ## Run the Delhi planner
 
 1. Install Python **3.12**. Download or clone this repository.
-2. Get **Delhi Buses: GTFS Static Data – DTC / DoT** from the [official Transport Stack catalogue](https://delhi.transportstack.in/data-services). Save the original ZIP as `delhi_buses_static_gtfs_v1.zip` beside `run.py`. Judges can also copy that one file from the submitted working-prototype ZIP. The October GPS and ticket archives are unnecessary for running the app.
+2. Get **Delhi Buses: GTFS Static Data – DTC / DoT** from the [official Transport Stack catalogue](https://delhi.transportstack.in/data-services). Save the original ZIP as `delhi_buses_static_gtfs_v1.zip` beside `run.py`. This is the only separate data download needed to run the public source.
 3. From this folder, run the commands below. The first run builds a timetable index and can take a few minutes.
 
 Keep the included `data/walk.npz` walking network and `data/walk-crossings.json` crossing connections together in `data/`. The repository also includes the map and fitted travel-time files.
@@ -49,7 +51,7 @@ python3.12 -m venv .venv
 .venv/bin/python run.py --offline
 ```
 
-Open the [passenger map](http://127.0.0.1:8765/), [runnable API guide](http://127.0.0.1:8765/api-guide) or [journey comparisons](http://127.0.0.1:8765/field-trials.html). The public copy includes the walking map, learned weekday and weekend estimates, and aggregate checks. The judge package also carries dated vehicle feeds for replay.
+Open the [local passenger map](http://127.0.0.1:8765/), [local API guide](http://127.0.0.1:8765/api-guide) or [journey comparisons](http://127.0.0.1:8765/field-trials.html). This repository includes the walking map, travel-time estimates for weekdays and weekends, and the results of the GPS checks.
 
 **Try a real query.** [Compare 08:45 and 13:00 on 15 October](http://127.0.0.1:8765/journeys?from=1025&to=2560&depart=2026-10-15T08:45&compare_hour=13). For map pins, enter latitude and longitude. Any full itinerary lists the boarding and exit stops and the seconds spent walking, waiting and riding. API times use Delhi local time.
 
