@@ -1,0 +1,403 @@
+{
+  "tuesday-transfer": {
+    "issue": "2026-11-24T17:30:00+05:30",
+    "packets": {
+      "positions": 41
+    },
+    "first_archive_receipt": "2026-11-24T17:09:58+05:30",
+    "last_receipt_by_issue": "2026-11-24T17:29:56+05:30",
+    "options": [
+      {
+        "arrival": "2026-11-24T18:46:41+05:30",
+        "access": 785,
+        "transfer": 0,
+        "egress": 370,
+        "legs": [
+          {
+            "route": "808STDOWN",
+            "route_id": "852",
+            "trip": "852_FULL_17_25",
+            "board": "7567",
+            "exit": "95",
+            "board_at": "2026-11-24T17:44:46+05:30",
+            "exit_at": "2026-11-24T17:45:19+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T17:25:00+05:30",
+            "scheduled_board": "2026-11-24T17:46:16+05:30",
+            "fresh_route_vehicles": 1,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 4129,
+            "boarding_position": null,
+            "vehicle_supported": false
+          },
+          {
+            "route": "174DOWN",
+            "route_id": "239",
+            "trip": "239_FULL_17_24",
+            "board": "95",
+            "exit": "97",
+            "board_at": "2026-11-24T17:51:40+05:30",
+            "exit_at": "2026-11-24T18:40:31+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T17:24:00+05:30",
+            "scheduled_board": "2026-11-24T17:47:21+05:30",
+            "fresh_route_vehicles": 2,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 5027,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "same_bus_alighting_not_witnessed",
+          "events": [
+            {
+              "kind": "board",
+              "lower": "2026-11-24T18:29:06+05:30",
+              "upper": "2026-11-24T18:29:28+05:30",
+              "evidence": "outside_to_inside_gps",
+              "stop_id": "7567"
+            },
+            {
+              "kind": "alight",
+              "lower": "2026-11-24T18:30:01+05:30",
+              "upper": "2026-11-24T18:30:33+05:30",
+              "evidence": "outside_to_inside_gps",
+              "stop_id": "95"
+            },
+            {
+              "kind": "board",
+              "lower": "2026-11-24T19:12:39+05:30",
+              "upper": "2026-11-24T19:13:23+05:30",
+              "evidence": "outside_to_inside_gps",
+              "stop_id": "95"
+            }
+          ]
+        }
+      },
+      {
+        "arrival": "2026-11-24T18:46:41+05:30",
+        "access": 785,
+        "transfer": 0,
+        "egress": 370,
+        "legs": [
+          {
+            "route": "919UP",
+            "route_id": "1091",
+            "trip": "1091_FULL_16_54",
+            "board": "7567",
+            "exit": "95",
+            "board_at": "2026-11-24T17:46:59+05:30",
+            "exit_at": "2026-11-24T17:47:43+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T16:54:00+05:30",
+            "scheduled_board": "2026-11-24T17:45:27+05:30",
+            "fresh_route_vehicles": 0,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": null,
+            "boarding_position": null,
+            "vehicle_supported": false
+          },
+          {
+            "route": "174DOWN",
+            "route_id": "239",
+            "trip": "239_FULL_17_24",
+            "board": "95",
+            "exit": "97",
+            "board_at": "2026-11-24T17:51:40+05:30",
+            "exit_at": "2026-11-24T18:40:31+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T17:24:00+05:30",
+            "scheduled_board": "2026-11-24T17:47:21+05:30",
+            "fresh_route_vehicles": 2,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 5027,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "no_later_witnessed_boarding",
+          "events": []
+        }
+      },
+      {
+        "arrival": "2026-11-24T18:47:16+05:30",
+        "access": 84,
+        "transfer": 0,
+        "egress": 169,
+        "legs": [
+          {
+            "route": "102ADOWN",
+            "route_id": "1",
+            "trip": "1_FULL_17_40",
+            "board": "1",
+            "exit": "7587",
+            "board_at": "2026-11-24T17:40:00+05:30",
+            "exit_at": "2026-11-24T18:44:27+05:30",
+            "boarding_source": "schedule",
+            "scheduled_start": "2026-11-24T17:40:00+05:30",
+            "scheduled_board": "2026-11-24T17:40:00+05:30",
+            "fresh_route_vehicles": 0,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": null,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "no_later_witnessed_boarding",
+          "events": []
+        }
+      },
+      {
+        "arrival": "2026-11-24T18:48:01+05:30",
+        "access": 785,
+        "transfer": 88,
+        "egress": 169,
+        "legs": [
+          {
+            "route": "972UP",
+            "route_id": "2536",
+            "trip": "2536_FULL_16_55",
+            "board": "7567",
+            "exit": "7579",
+            "board_at": "2026-11-24T17:50:34+05:30",
+            "exit_at": "2026-11-24T18:09:57+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T16:55:00+05:30",
+            "scheduled_board": "2026-11-24T17:57:32+05:30",
+            "fresh_route_vehicles": 2,
+            "exact_id_or_start_clock": 1,
+            "nearest_route_fix_metres": 1596,
+            "boarding_position": null,
+            "vehicle_supported": false
+          },
+          {
+            "route": "761UP",
+            "route_id": "2228",
+            "trip": "2228_FULL_17_05",
+            "board": "7711",
+            "exit": "7587",
+            "board_at": "2026-11-24T18:13:38+05:30",
+            "exit_at": "2026-11-24T18:45:12+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T17:05:00+05:30",
+            "scheduled_board": "2026-11-24T17:57:35+05:30",
+            "fresh_route_vehicles": 6,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 2619,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "no_later_witnessed_boarding",
+          "events": []
+        }
+      },
+      {
+        "arrival": "2026-11-24T18:49:44+05:30",
+        "access": 785,
+        "transfer": 0,
+        "egress": 169,
+        "legs": [
+          {
+            "route": "808STDOWN",
+            "route_id": "852",
+            "trip": "852_FULL_17_25",
+            "board": "7567",
+            "exit": "95",
+            "board_at": "2026-11-24T17:44:46+05:30",
+            "exit_at": "2026-11-24T17:45:19+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T17:25:00+05:30",
+            "scheduled_board": "2026-11-24T17:46:16+05:30",
+            "fresh_route_vehicles": 1,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 4129,
+            "boarding_position": null,
+            "vehicle_supported": false
+          },
+          {
+            "route": "114ADOWN",
+            "route_id": "1529",
+            "trip": "1529_FULL_17_01",
+            "board": "95",
+            "exit": "7587",
+            "board_at": "2026-11-24T17:53:43+05:30",
+            "exit_at": "2026-11-24T18:46:55+05:30",
+            "boarding_source": "gps_live_segment",
+            "scheduled_start": "2026-11-24T17:01:00+05:30",
+            "scheduled_board": "2026-11-24T18:08:14+05:30",
+            "fresh_route_vehicles": 13,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 299,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "same_bus_alighting_not_witnessed",
+          "events": [
+            {
+              "kind": "board",
+              "lower": "2026-11-24T18:29:06+05:30",
+              "upper": "2026-11-24T18:29:28+05:30",
+              "evidence": "outside_to_inside_gps",
+              "stop_id": "7567"
+            },
+            {
+              "kind": "alight",
+              "lower": "2026-11-24T18:30:01+05:30",
+              "upper": "2026-11-24T18:30:33+05:30",
+              "evidence": "outside_to_inside_gps",
+              "stop_id": "95"
+            },
+            {
+              "kind": "board",
+              "lower": "2026-11-24T19:10:34+05:30",
+              "upper": "2026-11-24T19:11:07+05:30",
+              "evidence": "two_outside_fixes_bracket_marker_on_directed_shape",
+              "stop_id": "95"
+            }
+          ]
+        }
+      },
+      {
+        "arrival": "2026-11-24T18:49:44+05:30",
+        "access": 785,
+        "transfer": 0,
+        "egress": 169,
+        "legs": [
+          {
+            "route": "919UP",
+            "route_id": "1091",
+            "trip": "1091_FULL_16_54",
+            "board": "7567",
+            "exit": "95",
+            "board_at": "2026-11-24T17:46:59+05:30",
+            "exit_at": "2026-11-24T17:47:43+05:30",
+            "boarding_source": "gps_historical",
+            "scheduled_start": "2026-11-24T16:54:00+05:30",
+            "scheduled_board": "2026-11-24T17:45:27+05:30",
+            "fresh_route_vehicles": 0,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": null,
+            "boarding_position": null,
+            "vehicle_supported": false
+          },
+          {
+            "route": "114ADOWN",
+            "route_id": "1529",
+            "trip": "1529_FULL_17_01",
+            "board": "95",
+            "exit": "7587",
+            "board_at": "2026-11-24T17:53:43+05:30",
+            "exit_at": "2026-11-24T18:46:55+05:30",
+            "boarding_source": "gps_live_segment",
+            "scheduled_start": "2026-11-24T17:01:00+05:30",
+            "scheduled_board": "2026-11-24T18:08:14+05:30",
+            "fresh_route_vehicles": 13,
+            "exact_id_or_start_clock": 0,
+            "nearest_route_fix_metres": 299,
+            "boarding_position": null,
+            "vehicle_supported": false
+          }
+        ],
+        "outcome": {
+          "status": "no_later_witnessed_boarding",
+          "events": []
+        }
+      }
+    ],
+    "policies": {
+      "current": 0,
+      "tracked_first_bus_within_five_minutes": 0,
+      "fewer_changes_within_one_minute": 2
+    },
+    "conditional": [],
+    "outcome_receipt_window": [
+      "2026-11-24T17:09:58+05:30",
+      "2026-11-24T19:29:59+05:30"
+    ],
+    "fixed_connections": {
+      "four_day": {
+        "four_day_itinerary": [
+          {
+            "route": "972UP",
+            "trip": "2536_FULL_16_41",
+            "ready": "2026-11-24T17:43:05+05:30",
+            "board": "2026-11-24T17:43:32+05:30",
+            "alight": "2026-11-24T17:44:00+05:30",
+            "seconds_to_spare": 27
+          },
+          {
+            "route": "114DOWN",
+            "trip": "69_FULL_16_52",
+            "ready": "2026-11-24T17:45:30+05:30",
+            "board": "2026-11-24T17:45:41+05:30",
+            "alight": "2026-11-24T18:28:26+05:30",
+            "seconds_to_spare": 11
+          }
+        ],
+        "full_month_itinerary": [
+          {
+            "route": "808STDOWN",
+            "trip": "852_FULL_17_25",
+            "ready": "2026-11-24T17:43:05+05:30",
+            "board": "2026-11-24T17:46:16+05:30",
+            "alight": "2026-11-24T17:46:44+05:30",
+            "seconds_to_spare": 191
+          },
+          {
+            "route": "174DOWN",
+            "trip": "239_FULL_17_24",
+            "ready": "2026-11-24T17:48:14+05:30",
+            "board": "2026-11-24T17:47:21+05:30",
+            "alight": "2026-11-24T18:30:01+05:30",
+            "seconds_to_spare": -53
+          }
+        ]
+      },
+      "full_month": {
+        "four_day_itinerary": [
+          {
+            "route": "972UP",
+            "trip": "2536_FULL_16_41",
+            "ready": "2026-11-24T17:43:05+05:30",
+            "board": "2026-11-24T17:36:34+05:30",
+            "alight": "2026-11-24T17:37:13+05:30",
+            "seconds_to_spare": -391
+          },
+          {
+            "route": "114DOWN",
+            "trip": "69_FULL_16_52",
+            "ready": "2026-11-24T17:38:43+05:30",
+            "board": "2026-11-24T17:36:58+05:30",
+            "alight": "2026-11-24T18:25:42+05:30",
+            "seconds_to_spare": -105
+          }
+        ],
+        "full_month_itinerary": [
+          {
+            "route": "808STDOWN",
+            "trip": "852_FULL_17_25",
+            "ready": "2026-11-24T17:43:05+05:30",
+            "board": "2026-11-24T17:44:46+05:30",
+            "alight": "2026-11-24T17:45:19+05:30",
+            "seconds_to_spare": 101
+          },
+          {
+            "route": "174DOWN",
+            "trip": "239_FULL_17_24",
+            "ready": "2026-11-24T17:46:49+05:30",
+            "board": "2026-11-24T17:51:40+05:30",
+            "alight": "2026-11-24T18:40:17+05:30",
+            "seconds_to_spare": 291
+          }
+        ]
+      }
+    }
+  }
+}
