@@ -103,6 +103,38 @@ function boardingObservation(position) {
   return position ? "Bus GPS recorded upstream at "+exactTime(position.observed_at)+
     ", received at "+exactTime(position.received_at)+" IST." : "";
 }
+function departureStatus(departure) {
+  if (!departure) return "";
+  switch (departure.status) {
+    case "confirmed_departure": return "GPS confirmed the bus left its first stop";
+    case "seen_in_service": return "GPS saw this bus in service";
+    case "at_origin": return "GPS saw this bus at its first stop";
+    case "unconfirmed": return "Departure from first stop unconfirmed by GPS";
+    default: return "";
+  }
+}
+function departureDetails(departure) {
+  const status=departureStatus(departure);
+  if (!status) return null;
+  const info=element("details","service-list departure-evidence");
+  info.append(element("summary",null,status));
+  info.append(element("p","leg-source","Scheduled to start at "+timeText(departure.scheduled_at)+
+    " from "+departure.origin.name+"."));
+  const stop=departure.observed_stop?.name, stamp=departure.observed_at;
+  if (departure.status==="confirmed_departure") {
+    info.append(element("p","leg-source","GPS saw this bus at its first stop at "+exactTime(departure.origin_observed_at)+
+      ", then at "+stop+" at "+exactTime(stamp)+"."));
+  } else if (stop && stamp) {
+    const note=departure.status==="at_origin"?" A later report is needed to confirm it left.":
+      " Its departure time from the first stop is unknown.";
+    info.append(element("p","leg-source","GPS placed this bus at "+stop+" at "+exactTime(stamp)+"."+note));
+  } else {
+    const date=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",day:"numeric",month:"short"}).format(new Date(departure.as_of));
+    info.append(element("p","leg-source","As of "+timeText(departure.as_of)+" IST on "+date+
+      ", Atlas had no GPS report confirming this scheduled bus had left its first stop."));
+  }
+  return info;
+}
 async function getJSON(path, params={}, signal) {
   const url = new URL(path, location.origin);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
@@ -623,7 +655,7 @@ function choices() {
   box.replaceChildren();
   const options=ui.data?.journeys || [];
   const policy=ui.data?.balanced_choices;
-  const primary=policy?.primary_count ?? options.length;
+  const primary=policy?.primary_count ?? Math.min(3,options.length);
   const more=element("details","more-journeys");
   const summary=element("summary",null,"More options");
   more.append(summary);
@@ -682,7 +714,7 @@ function choices() {
       choice.setAttribute("aria-label",choice.getAttribute("aria-label")+", "+tradeoff);
     }
     if (buses.length) {
-      const basis=boardingBasis(buses[0].calls?.[0]?.source);
+      const basis=[boardingBasis(buses[0].calls?.[0]?.source),departureStatus(buses[0].origin_departure)].filter(Boolean).join(" · ");
       choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
         " · "+waitDuration(journey.wait_seconds)+" total wait · "+duration(journey.walk_seconds)+" on foot"));
       if (basis) {
@@ -961,6 +993,10 @@ function details(journey) {
     if (leg.geometry_source==="ordered_stops") meta.push("Approximate path between stops");
     body.append(element("p","leg-source",meta.join(" · ")));
     if (leg.boarding_position) body.append(element("p","leg-source",boardingObservation(leg.boarding_position)));
+    if (leg.mode==="bus") {
+      const departure=departureDetails(leg.origin_departure);
+      if (departure) body.append(departure);
+    }
     if (leg.includes_arterial_without_mapped_sidewalk) {
       body.append(element("p","leg-source","Part of this walk follows a road with no mapped sidewalk."));
     }
@@ -1234,11 +1270,15 @@ async function searchJourney(submittedByRider=false) {
     showMessage("Enter both places and an India Standard Time departure.",true);
     return;
   }
+  const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30",preference:$("route-order").value,limit:"5"};
+  if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
+  return requestJourneys(params,submittedByRider);
+}
+async function requestJourneys(params,submittedByRider=false) {
   cancelPick();
   if (comparisonRequest) comparisonRequest.abort();
   const ticket=++ui.request;
-  const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30",preference:"balanced",limit:"5"};
-  if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
+  $("route-order").disabled=true;
   ui.data=null; ui.submitted=null; ui.boarding=null;
   choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();nearbyAlightingChoice();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);
   $("options").setAttribute("aria-busy","true");
@@ -1248,6 +1288,7 @@ async function searchJourney(submittedByRider=false) {
     const data=await getJSON("/journeys",params);
     if (ticket!==ui.request) return;
     ui.data=data;ui.submitted=params;ui.selected=0;
+    $("route-order-label").hidden=data.journeys?.length===1 && sameLocation(data.journeys[0]);
     ui.boarding=actionableBoarding(data.boarding_alerts);
     choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();nearbyAlightingChoice();
     if (showConditionalFirst(ui.boarding)) selectBoarding("conditional_itinerary");
@@ -1273,10 +1314,14 @@ async function searchJourney(submittedByRider=false) {
       showMessage("You’re already at your destination.");
     } else showMessage("");
   } catch(error) {
-    if (ticket===ui.request) showMessage("Journey search unavailable. "+error.message,true);
+    if (ticket===ui.request) {
+      $("route-order-label").hidden=true;
+      showMessage("Journey search unavailable. "+error.message,true);
+    }
   } finally {
     if (ticket===ui.request) {
       $("options").removeAttribute("aria-busy");
+      $("route-order").disabled=false;
       $("journey-form").querySelector(".submit").disabled=false;
       if ((submittedByRider || (opens502Replay && ui.boarding)) && window.innerWidth<=700) viewOptions();
     }
@@ -1311,14 +1356,23 @@ async function loadStatus() {
   }
 }
 function initialize() {
+  const example=new URLSearchParams(location.search).get("example");
   if (opens502Replay) {
     setPoint("origin",{id:"2383",name:"MMTC / Adhchini Village"});
     setPoint("destination",{id:"2386",name:"T.B. Hospital"});
     $("depart").value="2026-11-21T01:18";
-  } else if (new URLSearchParams(location.search).get("example")==="aiims") {
+  } else if (example==="aiims") {
     setPoint("origin",{name:"Laxmi Bai Nagar, near AIIMS",lat:28.568914,lon:77.213693});
     setPoint("destination",{name:"Block K, Lajpat Nagar II",lat:28.566610,lon:77.246373});
     $("depart").value="2026-11-22T15:00";
+  } else if (example==="rohini-evening") {
+    setPoint("origin",{name:"Rohini Sector 22",lat:28.71815,lon:77.06380});
+    setPoint("destination",{name:"Near Azadpur Terminal",lat:28.70700,lon:77.17890});
+    $("depart").value="2026-11-24T17:30";
+  } else if (example==="vivek") {
+    $("origin").value="Girls School Vivek Vihar";
+    $("destination").value="Rajiv Chowk Metro Station";
+    $("depart").value="2026-11-24T10:57";
   }
   for (const id of ["origin","destination"]) {
     enableStopSearch(id);
@@ -1335,6 +1389,9 @@ function initialize() {
   $("now").addEventListener("click",()=>{$("depart").value=localNow();markReplay();});
   $("replay").addEventListener("click",()=>{$("depart").value=demoDeparture;markReplay();});
   $("depart").addEventListener("input",markReplay);
+  $("route-order").addEventListener("change",()=>{
+    if (ui.submitted) requestJourneys({...ui.submitted,preference:$("route-order").value});
+  });
   $("cancel-pick").addEventListener("click",cancelPick);
   $("fit-map").addEventListener("click",lockMapToRoute);
   $("mobile-results").addEventListener("click",viewOptions);

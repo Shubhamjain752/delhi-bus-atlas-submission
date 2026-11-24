@@ -23,7 +23,16 @@ The map displays the first three choices together and up to two under **More opt
 
 For each bus leg, `calls[0]` gives the predicted boarding time and its source. The `same_platform_services` list shows other direct lines serving both of the selected stops. An estimate labelled `upstream_gps` in a journey uses a recent reading from this particular bus. Its `boarding_position` supplies the observed upstream stop, when the vehicle reported it, and when Atlas received the reading. Matched provider stop predictions are labelled `live`.
 
-Without a recent usable observation, the planner can still give a timetable or historical estimate. The exact fields and request limits are in the [saved OpenAPI schema](openapi.json).
+Each bus leg also includes `origin_departure` for its dated run. `scheduled_at` is the scheduled time at the first public stop. The leg’s `departure` is the estimated pickup at the passenger’s stop. `as_of` records the latest time at which the planner could have received evidence. The status applies to that run alone.
+
+| Status | What the GPS evidence supports |
+| --- | --- |
+| `unconfirmed` | There is no qualifying observation for that departure. The bus remains eligible. |
+| `at_origin` | A matched vehicle was seen at the first public stop. Whether it has left is unknown. |
+| `seen_in_service` | GPS placed a matched vehicle farther along the route. The time it left its first stop is unknown. |
+| `confirmed_departure` | GPS followed the same scheduled run from its first public stop to the next. The response gives the observation and receipt times for both stops. |
+
+A confirmed start records a past event. It remains available for that run if its GPS signal fades. The hosted planner holds observations on each active server instance. After a restart, or for a past date without a loaded recording, a bus may show as unconfirmed. An estimate based on past journeys can accompany any status. The map’s **Recommended** and **Earliest arrival** settings request `preference=balanced` and `preference=earliest` respectively. [See the 808STDOWN example](november-departure-audit.md) · [Saved OpenAPI schema](openapi.json)
 
 When `GET /arrivals` has two qualifying observations from the previous 30 minutes, `observed_service_gap` describes the last two distinct buses tracked through the same approach to this route's boarding platform. `gap_seconds` is the time between their observed stop passages. The response includes observation and receipt times for both buses. Some buses can be missing from the feed. Use `arrival` and `wait_seconds` for the next-bus forecast. At Shakarpur School Block on 22 November, GPS showed 37 seconds between tracked buses. Atlas estimated another 238 seconds until the next bus. [Delhi replay results](../data/observed-service-gaps.json)
 

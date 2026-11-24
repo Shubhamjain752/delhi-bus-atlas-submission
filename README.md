@@ -31,6 +31,8 @@ Atlas checks platforms within a 1.1 km mapped walk at each end. The map gives pr
 
 The map shows the first three choices together. Open **More options** for a fourth or fifth when available. If the final street connection is uncertain, Atlas shows when the bus reaches the area and labels any estimate for the remaining walk.
 
+Under **Show routes by**, choose **Recommended** to balance walking and arrival time, or **Earliest arrival** to see which bus combination could get there soonest. Select a ride to check whether GPS confirmed it left its first stop. On the 24 November Rohini example, the 808STDOWN connection saves an estimated 49 seconds and adds 15 minutes of walking. GPS had yet to confirm that run at 5:30 p.m. [Try the Rohini search](https://iitboys-delhi-bus-atlas.vercel.app/?example=rohini-evening) · [October departure study](https://github.com/Shubhamjain752/delhi-bus-atlas-submission/blob/codex/service-origin-history/docs/service-starts.md#matching-a-scheduled-start-by-name)
+
 On a divided road, Atlas looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
 
 Open a bus leg to see other lines serving the same two stops. **Check next bus at this stop** shows the next arrival estimate and its source. When GPS has tracked two buses approaching the same stop, it also shows how far apart they came. [First-bus test](docs/first-direct-bus.md) · [API fields](docs/api.md)

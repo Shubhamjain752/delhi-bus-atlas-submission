@@ -36,13 +36,17 @@ def check(browser, base, width, output):
         page = context.new_page()
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
-        assert page.goto(base, wait_until="domcontentloaded", timeout=90000).ok
-        for selector, value in (
-            ("#origin", ORIGIN), ("#destination", DESTINATION), ("#depart", DEPARTURE)
-        ):
-            page.locator(selector).fill(value)
-        with page.expect_response(is_test_search, timeout=120000) as pending:
-            page.get_by_role("button", name="Find journeys").click()
+        if width < 500:
+            with page.expect_response(is_test_search, timeout=120000) as pending:
+                assert page.goto(base.rstrip("/") + "/?example=vivek", wait_until="domcontentloaded", timeout=90000).ok
+            for field, value in (("#origin", ORIGIN), ("#destination", DESTINATION), ("#depart", DEPARTURE)):
+                expect(page.locator(field)).to_have_value(value)
+        else:
+            assert page.goto(base, wait_until="domcontentloaded", timeout=90000).ok
+            for field, value in (("#origin", ORIGIN), ("#destination", DESTINATION), ("#depart", DEPARTURE)):
+                page.locator(field).fill(value)
+            with page.expect_response(is_test_search, timeout=120000) as pending:
+                page.get_by_role("button", name="Find journeys").click()
         response = pending.value
         assert response.ok, (response.status, response.url)
         data = response.json()

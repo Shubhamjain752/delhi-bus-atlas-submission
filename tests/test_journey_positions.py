@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 import tempfile
 import unittest
@@ -36,18 +36,20 @@ class JourneyPositionTests(unittest.TestCase):
         self.router = Router(self.directory / "feed.zip",self.directory,None,None)
 
     def gps(self, at=None, route="red", run="red0", service_date="20261015", age=0,
-            receipt_delay=0, vehicles=("D1",), stop="X", direction=None):
+            receipt_delay=0, vehicles=("D1",), stop="X", direction=None, start_time=None, header_offset=0):
         self.when = at or self.when
         issue = int(self.when.timestamp())
         self.overlay = CapturedOverlay(EtaModel(),self.directory,issue).bind(self.router)
         message = protobuf().FeedMessage()
         message.header.gtfs_realtime_version = "2.0"
-        message.header.timestamp = issue - age
+        message.header.timestamp = issue - age + header_offset
         for vehicle in vehicles:
             vp = message.entity.add(id=vehicle).vehicle
             vp.trip.route_id, vp.trip.trip_id, vp.trip.start_date = route, run, service_date
             if direction is not None:
                 vp.trip.direction_id = direction
+            if start_time:
+                vp.trip.start_time = start_time
             vp.vehicle.id, vp.timestamp = vehicle, issue - age
             vp.position.latitude = self.router.stops[stop]["lat"]
             vp.position.longitude = self.router.stops[stop]["lon"]
@@ -75,6 +77,104 @@ class JourneyPositionTests(unittest.TestCase):
             self.gps(at=self.when.replace(hour=0),run=f"red_{clock}_00_900",service_date="")
             bus = self.buses()[0]
             self.assertEqual((bus["trip_id"],bus["calls"][0]["source"]),("night","upstream_gps"))
+
+    def advance_position(self, stop, seconds=45, receipt_delay=0, header_offset=0, **changes):
+        self.when = self.when.fromtimestamp(self.when.timestamp() + seconds, IST)
+        issue = self.overlay.issue = int(self.when.timestamp())
+        self.message.header.timestamp = issue + header_offset
+        vp = self.message.entity[0].vehicle
+        vp.timestamp = issue
+        vp.position.latitude = self.router.stops[stop]["lat"]
+        vp.position.longitude = self.router.stops[stop]["lon"]
+        for field, value in changes.items():
+            setattr(vp.trip, field, value)
+        self.overlay.apply_positions(self.message, issue + receipt_delay)
+
+    def service_start(self):
+        return next(b["origin_departure"] for b in self.buses() if b["route_id"] == "red")
+
+    def dated_evidence(self, issue, trip="red0", service_date=None):
+        from types import SimpleNamespace
+        pid, k = self.overlay.ids[trip]
+        ride = SimpleNamespace(pid=pid, trip=trip, service_date=service_date or issue.date(),
+                               skipped=(), live_run_id=None)
+        return self.overlay.origin_departure(ride, k, 0, issue)
+
+    def test_future_header_cannot_witness_either_stop_early(self):
+        self.gps(stop="W", header_offset=30)
+        self.advance_position("X")
+        self.assertNotEqual(self.dated_evidence(self.when).get("status"), "confirmed_departure")
+        self.gps(stop="W")
+        self.advance_position("X", header_offset=30)
+        self.assertFalse(self.dated_evidence(self.when))
+
+    def test_explicit_clock_contradicts_even_an_exact_static_trip_id(self):
+        self.gps(stop="W", start_time="09:10:00")
+        self.assertFalse(self.dated_evidence(self.when))
+        self.advance_position("X")
+        self.assertFalse(self.dated_evidence(self.when))
+
+    def test_dated_vehicle_dispute_survives_gps_expiry_from_time_it_was_received(self):
+        for day, run, expected in (("20261015", "red0", None), ("20261015", "red_08_00_999", None),
+                                   ("20261014", "red0", "confirmed_departure"),
+                                   ("20261015", "night", "confirmed_departure")):
+            with self.subTest(day=day, run=run):
+                self.gps(at=self.when.replace(hour=8, minute=1, second=0), stop="W")
+                self.advance_position("X")
+                past_issue = self.when
+                self.message.entity[0].vehicle.vehicle.id = "D2"
+                self.advance_position("Y", trip_id=run, start_date=day)
+                self.assertEqual(self.dated_evidence(past_issue).get("status"), "confirmed_departure")
+                self.assertEqual(self.dated_evidence(self.when + timedelta(minutes=10)).get("status"), expected)
+
+    def test_only_observed_start_then_next_stop_confirms_departure(self):
+        self.gps(stop="W")
+        at_origin = self.service_start()
+        self.assertEqual((at_origin["status"], at_origin["origin"]["id"]), ("at_origin", "W"))
+        self.assertEqual(at_origin["scheduled_at"], "2026-10-15T08:00:00+05:30")
+        self.advance_position("X")
+        moved = self.service_start()
+        self.assertEqual((moved["status"], moved["observed_stop"]["id"]), ("confirmed_departure", "X"))
+        self.assertEqual(moved["origin_observed_at"], at_origin["observed_at"])
+        self.assertEqual(moved["origin_received_at"], at_origin["received_at"])
+        self.assertEqual(moved["observed_at"], self.when.isoformat())
+        self.assertEqual(moved["received_at"], moved["as_of"])
+
+    def test_unmatched_or_downstream_gps_cannot_confirm_origin_movement(self):
+        self.gps()
+        self.assertEqual(self.service_start()["status"], "seen_in_service")
+        for changes in ({"age":181}, {"receipt_delay":1}, {"run":"different"},
+                        {"direction":0}, {"vehicles":("D1","D2")}, {"service_date":"20261014"}):
+            with self.subTest(changes=changes):
+                self.gps(**changes)
+                self.assertEqual(self.service_start()["status"], "unconfirmed")
+        self.gps(stop="X")
+        self.advance_position("W")
+        self.advance_position("X")
+        self.assertEqual(self.service_start()["status"], "seen_in_service")
+
+    def test_origin_witness_outlives_fresh_gps_only_for_the_same_dated_run(self):
+        from types import SimpleNamespace
+        self.gps(stop="W")
+        self.advance_position("X", receipt_delay=10)
+        def evidence(trip, service_date, issue):
+            pid, k = self.overlay.ids[trip]
+            ride = SimpleNamespace(pid=pid, trip=trip, service_date=service_date, skipped=(), live_run_id=None)
+            return self.overlay.origin_departure(ride, k, 0, issue)
+        day = self.when.date()
+        self.assertFalse(evidence("red0", day, self.when))
+        later = self.when + timedelta(minutes=10)
+        # A new empty snapshot supplies no current position for this bus.
+        self.message.ClearField("entity")
+        self.message.header.timestamp = self.overlay.issue = int(later.timestamp())
+        self.overlay.apply_positions(self.message, self.overlay.issue)
+        seen = evidence("red0", day, later)
+        self.assertEqual(seen["status"], "confirmed_departure")
+        self.assertEqual(seen["observed_at"], self.when.isoformat())
+        self.assertEqual(seen["received_at"], (self.when + timedelta(seconds=10)).isoformat())
+        self.assertFalse(evidence("night", day, later))
+        self.assertFalse(evidence("red0", day + timedelta(days=1), later))
+        self.assertFalse(evidence("red0", day, later + timedelta(hours=9)))
 
     def test_missing_unsafe_and_unmatched_positions_preserve_ordinary_order(self):
         for changes in ({"age":181}, {"receipt_delay":1}, {"vehicles":("D1","D2")},

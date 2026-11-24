@@ -89,6 +89,12 @@
       <section id="options" class="options-section" aria-labelledby="options-title" tabindex="-1">
         <div class="section-title"><h2 id="options-title">Journey options</h2><span id="option-count" hidden></span></div>
         <p id="result-context" class="result-context" hidden></p>
+        <label id="route-order-label" for="route-order" hidden>Show routes by
+          <select id="route-order">
+            <option value="balanced">Recommended</option>
+            <option value="earliest">Earliest arrival</option>
+          </select>
+        </label>
         <p id="platform-choice" hidden></p>
         <div id="message" role="status" aria-live="polite"></div>
         <section id="boarding-options" aria-label="Possible boarding and later bus" hidden></section>

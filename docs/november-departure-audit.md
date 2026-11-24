@@ -25,6 +25,8 @@ GPS later placed an 808STDOWN at the pickup between 6:29:06 and 6:29:28. Its fee
 
 ## Could a different recommendation have helped?
 
+On the public planner, **Recommended** offers the direct 102ADOWN, arriving at 6:47:16 p.m. **Earliest arrival** also offers the 808STDOWN and 174DOWN, arriving at 6:46:27 p.m. That connection adds 15 minutes 2 seconds of walking to save 49 seconds in the forecast. The map marks the unconfirmed start separately from the estimated pickup. Nobody measured either passenger journey. [Try the same trip](https://iitboys-delhi-bus-atlas.vercel.app/?example=rohini-evening)
+
 We repeated seven November searches. For each departure we restored only packets the recorder had received by that time. Two rules were tested separately against the usual first choice. The first preferred a bus with a fresh vehicle match if the journey would arrive within five minutes of the fastest option. The second preferred fewer changes when the arrival times were within one minute. Later GPS was used only to check the choices.
 
 | Departure in Delhi | What the test showed |
@@ -37,7 +39,11 @@ We repeated seven November searches. For each departure we restored only packets
 | Adhchini, Saturday 1:18 a.m. | Atlas kept the 502UP as a conditional choice. GPS later placed the bus near the stop. Whether its doors were open is unknown. |
 | Vasant Kunj, Saturday 1:20 a.m. | Atlas already showed the vehicle-supported 604UP first. Its estimated arrival at the exit stop was two seconds after the GPS sighting. |
 
-The tracked-bus rule changed zero of seven first recommendations. The simpler rule changed one, at Rohini. We could not verify a better passenger arrival in any of the seven. The direct bus is worth displaying alongside the transfer, but these results do not justify making it the automatic first choice.
+The tracked-bus rule changed zero of seven first recommendations. The simpler rule changed one, at Rohini. We could not verify a better passenger arrival in any of the seven. In the public planner, the direct bus ranks first in Recommended because it saves walking and avoids a change for almost the same arrival time.
+
+## An example of a departure GPS could confirm
+
+That same evening, GPS placed an ML06DOWN at Vishwa Vidyalaya Metro Station at 5:10:31 p.m. and then at INS Hostel at 5:11:14. Atlas could confirm that this bus had left its first stop at 5:12:25, when the second report arrived. The two observations tell us the bus moved between the stops. Its exact departure time and whether a passenger boarded are unknown.
 
 ## What the October history learns
 
@@ -45,7 +51,7 @@ The deployed model uses 22 weekdays and nine weekend days. It groups GPS travel 
 
 For the 808STDOWN between the Rohini crossing and Sector 21, October supplied 86 weekday observations between 4 and 6 p.m. Their middle value was 33 seconds. Between 6 and 8 p.m. there were 82 observations, with a middle value of 54 seconds. After blending with the broader history, Atlas uses 33 and 53 seconds respectively. Those observations describe a bus already travelling. They cannot establish whether a particular departure left the depot today.
 
-Training pools Monday through Friday and also pools Saturday and Sunday. It does not currently learn separate Tuesday, holiday, day-of-month or week-by-week trends. The next question to test on unseen dates is whether actual departures from the depot and gaps between buses can improve a passenger's wait estimate.
+Training pools Monday through Friday and also pools Saturday and Sunday. It does not currently learn separate Tuesday, holiday, day-of-month or week-by-week trends. A separate study matched 18,525 October scheduled starts using GPS at the first two public stops. For the 808STDOWN on weekdays between 4 and 6 p.m., zero of 198 scheduled runs had enough evidence for a match. Those counts measure GPS coverage. [October departure study and grouped results](https://github.com/Shubhamjain752/delhi-bus-atlas-submission/blob/codex/service-origin-history/docs/service-starts.md#matching-a-scheduled-start-by-name)
 
 [Seven departure replays](november-departure-audit.json) · [All six Rohini options](november-rohini-six-options.json) · [Replay script](../tools/audit_november_departures.py) · [Original comparison with Google Maps](../submission/05-validation.pdf)
 

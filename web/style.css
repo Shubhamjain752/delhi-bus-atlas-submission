@@ -711,6 +711,25 @@ h2 {
   color:var(--muted);
 }
 
+#route-order-label {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 0 12px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+#route-order {
+  min-height:36px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:4px 8px;
+  background:white;
+  color:var(--ink);
+  font:inherit;
+}
+
 #platform-choice {
   margin:0 0 12px;
   color:var(--ink);

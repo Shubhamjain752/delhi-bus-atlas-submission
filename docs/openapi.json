@@ -735,6 +735,17 @@
             ],
             "description": "Upstream position used to predict boarding time for this trip."
           },
+          "origin_departure": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OriginDeparture"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dated GPS evidence at the first public stop. A downstream sighting alone cannot confirm the departure there. Absence of a matched report leaves the start unconfirmed."
+          },
           "live_run_id": {
             "anyOf": [
               {
@@ -1519,6 +1530,108 @@
           "latest_received_at"
         ],
         "title": "ObservedServiceGap"
+      },
+      "OriginDeparture": {
+        "properties": {
+          "origin": {
+            "$ref": "#/components/schemas/Place",
+            "description": "First public boarding stop on this scheduled run."
+          },
+          "service_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Service Date"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Scheduled At",
+            "description": "Timetabled departure at the first public stop."
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "title": "As Of",
+            "description": "Latest receipt time allowed in this search."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "unconfirmed",
+              "at_origin",
+              "seen_in_service",
+              "confirmed_departure"
+            ],
+            "title": "Status"
+          },
+          "observed_stop": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Place"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed At"
+          },
+          "received_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Received At"
+          },
+          "origin_observed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Observed At"
+          },
+          "origin_received_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Received At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "origin",
+          "service_date",
+          "scheduled_at",
+          "as_of",
+          "status"
+        ],
+        "title": "OriginDeparture"
       },
       "Place": {
         "properties": {

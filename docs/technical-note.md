@@ -37,6 +37,8 @@ The live adapter treats agency vehicle positions and third-party stop prediction
 
 ## Interpretation
 
+When a passenger opens a bus leg, Atlas distinguishes the time the bus is due at pickup from evidence that the run started. GPS can place a bus at its first public stop, follow it to the next stop, or find it farther along the route. Only the run observed at both first stops earns a confirmed-start label. Gaps leave the service available with its estimated time. [What the status means](api.md) · [Rohini example](november-departure-audit.md)
+
 The held-out GPS evaluation measures conditional bus travel from a known stop passage. It does not observe the passenger's front door, whether they boarded, missed connections, or the time they spent crossing a road. Google Maps comparisons test whole-journey plausibility for specified coordinates and departures. The walking and transfer components have functional and topological tests; a field timing study remains necessary for a passenger-level accuracy claim.
 
 The passenger interface also offers a separate route-level platform board. Successive public or official vehicle positions can update the running estimate on a directed segment. A recent upstream passage can establish a platform ETA even when the bus's final destination is uncertain. The archive tests the board against the next observed platform entry. Three later operational replays use the same coordinates and departure minutes against Google Maps and tracked vehicles. They expose the effect of a mis-timed boarding and of two buses assigned to one timetable trip. Coordinate speed and traffic evidence · Platform wait evaluation · Matched November cases

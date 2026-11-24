@@ -48,6 +48,18 @@ class PlatformPassage:
     approach: str
 
 
+@dataclass(frozen=True)
+class StartPassage:
+    vehicle: str
+    raw_trip: str
+    origin_observed: int
+    origin_received: int
+    next_observed: int
+    next_received: int
+    expires: int
+    disputed_at: int | None = None
+
+
 def protobuf():
     try:
         from google.transit import gtfs_realtime_pb2
@@ -106,6 +118,8 @@ class LiveOverlay:
         self.position_claims = {}
         self.latest_position_fixes = {}
         self.previous_position_stops = {}
+        self.start_edges, self.start_stops = set(), set()
+        self.origin_fixes, self.confirmed_starts = {}, {}
         self.passage_directions = {}
         self.position_journeys_cache = None
         self.tracks, self.observations = {}, defaultdict(list)
@@ -117,8 +131,16 @@ class LiveOverlay:
         self.ids.clear()
         self.by_clock.clear()
         self.edges.clear()
+        self.start_edges.clear()
+        self.start_stops.clear()
+        self.origin_fixes.clear()
+        self.confirmed_starts.clear()
         self.passage_directions.clear()
         for pid,p in enumerate(router.patterns):
+            origin = next((i for i, pickup in enumerate(p.pickups) if pickup == 0), None)
+            if origin is not None and origin + 1 < len(p.stops):
+                self.start_stops.add((p.route, p.stops[origin]))
+                self.start_edges.add((p.route, p.stops[origin], p.stops[origin + 1]))
             for k,trip in enumerate(p.trips):
                 self.ids[trip] = (pid,k)
                 self.by_clock[p.route,(p.starts[k]+p.departures[0])//60].append((pid,k))
@@ -321,6 +343,10 @@ class LiveOverlay:
             return {"state":"stale","timestamp":stamp}
         matched, observations = 0,0
         new_passages = []
+        start_candidates = {}
+        same_provider = provider == self.position_provider
+        origin_fixes = {vid: row for vid, row in self.origin_fixes.items()
+                        if same_provider and stamp <= now and 0 <= now-row[0] <= 240}
         witnesses = {}
         seen_ids, duplicate_ids = set(),set()
         for entity in feed.entity:
@@ -333,6 +359,7 @@ class LiveOverlay:
             witnesses[vid] = None
             self.tracks.pop(vid,None)
             self.previous_position_stops.pop(vid,None)
+            origin_fixes.pop(vid,None)
         position_claims = defaultdict(set)
         latest_fixes = {}
         for entity in feed.entity:
@@ -399,6 +426,11 @@ class LiveOverlay:
                                 and passage_service_date_matches(day, track[4], observed)
                                 and self.matches_passage_run(rt, run, direction, track[2], s)):
                             new_passages.append(((rt, s), PlatformPassage(observed, now, vid, track[2]), track[6]))
+                            origin_fix = origin_fixes.get(vid)
+                            if ((rt, track[2], s) in self.start_edges and day and origin_fix
+                                    and origin_fix[:5] == (track[4], track[6], rt, run, day)):
+                                key = (vid, rt, run, day, track[2], s)
+                                start_candidates[key] = (track[4], track[6], observed, now, origin_fix[5], clock_key)
             self.tracks[vid] = (rt,run,s,first,observed,day,now,start_clock or (track[7] if track else None),
                                 provider,direction)
         self.tracks={v:t for v,t in self.tracks.items() if now-t[4]<=900}
@@ -414,6 +446,20 @@ class LiveOverlay:
         self.position_provider = provider
         self.position_claims = position_claims
         self.latest_position_fixes = latest_fixes
+        # Only a distinct position seen at the origin can witness a subsequent departure.
+        # Keep its prior stop so a bus returning to the origin cannot start the same run again.
+        for vid, fix in latest_fixes.items():
+            route, run, day, observed, _, _, clock_key = fix
+            track = self.tracks.get(vid)
+            if (stamp <= now and day and track and track[:2] == (route, run) and (route, track[2]) in self.start_stops
+                    and track[4] == observed and track[6] == now):
+                if position_claims[clock_key] == {vid}:
+                    origin_fixes[vid] = (observed, now, route, run, day, self.previous_position_stops.get(vid))
+                else:
+                    origin_fixes.pop(vid, None)
+        self.origin_fixes = origin_fixes
+        if stamp <= now:
+            self.record_starts(start_candidates, position_claims, now)
         self.position_journeys_cache = None
         self.update_exit_tracks(witnesses, now)
         self.vehicle_witnesses = stamp,now,witnesses
@@ -429,6 +475,91 @@ class LiveOverlay:
                 "new_segment_samples":observations,"segments_available":len(recent),
                 "source":("Transport Stack official DTC/DoT vehicle positions" if provider == "official_positions"
                           else "Reclaim Delhi GTFS-Realtime VehiclePositions")}
+
+    def departure_clock_matches(self, pattern, index, raw_trip, declared):
+        """All supplied start clocks must agree with this scheduled run, including after midnight."""
+        nominal = (pattern.starts[index] + pattern.departures[0]) // 60
+        def matches(minute):
+            return minute == nominal or (minute is not None and minute < 1440 and minute+1440 == nominal)
+        if declared and not matches(self.provider_clock(pattern.route, "", declared)):
+            return False
+        raw_minute = self.provider_clock(pattern.route, raw_trip)
+        return raw_trip in self.ids or raw_minute is None or matches(raw_minute)
+
+    def departure_runs(self, track, service_day):
+        route, run, stop, _, observed, _, _, declared, _, direction = track
+        exact = self.ids.get(run)
+        if exact is not None:
+            runs = (exact,)
+        else:
+            minute = self.provider_clock(route, run, declared)
+            if minute is None:
+                return []
+            runs = list(self.by_clock.get((route, minute), ()))
+            if minute < 1440:
+                runs.extend(self.by_clock.get((route, minute+1440), ()))
+        midnight = int(datetime.combine(service_day, datetime.min.time(), IST).timestamp())
+        matches = []
+        for pid, k in runs:
+            p = self.router.patterns[pid]
+            if (p.route != route or p.stops.count(stop) != 1 or p.service not in self.router._active(service_day)
+                    or not self.departure_clock_matches(p, k, run, declared)
+                    or direction is not None and self.router.trip_directions.get(p.trips[k]) not in (None, direction)):
+                continue
+            nominal = midnight + p.starts[k] + p.arrivals[p.stops.index(stop)]
+            if abs(observed-nominal) <= HORIZON:
+                matches.append((pid, k))
+        return matches
+
+    def record_starts(self, candidates, claims, received):
+        """Keep witnessed starts for their dated trip, including during later GPS gaps."""
+        starts = {key: proof for key, proof in self.confirmed_starts.items() if proof.expires >= received}
+        for (vehicle, route, raw_trip, day, origin, following), row in candidates.items():
+            first_seen, first_received, next_seen, next_received, previous, clock = row
+            if claims[clock] != {vehicle}:
+                continue
+            service_day = datetime.strptime(day, "%Y%m%d").date()
+            midnight = int(datetime.combine(service_day, datetime.min.time(), IST).timestamp())
+            matches = []
+            for pid, k in self.departure_runs(self.tracks[vehicle], service_day):
+                p = self.router.patterns[pid]
+                if p.stops.count(origin) != 1:
+                    continue
+                first = p.stops.index(origin)
+                if (p.pickups[first] or 0 in p.pickups[:first] or first+1 >= len(p.stops) or p.stops[first+1] != following
+                        or (previous is not None and (p.stops.count(previous) != 1 or previous not in p.stops[:first]))):
+                    continue
+                nominal = midnight + p.starts[k] + p.departures[first]
+                if nominal-300 <= first_seen <= nominal+3600:
+                    matches.append((pid, k))
+            if len(matches) == 1:
+                pid, k = matches[0]
+                p = self.router.patterns[pid]
+                key = service_day, pid, k
+                expires = min(next_seen+8*3600, midnight+p.starts[k]+p.arrivals[-1]+HORIZON)
+                old = starts.get(key)
+                if old is None:
+                    starts[key] = StartPassage(vehicle, raw_trip, first_seen, first_received, next_seen, next_received, expires)
+                elif old.vehicle != vehicle and old.disputed_at is None:
+                    starts[key] = replace(old, disputed_at=received)
+        # If another vehicle later matches this same dated run elsewhere on its route,
+        # the earlier identity stays disputed after the latest GPS position expires.
+        for (service_day, pid, k), proof in starts.items():
+            if proof.disputed_at is not None:
+                continue
+            p = self.router.patterns[pid]
+            clock = p.route, ((p.starts[k]+p.departures[0]) // 60) % 1440
+            for vehicle in claims.get(clock, ()):
+                if vehicle == proof.vehicle:
+                    continue
+                track = self.tracks.get(vehicle)
+                fix = self.latest_position_fixes[vehicle]
+                if (track and track[6] == received and track[4] == fix[3]
+                        and fix[2] == service_day.strftime("%Y%m%d")
+                        and self.departure_runs(track, service_day) == [(pid, k)]):
+                    starts[service_day, pid, k] = replace(proof, disputed_at=received)
+                    break
+        self.confirmed_starts = starts
 
     def matches_passage_run(self, route, run, direction, approach, stop):
         # An unmatched run can still supply a physical movement on the route's directed edge.
@@ -751,14 +882,62 @@ class LiveOverlay:
                         possible.append((day,pid,k,i))
             if len(possible) == 1:
                 day,pid,k,i = possible[0]
-                if (day,self.router.patterns[pid].trips[k]) not in supplied:
-                    matches[day,pid,k].append((i,ts,receipt))
+                matches[day,pid,k].append((i,ts,receipt,vid,run))
         result = defaultdict(dict)
+        physical = {}
         for (day,pid,k),observations in matches.items():
             if len(observations) == 1:
-                result[day,pid][k] = observations[0]
-        self.position_journeys_cache = key, result
+                obs = observations[0]
+                trip = self.router.patterns[pid].trips[k]
+                if (day,trip) not in supplied:
+                    result[day,pid][k] = obs[:3]
+                elif self.forecast_vehicle(day, trip, issue) != obs[3:]:
+                    continue
+                pattern = self.router.patterns[pid]
+                track = self.tracks.get(obs[3])
+                if track and self.departure_clock_matches(pattern, k, obs[4], track[7]):
+                    physical[day,pid,k] = obs
+        self.position_journeys_cache = key, result, physical
         return result
+
+    def origin_departure(self, ride, trip_index, first, when):
+        """Report the dated bus position and any observed movement from its first stop."""
+        issue = int(when.timestamp())
+        stamp = self.position_snapshot[0]
+        p = self.router.patterns[ride.pid]
+        key = ride.service_date, ride.pid, trip_index
+        if ride.live_run_id:
+            return {}
+        def local_clock(t):
+            return datetime.fromtimestamp(t, IST).isoformat()
+        proof = self.confirmed_starts.get(key)
+        if proof and proof.disputed_at is not None and proof.disputed_at <= issue:
+            return {}
+        if (proof and proof.next_received <= issue <= proof.expires
+                and first not in ride.skipped and first+1 not in ride.skipped):
+            forecast = self.forecast_vehicle(ride.service_date, ride.trip, issue)
+            if not forecast or forecast == (proof.vehicle, proof.raw_trip):
+                return {"status": "confirmed_departure", "observed_stop": self.router.stops[p.stops[first+1]],
+                        "observed_at": local_clock(proof.next_observed), "received_at": local_clock(proof.next_received),
+                        "origin_observed_at": local_clock(proof.origin_observed), "origin_received_at": local_clock(proof.origin_received)}
+        if not self.eligible(stamp, issue) or self.position_received > issue:
+            return {}
+        self.journey_positions(when)
+        cache = self.position_journeys_cache
+        if not cache or cache[0] != (issue, stamp, self.position_received, self.trips_snapshot[0], self.forecast_received):
+            return {}
+        position = cache[2].get(key)
+        if not position:
+            return {}
+        i, observed, received, _, _ = position
+        if i < first:
+            return {}
+        origin, stop = p.stops[first], p.stops[i]
+        if i > first and approximate_m(coords(self.router.stops[origin]), coords(self.router.stops[stop])) <= 90:
+            return {}
+        return {"status": "at_origin" if i == first else "seen_in_service",
+                "observed_at": local_clock(observed), "received_at": local_clock(received),
+                "observed_stop": self.router.stops[stop]}
 
     def can_approach(self, passage, stop, when):
         """Honor known trip-specific stopping patterns and disruptions for raw positions."""

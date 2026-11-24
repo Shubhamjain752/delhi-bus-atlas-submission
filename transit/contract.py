@@ -41,6 +41,19 @@ class PossibleBoarding(BoardingEvidence):
     note: str
 
 
+class OriginDeparture(BaseModel):
+    origin: Place = Field(description="First public boarding stop on this scheduled run.")
+    service_date: date
+    scheduled_at: AwareDatetime = Field(description="Timetabled departure at the first public stop.")
+    as_of: AwareDatetime = Field(description="Latest receipt time allowed in this search.")
+    status: Literal["unconfirmed", "at_origin", "seen_in_service", "confirmed_departure"]
+    observed_stop: Place | None = None
+    observed_at: AwareDatetime | None = None
+    received_at: AwareDatetime | None = None
+    origin_observed_at: AwareDatetime | None = None
+    origin_received_at: AwareDatetime | None = None
+
+
 class ObservedServiceGap(BaseModel):
     approach_stop_id: str = Field(description="The preceding platform seen on both vehicles' approaches.")
     gap_seconds: int = Field(gt=0, description="Time between the two vehicles' first GPS fixes inside the selected platform area on those passages.")
@@ -131,6 +144,7 @@ class Bus(Leg):
     agency: str
     trip_id: str
     boarding_position: BoardingPosition | None = Field(default=None, description="Upstream position used to predict boarding time for this trip.")
+    origin_departure: OriginDeparture | None = Field(default=None, description="Dated GPS evidence at the first public stop. A downstream sighting alone cannot confirm the departure there. Absence of a matched report leaves the start unconfirmed.")
     live_run_id: str | None = Field(default=None, description="Opaque vehicle-run identifier when multiple corroborated vehicles share this scheduled trip.")
     geometry_source: Literal["gtfs_shape", "ordered_stops"]
     model_sources: dict[str, int] = Field(description="Count of route intervals by timing source.")

@@ -600,6 +600,21 @@ class _Query:
                                       "observed_at":datetime.fromtimestamp(observed,IST).isoformat(),
                                       "received_at":datetime.fromtimestamp(received,IST).isoformat()}}
 
+    def origin_evidence(self, ride):
+        pattern = self.r.patterns[ride.pid]
+        first = next((i for i, restriction in enumerate(pattern.pickups) if restriction == 0), None)
+        if first is None:
+            return {}
+        trip_index = pattern.trips.index(ride.trip)
+        second = pattern.starts[trip_index] + pattern.departures[first]
+        scheduled = datetime.combine(ride.service_date, datetime.min.time(), IST) + timedelta(seconds=second)
+        departure = {"origin": self.r.stops[pattern.stops[first]], "service_date": ride.service_date.isoformat(),
+                     "scheduled_at": scheduled.isoformat(), "as_of": self.asof.isoformat(), "status": "unconfirmed"}
+        lookup = getattr(self.eta, "origin_departure", None)
+        if lookup:
+            departure.update(lookup(ride, trip_index, first, self.asof))
+        return {"origin_departure": departure}
+
     def same_platform_services(self, item):
         """Other lines a passenger can board here and leave at the same exit stop."""
         approach, [(chosen, first, last)], _, egress = item
@@ -1012,6 +1027,7 @@ class _Query:
                 agency=agency,trip_id=ride.trip,geometry_source=geo_source,model_sources=sources,
                 **({"live_run_id":ride.live_run_id} if ride.live_run_id else {}),
                 **self.position_evidence(ride),
+                **self.origin_evidence(ride),
                 stop_count=sum(k not in ride.skipped for k in range(i+1,j+1)),
                 calls=self.stop_calls(ride,i,j),
                 stops=[self.r.stops[p.stops[k]] for k in range(i,j+1) if k not in ride.skipped],
