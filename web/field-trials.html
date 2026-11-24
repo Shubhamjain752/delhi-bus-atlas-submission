@@ -12,18 +12,19 @@
   <main>
     <h1>Whole-journey trials</h1>
     <p class="intro">Compare Atlas and Google Maps for the same Delhi departure. Each forecast uses the planner’s earliest displayed bus journey, including the walk and wait from the requested start time. All clocks are in Delhi time.</p>
-    <p>On the travel date, GPS can show when a bus passed each stop. The comparison models walking at 1.25 metres per second with no extra transfer allowance, then measures waiting from the modelled arrival at the stop. A passenger’s door-to-door time would require a separate rider record. Google displays its forecasts to the nearest minute.</p>
+    <p>GPS shows where each bus was recorded. We estimate how long a passenger would walk at 1.25 metres per second and how long they would then wait at the stop. We allow no extra time to change buses in the standard comparison. Nobody timed these trips in person. Google shows arrival times to the nearest minute.</p>
     <div class="tools"><a href="/field-trials/results">Results as JSON</a><button type="button" id="refresh">Refresh results</button></div>
     <p id="status" role="status">Loading journey trials…</p>
     <div id="trials" aria-busy="true"></div>
     <section id="aiims-departures" aria-labelledby="aiims-title">
-      <h2 id="aiims-title">Which direct bus reached AIIMS first?</h2>
-      <p>On Sunday, 22 November, a person leaving Laxmi Bai Nagar at 3 p.m. could reach the eastbound platform around 3:05:08. Replaying only information received by 3 p.m., Atlas put the 711UP first at 3:05:42 using historical travel times. For the 392UP it had an operator prediction for that particular bus at 3:11:10. Both buses had reported positions west of AIIMS.</p>
-      <p>The 711 was seen within 27 metres of the AIIMS stop at 3:05:34. Its estimated time of entry overlaps the end of the walk. Its timetable stopping pattern disagreed with the provider, and GPS could not confirm it at the Lajpat Nagar exit. The 392 was seen at AIIMS around 3:12 and at Lajpat Nagar around 3:22. It was the first direct bus we could verify at both stops. Nobody recorded a passenger boarding.</p>
+      <h2 id="aiims-title">Which direct bus could we trace from AIIMS to Lajpat Nagar?</h2>
+      <p>For the 3 p.m. trip from Laxmi Bai Nagar, Atlas originally suggested a bus change. We found a missing link between the Ring Road stairs and the street. Once we fixed the map, the walk to the eastbound stop was 369 metres, about five minutes. We ran the search again using only bus reports received by 3 p.m.</p>
+      <p>Atlas put the direct 711UP first. Past travel times put it at AIIMS around 3:06, and the operator’s forecast put the 392UP there around 3:11. GPS later placed the 711UP near AIIMS around 3:05, just as the passenger could have reached the stop. We could not confirm it at Lajpat Nagar.</p>
+      <p>The first direct bus we could trace at both stops after the walk was the 392UP. It reached AIIMS around 3:12 and Lajpat Nagar around 3:22. With the final 495-metre walk, someone who caught it could have reached the address around 3:29 p.m.</p>
     </section>
     <section aria-labelledby="wait-cost-title">
       <h2 id="wait-cost-title">How much longer would a rider wait for the suggested line?</h2>
-      <p>Across six October dates, 304 searches had a clear first bus and GPS sightings of both planners’ suggested lines at the boarding and exit stops. For someone already at the stop, the median extra wait for the suggested line fell from 3 min 32 sec to about 3 min 5 sec. An untracked bus could have arrived earlier. The full test had 1,728 searches.</p>
+      <p>We compared two versions of Atlas in 1,728 searches across six October dates. In 304 searches, GPS showed which line came first and traced the lines both versions suggested at the boarding and exit stops. For someone already at the stop, the median extra wait for the suggested line fell from 3 min 32 sec to about 3 min 5 sec. An untracked bus could have arrived earlier.</p>
     </section>
     <section aria-labelledby="spacing-title">
       <h2 id="spacing-title">Two buses together at Shakarpur School Block</h2>
