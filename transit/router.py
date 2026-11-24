@@ -14,6 +14,7 @@ from functools import cached_property, lru_cache
 from inspect import signature
 
 from .schedule import cache_schedule, rows
+from .preferences import balanced_selection
 from .boarding import PlatformPath
 
 
@@ -22,7 +23,8 @@ WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", 
 ALL_STOPS_SERVED = frozenset()
 BOARDING_UNCERTAINTY_SECONDS = 60
 MINIMUM_ALERT_GAIN_SECONDS = 300
-TRANSFER_ENDPOINT_LIMIT = 12
+NEAREST_TRANSFER_PLATFORMS = 12
+TRANSFER_CANDIDATES_PER_PASS = 180
 NEARBY_PLATFORM_SCREEN_M = 250
 NEARBY_PLATFORM_COUNT = 2
 DEPARTURE_BOARD_SECONDS = 30 * 60
@@ -236,6 +238,7 @@ class _Query:
         self.start = int((depart-self.midnight).total_seconds())
         self.horizon = self.start + int(options.get("horizon_seconds", 14400))
         self.limit = max(1, min(8,int(options.get("limit",3))))
+        self.preference = options.get("preference","earliest")
         self.transfers = max(0,min(1,int(options.get("max_transfers",1))))
         self.buffer = max(0,int(options.get("transfer_buffer_seconds",90)))
         self.max_walk = max(0,int(options.get("max_walk_m",1100)))
@@ -294,8 +297,6 @@ class _Query:
             w = self.walk(place,stop) if outgoing else self.walk(stop,place)
             if w and w["distance_m"] <= self.max_walk:
                 result[s] = w
-                if len(result) >= TRANSFER_ENDPOINT_LIMIT:
-                    break
         return result
 
     def timeline(self, pid, k, day, offset, instance=None, boarding_index=None, position=None):
@@ -651,6 +652,8 @@ class _Query:
 
     def run(self, origin, destination):
         self.origin, self.destination = origin,destination
+        self.endpoint_stops_considered = 0
+        self.max_transfer_candidates = TRANSFER_CANDIDATES_PER_PASS
         if coords(origin)==coords(destination) and (None in (origin["id"],destination["id"])
                                                      or origin["id"]==destination["id"]):
             dt=self.depart.isoformat()
@@ -660,6 +663,7 @@ class _Query:
                                  "walk_seconds":0,"access_walk_seconds":0,"transfer_walk_seconds":0,
                                  "egress_walk_seconds":0,"wait_seconds":0,"ride_seconds":0,"legs":[same]}],[])
         access, egress = self.endpoint(origin,True), self.endpoint(destination,False)
+        self.endpoint_stops_considered = max(len(access),len(egress))
         destinations = defaultdict(list)
         for s in egress:
             for pid,j in self.r.at[s]:
@@ -681,15 +685,44 @@ class _Query:
                             if not p.drops[j] and ride.serves(j) and ride.arrivals[j] < self.horizon:
                                 first[p.stops[j]].append((ride.arrivals[j],pid,w,ride,i,j))
         if self.transfers:
-            self.connect(first,destinations)
+            checked = set()
+            if self.endpoint_stops_considered > NEAREST_TRANSFER_PLATFORMS:
+                # Protect connections from the nearest platforms. Farther feeders
+                # can otherwise take their places in the bounded transfer search.
+                near_start = set(list(access)[:NEAREST_TRANSFER_PLATFORMS])
+                near_end = set(list(egress)[:NEAREST_TRANSFER_PLATFORMS])
+                near_first = {s: [label for label in labels
+                                  if self.r.patterns[label[1]].stops[label[4]] in near_start]
+                              for s, labels in first.items()}
+                near_destinations = {pid: [(j, w) for j, w in ends
+                                          if self.r.patterns[pid].stops[j] in near_end]
+                                     for pid, ends in destinations.items()}
+                self.connect(near_first,near_destinations,checked)
+                self.max_transfer_candidates += TRANSFER_CANDIDATES_PER_PASS
+            self.connect(first,destinations,checked)
         unverified = self.remaining_direct_links(access, egress)
         ranked = sorted(self.itineraries.values(),key=lambda v:v[0])
         distinct = self.distinct_choices(ranked)
-        selected = distinct[:self.limit]
-        if self.limit > 1 and selected and all(len(item[1][1]) > 1 for item in selected):
-            direct = next((item for item in distinct if len(item[1][1]) == 1),None)
-            if direct:
-                selected[-1] = direct
+        policy = None
+        if self.preference == "balanced":
+            # Route IDs can differ between operators using the same public line.
+            # Keep identical passenger choices from filling the visible list.
+            named = {}
+            for cost, item in distinct:
+                calls = tuple((self.r.routes[self.r.patterns[ride.pid].route][0],
+                               self.r.patterns[ride.pid].stops[i], self.r.patterns[ride.pid].stops[j])
+                              for ride, i, j in item[1])
+                named.setdefault(calls,(cost,item))
+            distinct = list(named.values())
+            choices = [(arr-self.start,walk,len(item[1])-1) for (arr,walk),item in distinct]
+            indexes, policy = balanced_selection(choices,self.limit)
+            selected = [distinct[i] for i in indexes]
+        else:
+            selected = distinct[:self.limit]
+            if self.limit > 1 and selected and all(len(item[1][1]) > 1 for item in selected):
+                direct = next((item for item in distinct if len(item[1][1]) == 1),None)
+                if direct:
+                    selected[-1] = direct
         plans = [self.render_feasible(item) for _,item in selected]
         warnings = []
         if not plans and (not access or not egress):
@@ -700,7 +733,10 @@ class _Query:
             warnings.append("Special service appears in these results. Confirm eligibility with the operator.")
         alerts = self.boarding_alerts(access, destinations, ranked)
         platform_options = self.nearby_platform_options(unverified) if not plans or plans[0]["transfers"] else []
-        return self.result(plans,warnings,alerts,platform_options)
+        result = self.result(plans,warnings,alerts,platform_options)
+        if policy is not None:
+            result["balanced_choices"] = policy
+        return result
 
     def recent_live_departures(self, live_candidates, pid, i, ready):
         """Yield direct observations at this boarding platform just before the rider is ready."""
@@ -835,13 +871,15 @@ class _Query:
                 "warnings":warnings,"limits":{"max_transfers":self.transfers,
                 "horizon_seconds":self.horizon-self.start,"max_walk_m":self.max_walk,
                 "transfer_walk_m":self.transfer_walk,"transfer_buffer_seconds":self.buffer,
-                "endpoint_stops_considered":TRANSFER_ENDPOINT_LIMIT,"direct_endpoints":"all_in_walking_radius",
-                "max_transfer_candidates":180},
+                "endpoint_stops_considered":self.endpoint_stops_considered,"direct_endpoints":"all_in_walking_radius",
+                "max_transfer_candidates":self.max_transfer_candidates},
                 "source":"GTFS fixed-route schedule, walking graph and available ETA estimates"}
 
-    def connect(self, first, destinations):
+    def connect(self, first, destinations, checked):
         downstream = defaultdict(list)
         for pid, ends in destinations.items():
+            if not ends:
+                continue
             p = self.r.patterns[pid]
             for i,s in enumerate(p.stops):
                 if p.pickups[i]:
@@ -851,6 +889,8 @@ class _Query:
                         downstream[s].append((pid,i,j,egress))
         candidates = {}
         for s,labels in first.items():
+            if not labels:
+                continue
             labels.sort(key=lambda l:l[0])
             # Keep the earliest arriving first bus for each of up to two route choices.
             unique = {}
@@ -876,6 +916,8 @@ class _Query:
                             candidates[key]=item
         counts, evaluated = Counter(), 0
         for _,label,s,t,pid,i,j,endwalk in sorted(candidates.values(),key=lambda c:c[0]):
+            if evaluated >= TRANSFER_CANDIDATES_PER_PASS:
+                break
             pair = self.r.patterns[label[1]].route,self.r.patterns[pid].route
             if counts[pair] >= 5:
                 continue
@@ -884,14 +926,16 @@ class _Query:
                 continue
             counts[pair]+=1
             evaluated += 1
+            _,_,access,ride1,board,alight = label
+            connection = (id(ride1),board,alight,t,pid,i,j)
+            if connection in checked:
+                continue
+            checked.add(connection)
             ready = label[0]+transfer["seconds"]+self.buffer
             for ride2 in self.next_rides(pid,i,ready):
                 if not ride2.serves(j):
                     continue
-                _,_,access,ride1,board,alight = label
                 self.save(access,[(ride1,board,alight),(ride2,i,j)],transfer,endwalk)
-            if evaluated>=180:
-                break
 
     def stamp(self, seconds):
         return (self.midnight+timedelta(seconds=int(seconds))).isoformat()

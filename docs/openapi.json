@@ -156,6 +156,22 @@
             }
           },
           {
+            "name": "preference",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "earliest",
+                "balanced"
+              ],
+              "type": "string",
+              "description": "Choose earliest arrival or weigh extra walking against the time saved. The public map uses balanced.",
+              "default": "earliest",
+              "title": "Preference"
+            },
+            "description": "Choose earliest arrival or weigh extra walking against the time saved. The public map uses balanced."
+          },
+          {
             "name": "max_transfers",
             "in": "query",
             "required": false,
@@ -420,6 +436,68 @@
   },
   "components": {
     "schemas": {
+      "BalancedChoices": {
+        "properties": {
+          "primary_count": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 0.0,
+            "title": "Primary Count",
+            "description": "Show these first journeys immediately. The remaining journeys are additional alternatives."
+          },
+          "faster_index": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Faster Index",
+            "description": "Index in journeys of the faster option in the walking comparison."
+          },
+          "less_walking_index": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Less Walking Index",
+            "description": "Index in journeys of the option with at least five minutes less total walking and no extra transfer."
+          },
+          "time_saved_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Saved Seconds"
+          },
+          "extra_walk_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Walk Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "primary_count"
+        ],
+        "title": "BalancedChoices"
+      },
       "BoardingAlert": {
         "properties": {
           "service_date": {
@@ -1184,6 +1262,16 @@
             "title": "Journeys",
             "description": "Ranked alternatives. Empty if no usable path was found within the search limits."
           },
+          "balanced_choices": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BalancedChoices"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "walking_alternative": {
             "anyOf": [
               {
@@ -1839,7 +1927,7 @@
           "endpoint_stops_considered": {
             "type": "integer",
             "title": "Endpoint Stops Considered",
-            "description": "Maximum number of reachable platforms retained at each endpoint for transfer journeys."
+            "description": "Number of reachable platforms at the end with more choices. Both ends include every platform within the mapped walking limit."
           },
           "direct_endpoints": {
             "anyOf": [

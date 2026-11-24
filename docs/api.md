@@ -10,9 +10,14 @@ Start the planner and open the [runnable guide](http://127.0.0.1:8765/api-guide)
 | --- | --- |
 | `GET /stops?q=AIIMS` | Matching boarding platforms and their coordinates |
 | `GET /journeys?from=2839&to=2363&depart=2026-11-22T15:00` | Earliest estimated destination arrivals between these platforms |
+| `GET /journeys?from=2433&to=9561&depart=2026-11-24T10:57&preference=balanced&limit=5` | Compare an earlier arrival with a shorter walk from Vivek Vihar to Rajiv Chowk |
 | `GET /arrivals?stop=2839&route=1882` | A platform estimate for this route at the current time |
 
-The first journey is ranked by predicted arrival at the destination. For each bus leg, `calls[0]` gives the predicted boarding time and its source. The `same_platform_services` list shows other direct lines serving both of the selected stops. An estimate labelled `upstream_gps` in a journey uses a recent reading from this particular bus. Its `boarding_position` supplies the observed upstream stop, when the vehicle reported it, and when Atlas received the reading. Matched provider stop predictions are labelled `live`.
+The API normally lists the earliest estimated arrival first. The public map requests `preference=balanced`. It compares the fastest journey with the earliest alternative that saves at least five minutes of walking and needs no extra bus change. The fastest journey leads when it saves at least 10% of the alternative’s total time. Otherwise, the shorter walk leads. Atlas compares the full journey in seconds before rounding the display. The separate `compare_hour` result always refers to the fastest journey at that hour.
+
+The map requests up to five journeys. `balanced_choices.primary_count` gives the number to show first, up to three. Up to two more follow in the same array. When three shorter-walk routes each offer a different trade-off and fall within the 10% rule, the faster, longer-walk route is first under **More options**. When the comparison has just two useful choices, both appear immediately. The optional `faster_index` and `less_walking_index` point to the options returned. `time_saved_seconds` and `extra_walk_seconds` describe what the faster option gains and costs. Departures a passenger may miss stay in the separate boarding advice.
+
+For each bus leg, `calls[0]` gives the predicted boarding time and its source. The `same_platform_services` list shows other direct lines serving both of the selected stops. An estimate labelled `upstream_gps` in a journey uses a recent reading from this particular bus. Its `boarding_position` supplies the observed upstream stop, when the vehicle reported it, and when Atlas received the reading. Matched provider stop predictions are labelled `live`.
 
 Without a recent usable observation, the planner can still give a timetable or historical estimate. The exact fields and request limits are in the [saved OpenAPI schema](openapi.json).
 

@@ -99,6 +99,64 @@ class RouterTest(unittest.TestCase):
         result = router.journeys("28.6,77.198","28.6,77.222",self.query,max_transfers=0)
         self.assertEqual([l["trip_id"] for l in result["journeys"][0]["legs"] if l["mode"]=="bus"],["first"])
 
+    def test_transfer_can_use_reachable_platforms_beyond_twelve_at_both_ends(self):
+        def add_nearby_platforms(contents):
+            for side, lon in (("start", 77.198), ("finish", 77.242)):
+                for n in range(14):
+                    stop = f"{side}-{n}"
+                    contents["stops"].append([stop, stop, 28.6 + n * .00001, lon])
+                    trip = f"pre-dawn-{stop}"
+                    contents["trips"].append(["r2", "s", trip, ""])
+                    contents["stop_times"].extend([
+                        [trip, stop, 0, "05:00:00", "05:00:00"],
+                        [trip, "B", 1, "05:10:00", "05:10:00"],
+                    ])
+        directory = Path(self.temp.name) / "crowded-transfer"
+        directory.mkdir()
+        feed(directory / "data.zip", add_nearby_platforms)
+
+        class Walking:
+            @staticmethod
+            def route(a, b, max_distance_m=None):
+                return {"distance_m":150, "seconds":120, "source":"osm", "geometry":[a,b]}
+
+        router = Router(directory / "data.zip", directory, Walking(), None)
+        result = router.journeys("28.6,77.198", "28.6,77.242", self.query)
+        bus_legs = [leg for leg in result["journeys"][0]["legs"] if leg["mode"] == "bus"]
+        self.assertEqual([leg["trip_id"] for leg in bus_legs], ["first", "early"])
+        self.assertGreater(result["limits"]["endpoint_stops_considered"], 12)
+
+    def test_farther_feeders_do_not_evict_nearby_transfer_choices(self):
+        def competing_feeders(contents):
+            # Eleven pre-dawn platforms and A are nearest. Two farther lines
+            # reach B before the bus from A, but all three catch the same bus to C.
+            for n in range(11):
+                stop = f"near-{n}"
+                contents["stops"].append([stop, stop, 28.6 + n * .00001, 77.198])
+                contents["trips"].append(["r2", "s", stop, ""])
+                contents["stop_times"].extend([[stop, stop, 0, "05:00:00", "05:00:00"],
+                                               [stop, "B", 1, "05:10:00", "05:10:00"]])
+            for name, lon, arrive in (("3", 77.201, "08:07:00"), ("4", 77.202, "08:08:00")):
+                contents["stops"].append([name, name, 28.6, lon])
+                contents["routes"].append([name, name, "DTC"])
+                contents["trips"].append([name, "s", name, ""])
+                contents["stop_times"].extend([[name, name, 0, "08:00:00", "08:00:00"],
+                                               [name, "B", 1, arrive, arrive]])
+        directory = Path(self.temp.name) / "competing"
+        directory.mkdir()
+        feed(directory / "data.zip", competing_feeders)
+
+        class Walking:
+            @staticmethod
+            def route(a, b, max_distance_m=None):
+                return {"distance_m":150, "seconds":120, "source":"osm", "geometry":[a,b]}
+
+        router = Router(directory / "data.zip", directory, Walking(), None)
+        result = router.journeys("28.6,77.198", "C", self.query, limit=8)
+        routes = {tuple(leg["trip_id"] for leg in j["legs"] if leg["mode"] == "bus")
+                  for j in result["journeys"]}
+        self.assertEqual(routes, {("first", "early"), ("3", "early"), ("4", "early")})
+
     def test_unmapped_approach_lists_platform_departure_without_claiming_a_walk(self):
         query = self.router.journeys("28.6005,77.20","B",self.query)
         self.assertFalse(query["journeys"])

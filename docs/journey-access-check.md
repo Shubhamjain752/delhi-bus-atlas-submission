@@ -47,6 +47,10 @@ We also replayed forecasts that were **31–60 seconds** before platform readine
 
 There were 40 route IDs across the three days. A timetable trip could be matched uniquely in 226 cases. The production rule exposed nine secondary itineraries at the requested pair of stops. No later GPS outcome confirmed an approach among those nine. With a 30-second cut-off none of these 31–60-second cases would qualify. Drivers’ door opening and actual passenger boarding remain unknown. [One-minute replay totals by date](../data/boarding-minute-check.json)
 
+## A wider search in Vivek Vihar
+
+In a later comparison, the nearest 12 platforms missed a connection from Yojna Vihar. Considering all platforms within walking range found a route to Rajiv Chowk that could arrive nearly eight minutes earlier, with nearly 12 extra minutes on foot. The comparison covers 18 searches, including three after midnight. [See the two journeys and what GPS could verify](vivek-vihar-route-check.md)
+
 ## Reproduce
 
 For the full GPS replay, use the judge-provided data or your authorized local copies of the original receipts and previous planner. The public checkout includes the regression scripts and results.

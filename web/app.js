@@ -622,6 +622,11 @@ function choices() {
   const box=$("alternatives");
   box.replaceChildren();
   const options=ui.data?.journeys || [];
+  const policy=ui.data?.balanced_choices;
+  const primary=policy?.primary_count ?? options.length;
+  const more=element("details","more-journeys");
+  const summary=element("summary",null,"More options");
+  more.append(summary);
   const atDestination=options.length===1 && sameLocation(options[0]);
   const hasWalk=!!ui.data?.walking_alternative;
   const hasNearby=!!ui.data?.direct_from_nearby_platforms?.length;
@@ -661,10 +666,21 @@ function choices() {
     let serviceType=journey.transfers>0?journey.transfers+" transfer"+(journey.transfers===1?"":"s"):"Direct";
     if (!journey.transfers && options[0].transfers>0) {
       const difference=journey.duration_seconds-options[0].duration_seconds;
-      serviceType=difference>0?"Direct · "+duration(difference)+" later":"Direct · same arrival";
+      serviceType=difference===0?"Direct · same arrival":"Direct · "+duration(Math.abs(difference))+(difference>0?" later":" sooner");
     }
     bottom.append(chain,element("span","subtle",serviceType));
     choice.append(top,bottom);
+    let tradeoff="";
+    if (index===policy?.less_walking_index) {
+      tradeoff="Less walking · "+duration(journey.walk_seconds)+" on foot";
+    } else if (index===policy?.faster_index) {
+      tradeoff=policy.time_saved_seconds===0?"Same arrival":"Arrives "+duration(policy.time_saved_seconds)+" sooner";
+      tradeoff+=" · "+duration(policy.extra_walk_seconds)+" more walking";
+    }
+    if (tradeoff) {
+      choice.append(element("div","choice-tradeoff",tradeoff));
+      choice.setAttribute("aria-label",choice.getAttribute("aria-label")+", "+tradeoff);
+    }
     if (buses.length) {
       const basis=boardingBasis(buses[0].calls?.[0]?.source);
       choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
@@ -676,8 +692,12 @@ function choices() {
     }
     const others=buses[0]?.same_platform_services?.length;
     if (others) choice.append(element("div","choice-boarding",others+" other direct "+(others===1?"line serves":"lines serve")+" both stops"));
-    box.append(choice);
+    (index<primary?box:more).append(choice);
   });
+  if (more.children.length>1) {
+    summary.textContent="More options ("+(more.children.length-1)+")";
+    box.append(more);
+  }
 }
 function nearbyAlightingChoice() {
   const box=$("nearby-alighting"), option=ui.data?.nearby_alighting_option;
@@ -1217,7 +1237,7 @@ async function searchJourney(submittedByRider=false) {
   cancelPick();
   if (comparisonRequest) comparisonRequest.abort();
   const ticket=++ui.request;
-  const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30"};
+  const params={from,to,depart:depart+(depart.length===16?":00":"")+"+05:30",preference:"balanced",limit:"5"};
   if (opens502Replay && depart>="2026-11-21T01:17" && depart<="2026-11-21T01:30") params.replay="nov21";
   ui.data=null; ui.submitted=null; ui.boarding=null;
   choices();walkingChoice();boardingChoices();earlierBoardingChoices();nearbyDirectChoices();nearbyAlightingChoice();details();showWarnings([]);showBoardingAlerts([]);showRoute();resultContext(null);

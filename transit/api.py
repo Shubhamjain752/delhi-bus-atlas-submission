@@ -93,14 +93,14 @@ class Planner:
         self.last_interest = time.monotonic()
         self.interest.set()
 
-    def query(self, origin, destination, dt, limit, transfers, replay=None, *, include_nearby=True):
+    def query(self, origin, destination, dt, limit, transfers, replay=None, *, include_nearby=True, preference="earliest"):
         now = datetime.now(IST)
         if not replay and abs((dt - now).total_seconds()) < 3600:
             self.touch()
         # A near-future journey can use observations received by the actual query time.
         issue = now if not replay and timedelta(0) <= dt-now <= timedelta(minutes=45) else dt
         overlay, recording = self.archived_feed(int(issue.timestamp())) if replay else (self.live, None)
-        options = dict(limit=limit, max_transfers=transfers, asof=issue, eta=overlay)
+        options = dict(limit=limit, max_transfers=transfers, asof=issue, eta=overlay, preference=preference)
         result = plan_with_stop_names(self.router, origin, destination, dt, **options)
         if include_nearby and not result["journeys"]:
             nearby = nearby_alighting_option(self.router, result, dt, **options)
@@ -157,6 +157,7 @@ def journeys(origin: str = Query(alias="from", min_length=1, max_length=160,
              depart: str | None = Query(None, max_length=40, description="ISO 8601 departure. A timezone-free value uses Delhi time. Defaults to now.",
                                         examples=["2026-10-15T08:45"]),
              limit: int = Query(3, ge=1, le=6),
+             preference: Literal["earliest","balanced"] = Query("earliest", description="Choose earliest arrival or weigh extra walking against the time saved. The public map uses balanced."),
              max_transfers: int = Query(1, ge=0, le=1),
              compare_hour: int | None = Query(None, ge=0, le=23),
              replay: Literal["nov21"] | None = Query(None, description="Use feeds received by the requested November capture clock.")):
@@ -166,7 +167,7 @@ def journeys(origin: str = Query(alias="from", min_length=1, max_length=160,
         dt = ist_departure(depart)
         if replay and compare_hour is not None:
             raise ValueError("The November capture covers part of one hour. Omit compare_hour for this replay.")
-        result = planner.query(origin.strip(), destination.strip(), dt, limit, max_transfers, replay)
+        result = planner.query(origin.strip(), destination.strip(), dt, limit, max_transfers, replay, preference=preference)
         if compare_hour is not None:
             other = dt.replace(hour=compare_hour, minute=0, second=0, microsecond=0)
             compare = planner.query(result["origin"], result["destination"], other, 1, max_transfers, include_nearby=False)

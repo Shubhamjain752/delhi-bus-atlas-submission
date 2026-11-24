@@ -27,7 +27,7 @@ flowchart TD
     E --> G[Show route, stops and arrival time on the map]
 ```
 
-Atlas checks both ends of the trip. A farther stop can get you there sooner if the bus leaves earlier or takes a more direct route. For direct buses Atlas considers stops within 1.1 km at each end. For a journey with one change it keeps up to 12 reachable platforms at each end and checks up to 180 transfer candidates. A bus can also get you close when the final street connection is uncertain. The planner shows the time to the drop-off and labels any estimate for the remaining walk.
+Atlas checks every platform within a 1.1 km mapped walk at each end. A farther stop can get you there sooner if it serves a different bus. If the fastest trip needs at least five more minutes on foot, the map also shows the earliest option with less walking and no extra change. The shorter walk comes first unless the faster ride saves at least 10% of the whole trip. If the final street connection is uncertain, Atlas shows when the bus gets near your destination and labels any estimate for the remaining walk. [How the options are selected](docs/api.md)
 
 Atlas lists journeys by expected arrival at the destination. On a divided road, it looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
 

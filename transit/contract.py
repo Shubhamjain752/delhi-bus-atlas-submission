@@ -161,7 +161,7 @@ class SearchLimits(BaseModel):
     max_walk_m: int
     transfer_walk_m: int
     transfer_buffer_seconds: int
-    endpoint_stops_considered: int = Field(description="Maximum number of reachable platforms retained at each endpoint for transfer journeys.")
+    endpoint_stops_considered: int = Field(description="Number of reachable platforms at the end with more choices. Both ends include every platform within the mapped walking limit.")
     direct_endpoints: Literal["all_in_walking_radius"] | None = Field(default=None, description="Direct-service searches consider connecting stops throughout the walking radius.")
     max_transfer_candidates: int
 
@@ -233,6 +233,14 @@ class NearbyAlightingOption(BaseModel):
     estimated_walk: EstimatedStreetWalk | None = Field(default=None, description="Independently mapped street route when available; pedestrian access is uncertain.")
 
 
+class BalancedChoices(BaseModel):
+    primary_count: int = Field(ge=0, le=3, description="Show these first journeys immediately. The remaining journeys are additional alternatives.")
+    faster_index: int | None = Field(default=None, description="Index in journeys of the faster option in the walking comparison.")
+    less_walking_index: int | None = Field(default=None, description="Index in journeys of the option with at least five minutes less total walking and no extra transfer.")
+    time_saved_seconds: int | None = None
+    extra_walk_seconds: int | None = None
+
+
 class JourneyResult(BaseModel):
     origin: Place
     replay: ReplayInfo | None = None
@@ -240,6 +248,7 @@ class JourneyResult(BaseModel):
     departure: AwareDatetime
     issued_asof: AwareDatetime = Field(description="Cutoff for receiving observations used in this forecast or replay.")
     journeys: list[Itinerary] = Field(description="Ranked alternatives. Empty if no usable path was found within the search limits.")
+    balanced_choices: BalancedChoices | None = None
     walking_alternative: WalkingAlternative | None = None
     nearby_alighting_option: NearbyAlightingOption | None = Field(default=None, description="A usable bus ride ending near the chosen destination when no complete mapped journey was found.")
     direct_from_nearby_platforms: list[NearbyDirectDeparture] = Field(default_factory=list, description="Direct services from nearby platforms when the walk to board cannot be verified within the search limit. Times start at the boarding platform. These services are separate from the ranked door-to-door journeys.")

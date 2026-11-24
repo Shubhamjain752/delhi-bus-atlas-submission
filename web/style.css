@@ -746,6 +746,20 @@ h2 {
   border-color:#898ec9;
 }
 
+.choice-tradeoff {
+  margin-top:5px;
+  color:#283d56;
+  font-weight:600;
+}
+
+.more-journeys summary {
+  width:fit-content;
+  padding:7px 0 10px;
+  color:var(--indigo);
+  cursor:pointer;
+  font-weight:600;
+}
+
 .journey-choice[aria-pressed=true] {
   border-color:var(--indigo);
   box-shadow:inset 3px 0 var(--indigo);
