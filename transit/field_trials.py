@@ -179,6 +179,16 @@ def field_results(directory: Path):
                 else:
                     arm["interim"] = evidence
             case["providers"][name] = arm
+        observations = folder / "observed-legs.json"
+        if observations.is_file():
+            try:
+                summary = read(observations)
+            except (OSError, ValueError):
+                summary = None
+            if (isinstance(summary, dict) and summary.get("case") == key
+                    and summary.get("departure") == registered["departure"] and case.get("collection") == "scored"
+                    and all(case["providers"].get(name, {}).get("simulations") for name in ("atlas", "google"))):
+                case["observed_legs"] = summary
         cases.append(case)
     results = {"timezone":plan["timezone"],"cases":cases}
     try:

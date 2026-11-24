@@ -99,7 +99,10 @@ function nearView(test) {
   const state = {pending:"Waiting for the capture window", captured:"Saved", no_bus_estimate:"No bus estimate returned",
     partial_or_failed:"Capture incomplete", failed:"Capture failed", incomplete_after_departure:"Departure passed without a complete pair",
     outside_capture_window:"Outside the pre-departure window", mismatched_query:"Query could not be verified"};
-  details.append(node("p", "This separate check targets ten minutes before departure. A planner may suggest a different bus at that point. The travel-date comparison below follows the original saved routes."));
+  const scope = test.observed_legs?.near_google
+    ? "The main score uses the original routes. The GPS notes also cover Google’s updated route."
+    : "The travel-date comparison below follows the original saved routes.";
+  details.append(node("p", "This separate check targets ten minutes before departure. A planner may suggest a different bus at that point. " + scope));
   const rows = [["Capture",forecasts.map(f => f?.captured_at ? time(f.captured_at,datedClock) :
     (state[f?.state] || state[entry.state] || "No saved capture"))]];
   if (forecasts.some(f => f?.state === "captured" || f?.state === "no_bus_estimate")) {
@@ -209,9 +212,58 @@ function timeline(sim, arm, provider, showDurationRange = false) {
   return panel;
 }
 
+function stopObservations(observed) {
+  const details = node("details");
+  details.append(node("summary", "GPS sightings by bus and stop"),
+    node("p", "These are the first GPS readings within 45 m of each stop after departure. The same line can have several branches, and the readings can come from different buses. The last row counts only buses we could follow continuously through both stops in the advertised order."));
+  const seen = stamp => stamp ? time(stamp) : "No reading within 45 m";
+  for (const [key, label] of [...providers, ["near_google", "Google Maps just before departure"]]) {
+    const list = node("ul");
+    for (const leg of observed.routes[key]) {
+      const item = node("li");
+      item.append(node("strong", leg.route + " from " + leg.boarding_stop + " to " + leg.exit_stop),
+        node("div", "Boarding stop · " + seen(leg.first_fix_at_boarding_stop)),
+        node("div", "Exit stop · " + seen(leg.first_fix_at_exit_stop)),
+        node("div", "Continuous tracks with GPS entries at both stops · " + leg.confirmed_stop_pairs));
+      if (leg.example_pair) {
+        const pair = leg.example_pair;
+        const event = e => time(e.from) + "–" + time(e.to) +
+          (e.source === "inside_stop_area" ? " (GPS entered the stop area)" : " (crossing inferred between two readings)");
+        let detail = "For one bus, the stop times were " + event(pair.board) + " at " + leg.boarding_stop +
+          " and " + event(pair.exit) + " at " + leg.exit_stop + ".";
+        if (pair.gaps_in_trace) detail += " GPS missed part of the ride between these stops.";
+        if (!pair.matched_stopping_pattern) detail += " The route number matched. The exact stopping pattern is uncertain.";
+        item.append(node("p", detail));
+      }
+      list.append(item);
+    }
+    details.append(node("h4", label), list);
+  }
+  const coverage = observed.coverage;
+  details.append(node("p", coverage.fresh_snapshot_count_in_scoring_window + " fresh GPS updates from " +
+    time(coverage.scored_first_fresh_receipt) + " to " + time(coverage.scored_last_fresh_receipt) +
+    " were available before the " + time(coverage.registered_score_cutoff, minuteClock) + " scoring cut-off."));
+  return details;
+}
+
 function outcomesView(test, arms) {
   const box = node("div");
   box.append(node("h3", "Travel-date GPS comparison"));
+  if (test.observed_legs?.registered) {
+    const observed = test.observed_legs;
+    box.append(node("h4", "Which buses did GPS confirm?"), node("p", observed.headline));
+    const notes = node("ul");
+    for (const [key, name] of providers) {
+      const item = node("li");
+      item.append(node("strong", name + ". "), document.createTextNode(observed.registered[key]));
+      notes.append(item);
+    }
+    const update = node("li");
+    update.append(node("strong", "Google Maps just before departure. "), document.createTextNode(observed.near_google));
+    notes.append(update);
+    box.append(notes);
+    if (observed.routes && observed.coverage) box.append(stopObservations(observed));
+  }
   const inProgress = arms.map((arm,i) => arm?.interim ? providers[i][1] : null).filter(Boolean);
   if (inProgress.length) {
     box.append(node("p", "Interim observations for the " + inProgress.join(" and ") + " routes. The GPS collection window is still open. A later bus may appear as more positions arrive."));
@@ -407,8 +459,12 @@ async function load() {
     if (!response.ok) throw Error("Unable to retrieve results");
     const data = await response.json();
     if (!Array.isArray(data.cases)) throw Error("Missing cases");
+    const firstLoad = !results.querySelector(".trial");
     results.replaceChildren(...data.cases.map(trial));
     if (data.supplemental_control) results.append(controlView(data.supplemental_control));
+    if (firstLoad && location.hash.startsWith("#journey-")) {
+      document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    }
     statusLine.textContent = data.cases.length ? "" : "No registered trials available.";
   } catch {
     results.replaceChildren();

@@ -13,6 +13,8 @@ Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
 In a seven-day test, a candidate trained on more GPS history cut the average error between two stops from 51 seconds to 34. Both models predicted the same 5.94 million bus movements. The public planner uses the earlier model. [Results and reproduction steps](docs/october-eta-candidate.md)
 
+On the 5:30 p.m. Rohini to Azadpur check, we tracked a later 114DOWN for 55 minutes between the change stop and Azadpur. The same study follows the 957 and 174 that Google suggested at Budh Vihar. [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#journey-tuesday-transfer)
+
 ## How a journey is planned
 
 ```mermaid

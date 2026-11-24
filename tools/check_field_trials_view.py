@@ -23,6 +23,17 @@ def verify(page, base):
             if forecast:
                 expect(row.locator("td").nth(i)).to_have_text(" → ".join(l["route"] for l in forecast["legs"]))
         expect(section.get_by_role("table",name="Simulation",exact=True)).to_be_visible()
+        if case.get("observed_legs"):
+            observations = case["observed_legs"]
+            expect(section.get_by_role("heading", name="Which buses did GPS confirm?")).to_be_visible()
+            for text in [observations["headline"], *observations["registered"].values(), observations["near_google"]]:
+                expect(section).to_contain_text(text)
+            if observations.get("routes"):
+                section.get_by_text("GPS sightings by bus and stop", exact=True).click()
+                for group in observations["routes"].values():
+                    for leg in group:
+                        expect(section).to_contain_text(leg["route"] + " from " + leg["boarding_stop"] + " to " + leg["exit_stop"])
+                section.get_by_text("GPS sightings by bus and stop", exact=True).click()
         for provider, title in (("atlas","Delhi Bus Atlas"),("google","Google Maps")):
             arm = case["providers"].get(provider,{})
             if "interim" in arm:

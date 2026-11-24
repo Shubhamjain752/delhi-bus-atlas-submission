@@ -49,6 +49,22 @@ class ProspectiveResults(unittest.TestCase):
         self.assertNotIn("interim", arm)
         self.assertEqual(arm["simulations"], self.payload["simulations"])
 
+    def test_case_notes_need_two_completed_forecasts_for_the_same_journey(self):
+        summary = {"case": "a", **self.query, "headline": "Both forecasts checked"}
+        self.save("a/observed-legs.json", summary)
+        self.save("a/witness-status.json", {"state": "scored"})
+        self.save("a/simulation/atlas-result.json", self.payload)
+        self.assertNotIn("observed_legs", field_results(self.data)["cases"][0])
+        forecast = json.loads((self.data / "whole-journey/a/atlas/prediction.json").read_bytes())
+        self.save("a/google/prediction.json", {**forecast, "provider": "google"})
+        self.save("a/simulation/google-result.json", {
+            **self.payload, "scenario": {**self.payload["scenario"], "arm": "google"}})
+        self.assertEqual(field_results(self.data)["cases"][0]["observed_legs"], summary)
+        self.save("a/observed-legs.json", {**summary, "departure": "2026-11-23T15:00:00+05:30"})
+        case = field_results(self.data)["cases"][0]
+        self.assertNotIn("observed_legs", case)
+        self.assertEqual(case["providers"]["atlas"]["simulations"], self.payload["simulations"])
+
     def test_damaged_control_keeps_registered_cases_readable(self):
         folder = self.data / "whole-journey-walk-check"
         folder.mkdir()
