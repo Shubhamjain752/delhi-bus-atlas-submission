@@ -1,0 +1,116 @@
+{
+  "training": "2026-10-01 to 2026-10-24",
+  "test": "2026-10-25 to 2026-10-31",
+  "origin_wait_proxy": {
+    "coverage": {
+      "scheduled_origin_band_quarter_hours": 847280,
+      "bracketed_by_observed_movements": 25260,
+      "also_has_next_scheduled_start_in_band": 24011
+    },
+    "origin_gap_comparison": {
+      "all": {
+        "scored": 12202,
+        "timetable_mae_seconds": 986.01,
+        "historical_mae_seconds": 875.95
+      },
+      "weekend": {
+        "scored": 3269,
+        "timetable_mae_seconds": 930.65,
+        "historical_mae_seconds": 831.86
+      },
+      "00_to_04": {
+        "scored": 152,
+        "timetable_mae_seconds": 725.57,
+        "historical_mae_seconds": 638.11
+      },
+      "weekday": {
+        "scored": 8933,
+        "timetable_mae_seconds": 1006.27,
+        "historical_mae_seconds": 892.09
+      }
+    },
+    "observed_starts_by_training_support": {
+      "previously_observed": {
+        "scheduled_band_dates": 51985,
+        "with_one_or_more_observed_starts": 18340,
+        "scheduled_starts": 323397,
+        "observed_start_movements": 33359
+      },
+      "no_observed_starts_in_training": {
+        "scheduled_band_dates": 53925,
+        "with_one_or_more_observed_starts": 1107,
+        "scheduled_starts": 210087,
+        "observed_start_movements": 1190
+      }
+    },
+    "mean_seconds": {
+      "all": {
+        "queries": 17930,
+        "observed_wait": 1283.13,
+        "timetable": 1054.81,
+        "half_historical_median": 877.34,
+        "length_weighted_history": 832.77
+      },
+      "weekend": {
+        "queries": 4575,
+        "observed_wait": 1195.33,
+        "timetable": 990.14,
+        "half_historical_median": 825.17,
+        "length_weighted_history": 789.89
+      },
+      "00_to_04": {
+        "queries": 203,
+        "observed_wait": 1037.27,
+        "timetable": 790.32,
+        "half_historical_median": 627.35,
+        "length_weighted_history": 651.51
+      },
+      "weekday": {
+        "queries": 13355,
+        "observed_wait": 1313.21,
+        "timetable": 1076.97,
+        "half_historical_median": 895.22,
+        "length_weighted_history": 847.47
+      }
+    }
+  },
+  "training_file_sha256": "9311f31ec09de3a11a0c654c03d6f3ac441017733e1392be90326efd82398582",
+  "platform_spacing": {
+    "all": {
+      "observed_gaps": 3681291,
+      "scored": 3471818,
+      "absolute_error": 2694641595,
+      "at_or_below_median": 1694096,
+      "at_or_below_p90": 3002629,
+      "median_gap_mae_seconds": 776.15,
+      "within_historical_p90_pct": 86.49
+    },
+    "weekend": {
+      "observed_gaps": 1146658,
+      "scored": 1036066,
+      "absolute_error": 771856738,
+      "at_or_below_median": 510942,
+      "at_or_below_p90": 891069,
+      "median_gap_mae_seconds": 744.99,
+      "within_historical_p90_pct": 86.01
+    },
+    "00_to_04": {
+      "observed_gaps": 16348,
+      "scored": 13134,
+      "absolute_error": 10180792,
+      "at_or_below_median": 6739,
+      "at_or_below_p90": 11265,
+      "median_gap_mae_seconds": 775.15,
+      "within_historical_p90_pct": 85.77
+    },
+    "weekday": {
+      "observed_gaps": 2534633,
+      "scored": 2435752,
+      "absolute_error": 1922784857,
+      "at_or_below_median": 1183154,
+      "at_or_below_p90": 2111560,
+      "median_gap_mae_seconds": 789.4,
+      "within_historical_p90_pct": 86.69
+    }
+  }
+}

@@ -21,3 +21,16 @@ When `GET /arrivals` has two qualifying observations from the previous 30 minute
 ### If the passenger can reach the stop sooner
 
 `earlier_boarding_options` lists direct departures due after the requested start time but before the estimated walk to the boarding platform finishes. Each option names the boarding and exit platforms. It gives the bus’s predicted time at each, the passenger’s estimated arrival on foot (`walk_ready_at`), and the gap in seconds (`seconds_before_walk_ready`). The passenger can compare the two clocks and decide whether their own way to the stop works. The planner makes no assumption about a bike or cab. The regular journey list still uses the mapped walk.
+
+### Evidence for a bus departure
+
+A bus leg in `GET /journeys` can include the following fields. Route starts come from the first ordinary pickup listed for that scheduled trip in the Delhi timetable. A bus can begin passenger service at a terminal, depot stop or roadside platform.
+
+| Field | Meaning |
+| --- | --- |
+| `origin_departure` | Starting stop, scheduled time and service date. Status `seen_in_service` includes the later stop where GPS saw that specific run and the observation and receipt times. Status `unconfirmed` leaves the scheduled start unverified. |
+| `service_history` | Scheduled starts and qualifying recorded first-to-second-stop movements for the same route, day type and two-hour period. These two counts alone cannot establish a cancellation rate. |
+| `scheduled_start_history` | A separate check of physical buses whose GPS identity matched a scheduled run. The response gives matched and scheduled counts and the dates covered. |
+| `platform_gap_history` | Number of gaps, dates covered, median and 90th-percentile spacing in seconds for the boarding stop and next stop. At least five recorded gaps on three days are required. `GET /arrivals` can also return this field where the route’s next stop is unambiguous. |
+
+The October summaries are available for November onward only on the timetable they were fitted against. Missing evidence is omitted. `GET /status` reports the loaded history under `service_history`. [Method and rebuild instructions](service-starts.md)

@@ -134,8 +134,17 @@ def platform_estimate(router, overlay, stop, route, when):
     possible = possible_boarding(query, board, next_departures, wait, route_name)
     gap_lookup = getattr(overlay, "observed_service_gap", None)
     gap = gap_lookup(route, stop, when) if gap_lookup else None
+    # An anonymous platform query can cover branches with different onward paths.
+    # Publish a historical interval only when the platform and onward call are unambiguous.
+    following = {router.patterns[pid].stops[i+1] for pid,i in board
+                 if any(router.patterns[pid].service in active for _,_,active in query.days)}
+    historical = None
+    if len(following) == 1:
+        historical = router.service_history.platform(route, router.stops[stop], router.stops[following.pop()],
+                                                     when, when)
     return {"platform":router.stops[stop], "route_id":route, "route":route_name,
             "at":when.isoformat(), "arrival":(when + timedelta(seconds=wait)).isoformat() if wait is not None else None,
             "wait_seconds":wait, "source":source, "observed_at":observed_at, "observed_stop":observed_stop, "note":note,
             **({"observed_service_gap":gap} if gap else {}),
+            **({"platform_gap_history":historical} if historical else {}),
             **({"possible_boarding":possible} if possible else {})}

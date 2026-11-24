@@ -69,6 +69,14 @@ class JourneyPositionTests(unittest.TestCase):
         self.assertEqual(bus["arrival"],"2026-10-15T08:07:00+05:30")
         self.assertEqual(bus["boarding_position"],{"observed_stop_id":"X",
                          "observed_at":self.when.isoformat(),"received_at":self.when.isoformat()})
+        self.assertEqual(bus["origin_departure"]["status"],"seen_in_service")
+        self.assertEqual(bus["origin_departure"]["observed_stop"]["id"],"X")
+        self.assertEqual(bus["origin_departure"]["origin"]["id"],"W")
+
+    def test_position_on_first_stop_cannot_confirm_departure(self):
+        self.gps(stop="W")
+        red = next(b for b in self.buses() if b["route_id"]=="red")
+        self.assertEqual(red["origin_departure"]["status"],"unconfirmed")
 
     def test_prior_service_day_inferred_from_unique_stop_clock(self):
         for clock in ("24","00"):
@@ -138,3 +146,14 @@ class JourneyPositionTests(unittest.TestCase):
         red = next(b for b in self.buses() if b["route_id"]=="red")
         self.assertEqual(red["calls"][0]["source"],"live")
         self.assertNotIn("boarding_position",red)
+        self.assertEqual(red["origin_departure"]["status"],"unconfirmed")
+        update.vehicle.id = "D1"
+        self.overlay.apply_trip_updates(feed_message,stamp)
+        red = next(b for b in self.buses() if b["route_id"]=="red")
+        self.assertEqual(red["calls"][0]["source"],"live")
+        self.assertEqual(red["origin_departure"]["status"],"seen_in_service")
+        self.assertEqual(red["origin_departure"]["observed_at"],self.when.isoformat())
+        update.vehicle.id = "different"
+        self.overlay.apply_trip_updates(feed_message,stamp)
+        red = next(b for b in self.buses() if b["route_id"]=="red")
+        self.assertEqual(red["origin_departure"]["status"],"unconfirmed")

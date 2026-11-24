@@ -685,6 +685,34 @@ class LiveOverlay:
             return row[1:]
         return None
 
+    def matched_service_position(self, ride, when):
+        """Locate the physical bus from a dated stop forecast without changing its predicted clock."""
+        issue = int(when.timestamp())
+        stamp, receipt, witnesses = self.vehicle_witnesses
+        if not self.eligible(stamp, issue) or not stamp <= receipt <= issue:
+            return None
+        identity = self.forecast_vehicle(ride.service_date, ride.trip, issue)
+        if not identity:
+            return None
+        vehicle, raw_trip = identity
+        p = self.router.patterns[ride.pid]
+        witness = witnesses.get(vehicle)
+        day = ride.service_date.strftime("%Y%m%d")
+        if not witness or witness[:3] != (day, p.route, raw_trip):
+            return None
+        observed, location, direction = witness[3:]
+        fix = self.latest_position_fixes.get(vehicle)
+        track = self.tracks.get(vehicle)
+        if (not issue - TTL <= observed <= receipt or not fix or fix[3] != observed
+                or self.position_claims.get(fix[6]) != {vehicle}
+                or not track or track[:2] != (p.route, raw_trip) or track[4] != observed or track[5] != day
+                or p.stops.count(track[2]) != 1
+                or approximate_m(location, coords(self.router.stops[track[2]])) > 45):
+            return None
+        if direction is not None and self.router.trip_directions.get(ride.trip) not in (None, direction):
+            return None
+        return p.stops.index(track[2]), observed, receipt
+
     def recent_passages(self, when):
         issue = int(when.timestamp())
         if self.eligible(self.position_snapshot[0], issue) and self.position_received <= issue:

@@ -87,7 +87,8 @@ class Planner:
         version = next((f.get("feed_version") for f in stats["feed_info"]), None)
         live = self.live.status() if self.online else {"state":"disabled", "source":"offline"}
         return {"feed_version":version, "timetable":stats, "walking":self.walking.metadata,
-                "model":self.model.metadata, "live":live, "timezone":"Asia/Kolkata"}
+                "model":self.model.metadata, "service_history":self.router.service_history.coverage(),
+                "live":live, "timezone":"Asia/Kolkata"}
 
     def touch(self):
         self.last_interest = time.monotonic()

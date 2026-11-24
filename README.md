@@ -15,6 +15,8 @@ For journeys from November onward, Atlas uses bus movements from all 31 days of 
 
 For Rohini to Azadpur at 5:30 p.m., the original Atlas forecast was 6:35 p.m. and Google Maps gave 6:28 p.m. Repeating the search with the full-month model gave 6:46 p.m. GPS traced an 808STDOWN to the change stop around 6:30 and a 174DOWN there around 7:13. The passenger’s final arrival is unknown. Across three overnight checks, the new model moved one estimate closer to the observed bus and tied on two. [Read the November comparison](https://iitboys-delhi-bus-atlas.vercel.app/submission/05-validation.pdf) · [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#november-model) · [Why the Rohini recommendation changed](docs/november-departure-audit.md)
 
+Atlas now shows whether GPS has seen the scheduled bus in service and how far apart buses have been at the boarding stop. At the Rohini crossing, for example, the middle gap between recorded 808STDOWN movements on October weekdays from 4 to 6 p.m. was 18 min 40 sec. There were 64 measurable gaps across 22 weekdays. An earlier bus could have passed without reporting. [How Atlas checks a departure](docs/service-starts.md) · [Test results](docs/departure-history-evaluation.md)
+
 ## How a journey is planned
 
 ```mermaid

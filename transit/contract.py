@@ -51,6 +51,50 @@ class ObservedServiceGap(BaseModel):
     latest_received_at: AwareDatetime
 
 
+class OriginDeparture(BaseModel):
+    origin: Place = Field(description="First regular boarding platform on the scheduled stopping pattern.")
+    service_date: date
+    scheduled_at: AwareDatetime
+    status: Literal["seen_in_service", "unconfirmed"] = Field(description="A fresh position uniquely matched this dated run at a downstream platform. An unconfirmed start remains possible.")
+    observed_stop: Place | None = None
+    observed_at: AwareDatetime | None = None
+    received_at: AwareDatetime | None = None
+
+
+class ServiceWindow(BaseModel):
+    next_stop: Place
+    day_type: Literal["weekday", "weekend"]
+    start_hour: int = Field(ge=0, le=22, description="Start of the two-hour window in Delhi civil time.")
+
+
+class HistoricalWindow(ServiceWindow):
+    training_start: date
+    training_end: date
+    gap_count: int = Field(ge=0)
+    gap_days: int = Field(ge=0)
+
+
+class OriginServiceHistory(HistoricalWindow):
+    origin: Place
+    scheduled: int = Field(ge=0, description="Scheduled starts in this window during the training period.")
+    observed: int = Field(ge=0, description="GPS movements from this origin to the next stop. These are independent of scheduled trip identities.")
+    observed_days: int = Field(ge=0)
+    median_gap_seconds: int | None = Field(default=None, ge=0, description="Middle gap between recorded movements at the origin when enough observations exist.")
+
+
+class HistoricalPlatformGap(HistoricalWindow):
+    platform: Place
+    median_gap_seconds: int = Field(ge=0, description="Middle historical gap between GPS sightings at this platform followed by the named next stop. Some buses may be missing from GPS.")
+    p90_gap_seconds: int = Field(ge=0, description="90th percentile of the recorded gaps.")
+
+
+class ScheduledStartHistory(ServiceWindow):
+    origin: Place
+    observed_dates: list[date] = Field(description="Dates checked for this bucket.")
+    scheduled: int = Field(gt=0, description="Distinct scheduled departures on those dates.")
+    matched: int = Field(ge=0, description="Scheduled departures with matching dated vehicle evidence. Others have unknown outcomes.")
+
+
 class PlatformEstimate(BaseModel):
     platform: Place
     route_id: str
@@ -64,6 +108,7 @@ class PlatformEstimate(BaseModel):
     note: str
     possible_boarding: PossibleBoarding | None = None
     observed_service_gap: ObservedServiceGap | None = Field(default=None, description="Interval between two distinct tracked buses at this platform via the same approach. GPS can miss buses. Passenger wait is estimated separately.")
+    platform_gap_history: HistoricalPlatformGap | None = None
     replay: ReplayInfo | None = None
 
 
@@ -131,6 +176,10 @@ class Bus(Leg):
     agency: str
     trip_id: str
     boarding_position: BoardingPosition | None = Field(default=None, description="Upstream position used to predict boarding time for this trip.")
+    origin_departure: OriginDeparture | None = None
+    service_history: OriginServiceHistory | None = None
+    platform_gap_history: HistoricalPlatformGap | None = None
+    scheduled_start_history: ScheduledStartHistory | None = None
     live_run_id: str | None = Field(default=None, description="Opaque vehicle-run identifier when multiple corroborated vehicles share this scheduled trip.")
     geometry_source: Literal["gtfs_shape", "ordered_stops"]
     model_sources: dict[str, int] = Field(description="Count of route intervals by timing source.")

@@ -103,6 +103,66 @@ function boardingObservation(position) {
   return position ? "Bus GPS recorded upstream at "+exactTime(position.observed_at)+
     ", received at "+exactTime(position.received_at)+" IST." : "";
 }
+
+function pastServiceWindow(history) {
+  const hour = n => String(n).padStart(2,"0")+":00";
+  return (history.day_type==="weekend"?"weekends":"weekdays")+" from "+hour(history.start_hour)+" to "+hour(history.start_hour+2);
+}
+
+function historyPeriod(history) {
+  const month = value => new Intl.DateTimeFormat("en-GB",{month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(value));
+  const first = month(history.training_start), last = month(history.training_end);
+  return first===last?first:first+"–"+last;
+}
+
+function historicalGapText(history) {
+  let text="On "+pastServiceWindow(history)+" in "+historyPeriod(history)+
+    ", tracked buses at "+history.platform.name+" were typically "+segmentTime(history.median_gap_seconds)+
+    " apart.";
+  if (history.gap_count>=10 && history.p90_gap_seconds>history.median_gap_seconds) {
+    text+=" About 9 in 10 recorded gaps were "+segmentTime(history.p90_gap_seconds)+" or shorter.";
+  }
+  return text+" GPS recorded "+history.gap_count+" gaps across "+history.gap_days+
+    " days. Other buses may have passed between sightings.";
+}
+
+function startWasDue(departure) {
+  return Date.parse(departure.scheduled_at)<=Math.min(Date.now(),Date.parse(ui.data?.issued_asof));
+}
+
+function serviceDetails(leg) {
+  const departure=leg.origin_departure, origin=leg.service_history, named=leg.scheduled_start_history, gap=leg.platform_gap_history;
+  if (!departure && !origin && !named && !gap) return null;
+  const details=element("details","service-list departure-evidence");
+  details.append(element("summary",null,"Departure and service history"));
+  if (departure) {
+    let text=leg.route+" is scheduled to start at "+departure.origin.name+" at "+timeText(departure.scheduled_at)+".";
+    if (departure.status==="seen_in_service") {
+      text+=" GPS recorded this bus farther along the route at "+departure.observed_stop.name+" at "+timeText(departure.observed_at)+".";
+    } else if (startWasDue(departure)) {
+      text+=" Atlas has no GPS confirmation that this run has started.";
+    }
+    details.append(element("p","leg-source",text));
+  }
+  if (gap) details.append(element("p","leg-source",historicalGapText(gap)));
+  if (origin) {
+    let text="In "+historyPeriod(origin)+", on "+pastServiceWindow(origin)+", GPS recorded "+origin.observed+
+      " movements from "+origin.origin.name+" to "+origin.next_stop.name+".";
+    if (origin.observed_days) text+=" They were recorded on "+origin.observed_days+(origin.observed_days===1?" day.":" days.");
+    if (Number.isFinite(origin.median_gap_seconds) && origin.origin.id!==gap?.platform.id) {
+      text+=" The typical gap at that starting stop was "+segmentTime(origin.median_gap_seconds)+".";
+    }
+    details.append(element("p","leg-source",text));
+  }
+  if (named) {
+    const days=named.observed_dates.length;
+    let text="We checked "+days+(days===1?" date":" dates")+" for scheduled starts at "+named.origin.name+
+      " on "+pastServiceWindow(named)+". GPS matched "+named.matched+" of "+named.scheduled+" scheduled starts to a bus.";
+    if (named.scheduled>named.matched) text+=" The remaining starts could not be verified.";
+    details.append(element("p","leg-source",text));
+  }
+  return details;
+}
 async function getJSON(path, params={}, signal) {
   const url = new URL(path, location.origin);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
@@ -666,7 +726,14 @@ function choices() {
     bottom.append(chain,element("span","subtle",serviceType));
     choice.append(top,bottom);
     if (buses.length) {
-      const basis=boardingBasis(buses[0].calls?.[0]?.source);
+      const firstBus=buses[0], start=firstBus.origin_departure;
+      let basis=boardingBasis(firstBus.calls?.[0]?.source);
+      if (start?.status==="seen_in_service") {
+        const tracking="GPS saw this bus in service at "+timeText(start.observed_at);
+        basis=firstBus.calls?.[0]?.source==="upstream_gps"?tracking:[basis,tracking].filter(Boolean).join(" · ");
+      } else if (start?.status==="unconfirmed" && startWasDue(start)) {
+        basis=[basis,"Start unconfirmed"].filter(Boolean).join(" · ");
+      }
       choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
         " · "+waitDuration(journey.wait_seconds)+" total wait"));
       if (basis) {
@@ -859,6 +926,9 @@ function platformArrival(leg) {
           element("p",null,boardingEvidence(possible)));
       }
       result.append(element("strong",null,heading));
+      if (prediction.platform_gap_history) {
+        result.append(element("p",null,historicalGapText(prediction.platform_gap_history)));
+      }
       const gap=prediction.observed_service_gap;
       if (gap && Number.isFinite(gap.gap_seconds)) {
         const observedClock=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Kolkata",
@@ -941,6 +1011,10 @@ function details(journey) {
     if (leg.geometry_source==="ordered_stops") meta.push("Approximate path between stops");
     body.append(element("p","leg-source",meta.join(" · ")));
     if (leg.boarding_position) body.append(element("p","leg-source",boardingObservation(leg.boarding_position)));
+    if (leg.mode==="bus") {
+      const history=serviceDetails(leg);
+      if (history) body.append(history);
+    }
     if (leg.includes_arterial_without_mapped_sidewalk) {
       body.append(element("p","leg-source","Part of this walk follows a road with no mapped sidewalk."));
     }

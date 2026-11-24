@@ -14,6 +14,7 @@ from functools import cached_property, lru_cache
 from inspect import signature
 
 from .schedule import cache_schedule, rows
+from .service_history import ServiceHistory
 from .boarding import PlatformPath
 
 
@@ -85,6 +86,7 @@ class Router:
     def __init__(self, gtfs_path, data_dir, walking, eta):
         self.gtfs_path = gtfs_path
         self.cache_path = cache_schedule(gtfs_path, data_dir)
+        self.service_history = ServiceHistory.load(data_dir, gtfs_path, self.cache_path)
         self.walking, self.eta = walking, eta
         self.patterns, self.at = [], defaultdict(list)
         with closing(sqlite3.connect(self.cache_path)) as db:
@@ -599,6 +601,52 @@ class _Query:
                                       "observed_at":datetime.fromtimestamp(observed,IST).isoformat(),
                                       "received_at":datetime.fromtimestamp(received,IST).isoformat()}}
 
+    def service_evidence(self, ride, board):
+        p = self.r.patterns[ride.pid]
+        start = next(i for i, restriction in enumerate(p.pickups) if restriction == 0)
+        origin = self.r.stops[p.stops[start]]
+        midnight = datetime.combine(ride.service_date, datetime.min.time(), IST)
+        start_time = midnight + timedelta(seconds=p.starts[p.trips.index(ride.trip)] + p.departures[start])
+        departure = {"origin":origin, "scheduled_at":start_time.isoformat(), "service_date":ride.service_date.isoformat(),
+                     "status":"unconfirmed"}
+        anchor = ride.position_anchor
+        # A matched stop fix can establish that a bus is in service even when it cannot
+        # time boarding (for example, a bus standing at the passenger's platform).
+        if anchor is None and not ride.live_run_id:
+            lookup = getattr(self.eta, "journey_positions", None)
+            if lookup:
+                anchors = lookup(self.asof).get((ride.service_date,ride.pid), {})
+                anchor = anchors.get(p.trips.index(ride.trip))
+        if anchor is None:
+            observed_position = getattr(self.eta, "matched_service_position", None)
+            if observed_position:
+                anchor = observed_position(ride, self.asof)
+        if anchor is not None:
+            index, observed, received = anchor
+            issue = int(self.asof.timestamp())
+            if (index > start and issue - 180 <= observed <= received <= issue and
+                    approximate_m(coords(origin), coords(self.r.stops[p.stops[index]])) > 90):
+                departure.update(status="seen_in_service", observed_stop=self.r.stops[p.stops[index]],
+                                 observed_at=datetime.fromtimestamp(observed,IST).isoformat(),
+                                 received_at=datetime.fromtimestamp(received,IST).isoformat())
+        result = {"origin_departure":departure}
+        history = self.r.service_history
+        if start+1 < len(p.stops):
+            following = self.r.stops[p.stops[start+1]]
+            origin_stats = history.origin(p.route, origin, following, start_time, self.asof)
+            if origin_stats:
+                result["service_history"] = origin_stats
+            named = history.scheduled(p.route, origin, following, start_time, self.asof)
+            if named:
+                result["scheduled_start_history"] = named
+        if board+1 not in ride.skipped:
+            board_time = self.midnight + timedelta(seconds=ride.departures[board])
+            platform_gap = history.platform(p.route, self.r.stops[p.stops[board]], self.r.stops[p.stops[board+1]],
+                                            board_time, self.asof)
+            if platform_gap:
+                result["platform_gap_history"] = platform_gap
+        return result
+
     def same_platform_services(self, item):
         """Other lines a passenger can board here and leave at the same exit stop."""
         approach, [(chosen, first, last)], _, egress = item
@@ -968,6 +1016,7 @@ class _Query:
                 agency=agency,trip_id=ride.trip,geometry_source=geo_source,model_sources=sources,
                 **({"live_run_id":ride.live_run_id} if ride.live_run_id else {}),
                 **self.position_evidence(ride),
+                **self.service_evidence(ride, i),
                 stop_count=sum(k not in ride.skipped for k in range(i+1,j+1)),
                 calls=self.stop_calls(ride,i,j),
                 stops=[self.r.stops[p.stops[k]] for k in range(i,j+1) if k not in ride.skipped],
