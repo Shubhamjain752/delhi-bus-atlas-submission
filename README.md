@@ -1,6 +1,6 @@
 # Delhi Bus Atlas
 
-Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the recorded Rohini Sector 22 to Azadpur example, taking one bus saves about 12 minutes of walking and gets you there an estimated four minutes later than changing buses.
+Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the 8:45 a.m. Rohini Sector 22 to Azadpur example, Atlas estimates that taking the direct 102DOWN saves 12 minutes of walking and gets you there about three minutes later than changing buses.
 
 [Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
 
@@ -73,7 +73,7 @@ We also tested 1,728 departures across six October dates. GPS identified a clear
 
 For 304 searches, GPS also showed when both planners' suggested lines passed. For someone already at the stop, the median extra wait compared with the first verified line fell from 3 minutes 32 seconds to about 3 minutes 5 seconds. [Wait comparison](data/passenger-wait-cost.json)
 
-GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The [public journey comparisons](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html) shows where each estimate could be checked.
+GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The report shows which parts of each journey we could check. [Public journey comparisons](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html)
 
 Further work should test waits on routes with irregular service, verify road crossings near AIIMS, and repeat after-midnight boarding checks on fresh dates. [Build guide, data and test commands](AGENTS.md) · [Technical note](docs/technical-note.md) · [Credits](CREDITS.md) · [Official challenge](https://delhi.transportstack.in/hackathon/)
 
