@@ -660,7 +660,7 @@ function choices() {
     const buses=(journey.legs || []).filter(l=>l.mode==="bus");
     if (buses.length) choice.setAttribute("aria-label","Journey "+(index+1)+", arrival "+arrivalText(journey.departure,journey.arrival)+
       ", "+duration(journey.duration_seconds)+", board "+buses[0].route+" at "+timeText(buses[0].departure)+
-      ", total wait "+waitDuration(journey.wait_seconds));
+      ", total wait "+waitDuration(journey.wait_seconds)+", "+duration(journey.walk_seconds)+" on foot");
     buses.forEach((leg,i) => chain.append(routeChip(leg,i)));
     if (!chain.children.length) chain.append(icon("walk"),"Walk");
     let serviceType=journey.transfers>0?journey.transfers+" transfer"+(journey.transfers===1?"":"s"):"Direct";
@@ -672,7 +672,7 @@ function choices() {
     choice.append(top,bottom);
     let tradeoff="";
     if (index===policy?.less_walking_index) {
-      tradeoff="Less walking · "+duration(journey.walk_seconds)+" on foot";
+      tradeoff="Less walking";
     } else if (index===policy?.faster_index) {
       tradeoff=policy.time_saved_seconds===0?"Same arrival":"Arrives "+duration(policy.time_saved_seconds)+" sooner";
       tradeoff+=" · "+duration(policy.extra_walk_seconds)+" more walking";
@@ -684,7 +684,7 @@ function choices() {
     if (buses.length) {
       const basis=boardingBasis(buses[0].calls?.[0]?.source);
       choice.append(element("div","choice-boarding","Board "+timeText(buses[0].departure)+
-        " · "+waitDuration(journey.wait_seconds)+" total wait"));
+        " · "+waitDuration(journey.wait_seconds)+" total wait · "+duration(journey.walk_seconds)+" on foot"));
       if (basis) {
         choice.append(element("div","choice-boarding",basis));
         choice.setAttribute("aria-label",choice.getAttribute("aria-label")+", "+basis);

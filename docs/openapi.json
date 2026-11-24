@@ -467,7 +467,7 @@
               }
             ],
             "title": "Less Walking Index",
-            "description": "Index in journeys of the option with at least five minutes less total walking and no extra transfer."
+            "description": "Index in journeys of the shorter-walk option used for the time and walking comparison."
           },
           "time_saved_seconds": {
             "anyOf": [

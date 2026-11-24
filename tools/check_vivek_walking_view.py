@@ -13,6 +13,7 @@ DESTINATION = "Rajiv Chowk Metro Station"
 DEPARTURE = "2026-11-24T10:57"
 SHORT_WALK = ("243DOWN", "943UP")
 EARLIER = ("473UP", "317DOWN")
+PRACTICAL = [SHORT_WALK, ("267UP", "943UP"), ("243DOWN", "352DOWN")]
 
 
 def is_test_search(response):
@@ -60,22 +61,26 @@ def check(browser, base, width, output):
         assert EARLIER in by_routes, list(by_routes)
         earlier = by_routes[EARLIER]
         short = choices[0][1]
-        assert short["arrival"][11:19] == "12:20:39" and short["walk_seconds"] == 635
-        assert earlier["arrival"][11:19] == "12:12:56" and earlier["walk_seconds"] == 1325
 
         cards = page.locator("#alternatives .journey-choice")
         first = cards.filter(has_text=SHORT_WALK[0]).filter(has_text=SHORT_WALK[1]).first
         faster = cards.filter(has_text=EARLIER[0]).filter(has_text=EARLIER[1]).first
         expect(first).to_be_visible()
         expect(first).to_have_attribute("aria-pressed", "true")
-        expect(faster).to_be_visible()
         expect(first).to_contain_text("Less walking")
-        expect(faster).to_contain_text("8 min sooner")
-        expect(faster).to_contain_text("12 min more walking")
         visible_cards = page.locator("#alternatives .journey-choice:visible").all_inner_texts()
         assert len(visible_cards) == policy["primary_count"] == 3, visible_cards
         assert len(by_routes) == len(choices) == 5
-        assert choices[1][0] == EARLIER
+        assert [routes for routes, _ in choices[:3]] == PRACTICAL, list(by_routes)
+        assert choices[3][0] == EARLIER and earlier["walk_seconds"] > short["walk_seconds"]
+        assert choices[4][0] == ("243DOWN", "85UP")
+        assert [(trip["arrival"][11:19], trip["walk_seconds"]) for _, trip in choices] == [
+            ("12:20:39", 635), ("12:20:39", 817), ("12:23:20", 635),
+            ("12:12:56", 1325), ("12:24:20", 901),
+        ]
+        assert all(trip["walk_seconds"] < short["walk_seconds"] + 300
+                   for routes, trip in choices if routes != EARLIER)
+        expect(faster).to_be_hidden()
         for index, (routes, _) in enumerate(choices[:3]):
             expect(cards.nth(index)).to_be_visible()
             for route in routes:
@@ -88,6 +93,11 @@ def check(browser, base, width, output):
         assert hidden_cards.count() == len(trips) - len(visible_cards) == 2
         expect(hidden_cards.first).to_be_hidden()
         disclosure.locator("summary").click()
+        expect(faster).to_contain_text("8 min sooner")
+        expect(faster).to_contain_text("12 min more walking")
+        for index, (_, trip) in enumerate(choices):
+            walk_minutes = (trip["walk_seconds"] + 30) // 60
+            expect(cards.nth(index)).to_contain_text(f"{walk_minutes} min on foot")
         for index, (routes, _) in enumerate(choices[3:]):
             card = hidden_cards.nth(index)
             expect(card).to_be_visible()
@@ -101,9 +111,6 @@ def check(browser, base, width, output):
         expect(cards.nth(2)).to_have_attribute("aria-pressed", "true")
         for route in choices[2][0]:
             expect(page.locator("#details")).to_contain_text(route)
-        faster.click()
-        expect(faster).to_have_attribute("aria-pressed", "true")
-        expect(page.locator("#details")).to_contain_text(EARLIER[1])
         first.click()
         expect(first).to_have_attribute("aria-pressed", "true")
         expect(page.locator("#details")).to_contain_text(SHORT_WALK[1])

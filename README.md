@@ -27,11 +27,11 @@ flowchart TD
     E --> G[Show route, stops and arrival time on the map]
 ```
 
-Atlas checks every platform within a 1.1 km mapped walk at each end. A farther stop can get you there sooner if it serves a different bus. If the fastest trip needs at least five more minutes on foot, the map also shows the earliest option with less walking and no extra change. The shorter walk comes first unless the faster ride saves at least 10% of the whole trip. If the final street connection is uncertain, Atlas shows when the bus gets near your destination and labels any estimate for the remaining walk. [How the options are selected](docs/api.md)
+Atlas checks platforms within a 1.1 km mapped walk at each end. The map gives priority to journeys that combine a short walk with an early arrival. It can offer up to two longer walks if they get the passenger there sooner. A longer walk can take first place when it saves at least 10% of the whole trip. Every bus option shows its total walking time. [How the options are selected](docs/api.md)
 
-The map shows three distinct bus journeys when it finds three. If there are only one or two, it shows them all. Open **More options** for a fourth and fifth route when available.
+The map shows the first three choices together. Open **More options** for a fourth or fifth when available. If the final street connection is uncertain, Atlas shows when the bus reaches the area and labels any estimate for the remaining walk.
 
-Atlas lists journeys by expected arrival at the destination. On a divided road, it looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
+On a divided road, Atlas looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
 
 Open a bus leg to see other lines serving the same two stops. **Check next bus at this stop** shows the next arrival estimate and its source. When GPS has tracked two buses approaching the same stop, it also shows how far apart they came. [First-bus test](docs/first-direct-bus.md) · [API fields](docs/api.md)
 
