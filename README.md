@@ -2,6 +2,8 @@
 
 Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the recorded Rohini Sector 22 to Azadpur example, taking one bus saves about 12 minutes of walking and gets you there an estimated four minutes later than changing buses.
 
+[Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
+
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
