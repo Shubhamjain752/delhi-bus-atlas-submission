@@ -33,6 +33,8 @@ After evaluation we fitted the same method on all 31 dates. Those weekday and we
 
 ## Reproduce the experiment
 
+To repeat the four November daytime searches with each model, run `python tools/replay_november_trips.py` after setting up the planner. With the original November recordings, `--witness-dir PATH` also checks the recorded boarding and exit events, and `--overnight` replays the three after-midnight searches from the local 21 November capture. The dated results include the original Google Maps forecasts, both Atlas estimates and which bus movements could be traced. [November trip records](november-model-comparison.json)
+
 Use Python 3.12, the build requirements, 7-Zip, the official October GPS archive and the official GTFS timetable. The trainer expands one daily database at a time. Allow at least 8 GiB of scratch space and 2 GB for the evaluator. First generate a reference count from your own archive. The extractor checks each date against those locally held counts by route and receipt hour. Individual vehicle IDs and coordinates are excluded from the saved training labels.
 
 ```powershell

@@ -1,0 +1,2743 @@
+{
+  "method": "Identical pins, departure and routing code. Only the fitted stop-to-stop history changes. Daytime reruns use history alone. The 21 November replays use identical operator packets received by each request. Forecasts originally saved are preserved separately. GPS checks use 45 m stop areas and separately flag directed crossings and tracking breaks. A continuous, ordered sequence after the planned walks and a 90-second transfer allowance is required for a simulated connection.",
+  "daytime": {
+    "tuesday-transfer": {
+      "query": {
+        "title": "Rohini Sector 22 to Azadpur",
+        "stratum": "Weekday evening peak and one bus change",
+        "origin": [
+          28.71815,
+          77.0638
+        ],
+        "destination": [
+          28.707,
+          77.1789
+        ],
+        "departure": "2026-11-24T17:30:00+05:30"
+      },
+      "saved": {
+        "atlas": {
+          "saved": "2026-11-22T14:19:41+05:30",
+          "source_sha256": "e38c06df8bbdb70ac233fdad0c6b0f06bfb7c87d5aa3c7bf7085bf54ed466f03",
+          "earliest": {
+            "arrival": "2026-11-24T18:34:36+05:30",
+            "legs": [
+              {
+                "route": "972UP",
+                "board": "7567",
+                "alight": "95",
+                "board_name": "Rohini Sec 20/21/22 Crossing",
+                "alight_name": "Rohini Sec21"
+              },
+              {
+                "route": "114DOWN",
+                "board": "95",
+                "alight": "97",
+                "board_name": "Rohini Sec21",
+                "alight_name": "Azadpur Metro Station / Terminal"
+              }
+            ],
+            "access_walk_seconds": 785,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 370,
+            "wait_seconds": 128,
+            "ride_seconds": 2593
+          },
+          "original_gps_check": {
+            "status": "no_later_witnessed_boarding",
+            "arrival_interval": null,
+            "source_sha256": "be46654d3e31793d2263e93b66d47217e28ed078c97f20f6574a080119bc8741",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:43:05+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:43:05+05:30",
+                "upper": "2026-11-24T17:43:05+05:30",
+                "walking_seconds": 785
+              }
+            ]
+          }
+        },
+        "google": {
+          "saved": "2026-11-22T14:24:21+05:30",
+          "source_sha256": "9d3a371758952f791cbf817fc799782940667566249a7fedfdac6d96b8c0d118",
+          "earliest": {
+            "arrival": "2026-11-24T18:28:00+05:30",
+            "legs": [
+              {
+                "route": "957",
+                "board": "Rohini Sector - 22 Nehru Place",
+                "alight": "Budh Vihar",
+                "headsign": "Shivaji Stadium Connaught Place"
+              },
+              {
+                "route": "174",
+                "board": "Budh Vihar",
+                "alight": "Azadpur",
+                "headsign": "Azadpur"
+              }
+            ],
+            "access_walk_seconds": 60,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 240,
+            "wait_seconds": 480,
+            "ride_seconds": 2700,
+            "source_precision": "Google displays minute-rounded clocks. Wait includes time from the requested departure before a later suggested start."
+          },
+          "original_gps_check": {
+            "status": "unresolved_route_to_map_landmarks",
+            "arrival_interval": null,
+            "source_sha256": "663b44714768852953d15b83aa22ff0b589d876a966f88d2a17ba59264d9ea75",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:31:30+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:31:30+05:30",
+                "upper": "2026-11-24T17:31:30+05:30",
+                "walking_seconds": 90
+              }
+            ]
+          }
+        }
+      },
+      "four_day": [
+        {
+          "arrival": "2026-11-24T18:34:36+05:30",
+          "duration_seconds": 3876,
+          "access_walk_seconds": 785,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 370,
+          "walk_seconds": 1155,
+          "wait_seconds": 128,
+          "ride_seconds": 2593,
+          "legs": [
+            {
+              "route": "972UP",
+              "route_id": "2536",
+              "trip_id": "2536_FULL_16_41",
+              "departure": "2026-11-24T17:43:32+05:30",
+              "arrival": "2026-11-24T17:44:00+05:30",
+              "seconds": 28,
+              "board": "7567",
+              "alight": "95",
+              "board_name": "Rohini Sec 20/21/22 Crossing",
+              "alight_name": "Rohini Sec21"
+            },
+            {
+              "route": "114DOWN",
+              "route_id": "69",
+              "trip_id": "69_FULL_16_52",
+              "departure": "2026-11-24T17:45:41+05:30",
+              "arrival": "2026-11-24T18:28:26+05:30",
+              "seconds": 2565,
+              "board": "95",
+              "alight": "97",
+              "board_name": "Rohini Sec21",
+              "alight_name": "Azadpur Metro Station / Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-24T18:36:11+05:30",
+          "duration_seconds": 3971,
+          "access_walk_seconds": 84,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 169,
+          "walk_seconds": 253,
+          "wait_seconds": 516,
+          "ride_seconds": 3202,
+          "legs": [
+            {
+              "route": "102ADOWN",
+              "route_id": "1",
+              "trip_id": "1_FULL_17_40",
+              "departure": "2026-11-24T17:40:00+05:30",
+              "arrival": "2026-11-24T18:33:22+05:30",
+              "seconds": 3202,
+              "board": "1",
+              "alight": "7587",
+              "board_name": "Rohini Sec 22 Terminal",
+              "alight_name": "Azadpur Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-24T18:36:11+05:30",
+          "duration_seconds": 3971,
+          "access_walk_seconds": 785,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 370,
+          "walk_seconds": 1155,
+          "wait_seconds": 228,
+          "ride_seconds": 2588,
+          "legs": [
+            {
+              "route": "972UP",
+              "route_id": "2536",
+              "trip_id": "2536_FULL_16_41",
+              "departure": "2026-11-24T17:43:32+05:30",
+              "arrival": "2026-11-24T17:44:00+05:30",
+              "seconds": 28,
+              "board": "7567",
+              "alight": "95",
+              "board_name": "Rohini Sec 20/21/22 Crossing",
+              "alight_name": "Rohini Sec21"
+            },
+            {
+              "route": "174DOWN",
+              "route_id": "239",
+              "trip_id": "239_FULL_17_24",
+              "departure": "2026-11-24T17:47:21+05:30",
+              "arrival": "2026-11-24T18:30:01+05:30",
+              "seconds": 2560,
+              "board": "95",
+              "alight": "97",
+              "board_name": "Rohini Sec21",
+              "alight_name": "Azadpur Metro Station / Terminal"
+            }
+          ]
+        }
+      ],
+      "full_month": [
+        {
+          "arrival": "2026-11-24T18:46:27+05:30",
+          "duration_seconds": 4587,
+          "access_walk_seconds": 785,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 370,
+          "walk_seconds": 1155,
+          "wait_seconds": 482,
+          "ride_seconds": 2950,
+          "legs": [
+            {
+              "route": "808STDOWN",
+              "route_id": "852",
+              "trip_id": "852_FULL_17_25",
+              "departure": "2026-11-24T17:44:46+05:30",
+              "arrival": "2026-11-24T17:45:19+05:30",
+              "seconds": 33,
+              "board": "7567",
+              "alight": "95",
+              "board_name": "Rohini Sec 20/21/22 Crossing",
+              "alight_name": "Rohini Sec21"
+            },
+            {
+              "route": "174DOWN",
+              "route_id": "239",
+              "trip_id": "239_FULL_17_24",
+              "departure": "2026-11-24T17:51:40+05:30",
+              "arrival": "2026-11-24T18:40:17+05:30",
+              "seconds": 2917,
+              "board": "95",
+              "alight": "97",
+              "board_name": "Rohini Sec21",
+              "alight_name": "Azadpur Metro Station / Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-24T18:46:27+05:30",
+          "duration_seconds": 4587,
+          "access_walk_seconds": 785,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 370,
+          "walk_seconds": 1155,
+          "wait_seconds": 471,
+          "ride_seconds": 2961,
+          "legs": [
+            {
+              "route": "919UP",
+              "route_id": "1091",
+              "trip_id": "1091_FULL_16_54",
+              "departure": "2026-11-24T17:46:59+05:30",
+              "arrival": "2026-11-24T17:47:43+05:30",
+              "seconds": 44,
+              "board": "7567",
+              "alight": "95",
+              "board_name": "Rohini Sec 20/21/22 Crossing",
+              "alight_name": "Rohini Sec21"
+            },
+            {
+              "route": "174DOWN",
+              "route_id": "239",
+              "trip_id": "239_FULL_17_24",
+              "departure": "2026-11-24T17:51:40+05:30",
+              "arrival": "2026-11-24T18:40:17+05:30",
+              "seconds": 2917,
+              "board": "95",
+              "alight": "97",
+              "board_name": "Rohini Sec21",
+              "alight_name": "Azadpur Metro Station / Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-24T18:47:16+05:30",
+          "duration_seconds": 4636,
+          "access_walk_seconds": 84,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 169,
+          "walk_seconds": 253,
+          "wait_seconds": 516,
+          "ride_seconds": 3867,
+          "legs": [
+            {
+              "route": "102ADOWN",
+              "route_id": "1",
+              "trip_id": "1_FULL_17_40",
+              "departure": "2026-11-24T17:40:00+05:30",
+              "arrival": "2026-11-24T18:44:27+05:30",
+              "seconds": 3867,
+              "board": "1",
+              "alight": "7587",
+              "board_name": "Rohini Sec 22 Terminal",
+              "alight_name": "Azadpur Terminal"
+            }
+          ]
+        }
+      ],
+      "gps": {
+        "fresh_snapshots": 276,
+        "receipts": [
+          "2026-11-24T17:09:58+05:30",
+          "2026-11-24T19:29:59+05:30"
+        ],
+        "checks": [
+          {
+            "route": [
+              "808STDOWN",
+              "174DOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-24T18:29:28+05:30",
+                "alight_first_fix": "2026-11-24T18:30:33+05:30",
+                "trip_identity_candidates": 0,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-24T18:29:06+05:30",
+                      "2026-11-24T18:29:28+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-24T18:30:01+05:30",
+                      "2026-11-24T18:30:33+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      33,
+                      87
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-24T17:48:03+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:43:05+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:43:05+05:30",
+                "upper": "2026-11-24T17:43:05+05:30",
+                "stop_id": "7567"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-24T18:29:17+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-24T18:29:06+05:30",
+                "upper": "2026-11-24T18:29:28+05:30",
+                "stop_id": "7567",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-24T18:30:17+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-24T18:30:01+05:30",
+                "upper": "2026-11-24T18:30:33+05:30",
+                "stop_id": "95",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T18:30:17+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T18:30:01+05:30",
+                "upper": "2026-11-24T18:30:33+05:30",
+                "stop_id": "95"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-24T19:13:01+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-24T19:12:39+05:30",
+                "upper": "2026-11-24T19:13:23+05:30",
+                "stop_id": "95",
+                "evidence": "outside_to_inside_gps"
+              }
+            ],
+            "last_bus_followup": {
+              "first_same_vehicle_fix_within_45m_of_exit": null,
+              "last_same_vehicle_fix": {
+                "observed": "2026-11-24T19:29:20+05:30",
+                "received": "2026-11-24T19:29:59+05:30",
+                "metres_from_exit": 9520.5,
+                "provider_assignment": "same_route_different_run"
+              },
+              "closest_same_vehicle_fix": {
+                "observed": "2026-11-24T19:29:20+05:30",
+                "received": "2026-11-24T19:29:59+05:30",
+                "metres_from_exit": 9520.5,
+                "provider_assignment": "same_route_different_run"
+              },
+              "ended_at_new_visit_to_board": false
+            }
+          },
+          {
+            "route": [
+              "919UP",
+              "174DOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-24T18:26:50+05:30",
+                "alight_first_fix": "2026-11-24T17:44:58+05:30",
+                "trip_identity_candidates": 3,
+                "continuous": [],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-24T17:48:03+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:43:05+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:43:05+05:30",
+                "upper": "2026-11-24T17:43:05+05:30",
+                "stop_id": "7567"
+              }
+            ]
+          },
+          {
+            "route": [
+              "102ADOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:31:24+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:31:24+05:30",
+                "upper": "2026-11-24T17:31:24+05:30",
+                "stop_id": "1"
+              }
+            ]
+          },
+          {
+            "route": [
+              "972UP",
+              "114DOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 2,
+                "continuous": [],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-24T18:09:33+05:30",
+                "alight_first_fix": "2026-11-24T17:43:29+05:30",
+                "trip_identity_candidates": 1,
+                "continuous": [],
+                "tracking_gap": [
+                  {
+                    "board": [
+                      "2026-11-24T18:09:11+05:30",
+                      "2026-11-24T18:09:33+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-24T19:04:40+05:30",
+                      "2026-11-24T19:04:51+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      3307,
+                      3340
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ]
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-24T17:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-24T17:43:05+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-24T17:43:05+05:30",
+                "upper": "2026-11-24T17:43:05+05:30",
+                "stop_id": "7567"
+              }
+            ]
+          }
+        ]
+      },
+      "browser_result": {
+        "options": 3,
+        "origin_and_destination": "registered pins",
+        "method": "Guest Chromium, public Vercel passenger form, checked rendered line names and arrival."
+      }
+    },
+    "monday-peak": {
+      "query": {
+        "title": "Kashmere Gate to Nehru Place",
+        "stratum": "Weekday morning peak",
+        "origin": [
+          28.668198,
+          77.229219
+        ],
+        "destination": [
+          28.5487,
+          77.256981
+        ],
+        "departure": "2026-11-23T08:30:00+05:30"
+      },
+      "saved": {
+        "atlas": {
+          "saved": "2026-11-22T14:19:42+05:30",
+          "source_sha256": "8588d8f1e72687d541bd38639795be81cd33c4f2bb40e2b13286bc42ad347e51",
+          "earliest": {
+            "arrival": "2026-11-23T09:34:07+05:30",
+            "legs": [
+              {
+                "route": "425CLUP",
+                "board": "1025",
+                "alight": "2560",
+                "board_name": "Kashmere Gate City Bus Terminal",
+                "alight_name": "Nehru Place Terminal"
+              }
+            ],
+            "access_walk_seconds": 0,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 13,
+            "wait_seconds": 780,
+            "ride_seconds": 3054
+          },
+          "original_gps_check": {
+            "status": "no_later_witnessed_boarding",
+            "arrival_interval": null,
+            "source_sha256": "38711724a3c82fca91adab400904579e49f77f4468dc50db735e0975647e7612",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:30:00+05:30",
+                "upper": "2026-11-23T08:30:00+05:30",
+                "walking_seconds": 0
+              }
+            ]
+          }
+        },
+        "google": {
+          "saved": "2026-11-22T14:24:23+05:30",
+          "source_sha256": "71f75770b94472143bbeb42deeb12f0d893c17d0a87fa8f1ebff0723e2ab6b28",
+          "earliest": {
+            "arrival": "2026-11-23T09:36:00+05:30",
+            "legs": [
+              {
+                "route": "405",
+                "board": "ISBT Kashmere Gate",
+                "alight": "Ambedkar Stadium",
+                "headsign": "Badarpur Border"
+              },
+              {
+                "route": "447",
+                "board": "Ambedkar Stadium",
+                "alight": "Nehru Place",
+                "headsign": "Nehru Place"
+              }
+            ],
+            "access_walk_seconds": 120,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 120,
+            "wait_seconds": 420,
+            "ride_seconds": 3300,
+            "source_precision": "Google displays minute-rounded clocks. Wait includes time from the requested departure before a later suggested start."
+          },
+          "original_gps_check": {
+            "status": "unresolved_route_to_map_landmarks",
+            "arrival_interval": null,
+            "source_sha256": "78ef634b3f405dcb3ea64ef8d1bfbada45253faac2aa8ed1b3518a3353e35c26",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:31:20+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:31:20+05:30",
+                "upper": "2026-11-23T08:31:20+05:30",
+                "walking_seconds": 80
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-23T08:40:42+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-23T08:40:25+05:30",
+                "upper": "2026-11-23T08:40:59+05:30",
+                "route": "405UP",
+                "evidence": "two_outside_fixes_bracket_marker_on_directed_shape"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-23T08:53:42+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-23T08:53:26+05:30",
+                "upper": "2026-11-23T08:53:59+05:30",
+                "route": "405UP",
+                "evidence": "two_outside_fixes_bracket_marker_on_directed_shape"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:53:42+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:53:26+05:30",
+                "upper": "2026-11-23T08:53:59+05:30",
+                "walking_seconds": 0
+              }
+            ]
+          }
+        }
+      },
+      "four_day": [
+        {
+          "arrival": "2026-11-23T09:34:07+05:30",
+          "duration_seconds": 3847,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 13,
+          "wait_seconds": 780,
+          "ride_seconds": 3054,
+          "legs": [
+            {
+              "route": "425CLUP",
+              "route_id": "3666",
+              "trip_id": "3666_FULL_08_43",
+              "departure": "2026-11-23T08:43:00+05:30",
+              "arrival": "2026-11-23T09:33:54+05:30",
+              "seconds": 3054,
+              "board": "1025",
+              "alight": "2560",
+              "board_name": "Kashmere Gate City Bus Terminal",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-23T09:35:56+05:30",
+          "duration_seconds": 3956,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 13,
+          "wait_seconds": 911,
+          "ride_seconds": 3032,
+          "legs": [
+            {
+              "route": "425CLUP",
+              "route_id": "3666",
+              "trip_id": "3666_FULL_08_43",
+              "departure": "2026-11-23T08:43:00+05:30",
+              "arrival": "2026-11-23T09:15:23+05:30",
+              "seconds": 1943,
+              "board": "1025",
+              "alight": "2791",
+              "board_name": "Kashmere Gate City Bus Terminal",
+              "alight_name": "Pant Nagar"
+            },
+            {
+              "route": "930DOWN",
+              "route_id": "2440",
+              "trip_id": "2440_FULL_08_00",
+              "departure": "2026-11-23T09:17:34+05:30",
+              "arrival": "2026-11-23T09:35:43+05:30",
+              "seconds": 1089,
+              "board": "2791",
+              "alight": "2560",
+              "board_name": "Pant Nagar",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-23T09:37:13+05:30",
+          "duration_seconds": 4033,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 13,
+          "wait_seconds": 971,
+          "ride_seconds": 3049,
+          "legs": [
+            {
+              "route": "425CLUP",
+              "route_id": "3666",
+              "trip_id": "3666_FULL_08_43",
+              "departure": "2026-11-23T08:43:00+05:30",
+              "arrival": "2026-11-23T09:07:19+05:30",
+              "seconds": 1459,
+              "board": "1025",
+              "alight": "4922",
+              "board_name": "Kashmere Gate City Bus Terminal",
+              "alight_name": "Sunder Nagar"
+            },
+            {
+              "route": "425UP",
+              "route_id": "1920",
+              "trip_id": "1920_FULL_08_43",
+              "departure": "2026-11-23T09:10:30+05:30",
+              "arrival": "2026-11-23T09:37:00+05:30",
+              "seconds": 1590,
+              "board": "4922",
+              "alight": "2560",
+              "board_name": "Sunder Nagar",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        }
+      ],
+      "full_month": [
+        {
+          "arrival": "2026-11-23T09:31:59+05:30",
+          "duration_seconds": 3719,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 13,
+          "wait_seconds": 780,
+          "ride_seconds": 2926,
+          "legs": [
+            {
+              "route": "425CLUP",
+              "route_id": "3666",
+              "trip_id": "3666_FULL_08_43",
+              "departure": "2026-11-23T08:43:00+05:30",
+              "arrival": "2026-11-23T09:31:46+05:30",
+              "seconds": 2926,
+              "board": "1025",
+              "alight": "2560",
+              "board_name": "Kashmere Gate City Bus Terminal",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-23T09:36:33+05:30",
+          "duration_seconds": 3993,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 13,
+          "wait_seconds": 1048,
+          "ride_seconds": 2932,
+          "legs": [
+            {
+              "route": "425CLUP",
+              "route_id": "3666",
+              "trip_id": "3666_FULL_08_43",
+              "departure": "2026-11-23T08:43:00+05:30",
+              "arrival": "2026-11-23T09:29:29+05:30",
+              "seconds": 2789,
+              "board": "1025",
+              "alight": "2559",
+              "board_name": "Kashmere Gate City Bus Terminal",
+              "alight_name": "Nehru Place"
+            },
+            {
+              "route": "425UP",
+              "route_id": "1920",
+              "trip_id": "1920_FULL_08_43",
+              "departure": "2026-11-23T09:33:57+05:30",
+              "arrival": "2026-11-23T09:36:20+05:30",
+              "seconds": 143,
+              "board": "2559",
+              "alight": "2560",
+              "board_name": "Nehru Place",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-23T09:36:33+05:30",
+          "duration_seconds": 3993,
+          "access_walk_seconds": 23,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 13,
+          "walk_seconds": 36,
+          "wait_seconds": 975,
+          "ride_seconds": 2982,
+          "legs": [
+            {
+              "route": "214DOWN",
+              "route_id": "1714",
+              "trip_id": "1714_FULL_08_00",
+              "departure": "2026-11-23T08:32:48+05:30",
+              "arrival": "2026-11-23T08:37:46+05:30",
+              "seconds": 298,
+              "board": "6026",
+              "alight": "333",
+              "board_name": "ISBT Kashmiri Gate",
+              "alight_name": "Red Fort"
+            },
+            {
+              "route": "425UP",
+              "route_id": "1920",
+              "trip_id": "1920_FULL_08_43",
+              "departure": "2026-11-23T08:51:36+05:30",
+              "arrival": "2026-11-23T09:36:20+05:30",
+              "seconds": 2684,
+              "board": "333",
+              "alight": "2560",
+              "board_name": "Red Fort",
+              "alight_name": "Nehru Place Terminal"
+            }
+          ]
+        }
+      ],
+      "gps": {
+        "fresh_snapshots": 225,
+        "receipts": [
+          "2026-11-23T08:36:46+05:30",
+          "2026-11-23T10:29:48+05:30"
+        ],
+        "checks": [
+          {
+            "route": [
+              "425CLUP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 1,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:30:00+05:30",
+                "upper": "2026-11-23T08:30:00+05:30",
+                "stop_id": "1025"
+              }
+            ]
+          },
+          {
+            "route": [
+              "425CLUP",
+              "425UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 1,
+                "continuous": [],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-23T08:37:15+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:30:00+05:30",
+                "upper": "2026-11-23T08:30:00+05:30",
+                "stop_id": "1025"
+              }
+            ]
+          },
+          {
+            "route": [
+              "214DOWN",
+              "425UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-23T09:04:35+05:30",
+                "alight_first_fix": "2026-11-23T08:49:57+05:30",
+                "trip_identity_candidates": 6,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-23T08:44:38+05:30",
+                      "2026-11-23T08:45:22+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-23T08:49:24+05:30",
+                      "2026-11-23T08:49:57+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      242,
+                      319
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-23T09:04:13+05:30",
+                      "2026-11-23T09:04:35+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-23T09:10:38+05:30",
+                      "2026-11-23T09:11:11+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      363,
+                      418
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-23T09:23:17+05:30",
+                      "2026-11-23T09:24:01+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-23T09:27:52+05:30",
+                      "2026-11-23T09:28:14+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      231,
+                      297
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-23T09:42:14+05:30",
+                      "2026-11-23T09:43:09+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-23T09:49:01+05:30",
+                      "2026-11-23T09:49:23+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      352,
+                      429
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-23T09:52:15+05:30",
+                      "2026-11-23T09:52:48+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-23T09:58:52+05:30",
+                      "2026-11-23T09:59:52+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      364,
+                      457
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-23T08:38:56+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:30:23+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:30:23+05:30",
+                "upper": "2026-11-23T08:30:23+05:30",
+                "stop_id": "6026"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-23T08:45:00+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-23T08:44:38+05:30",
+                "upper": "2026-11-23T08:45:22+05:30",
+                "stop_id": "6026",
+                "evidence": "two_outside_fixes_bracket_marker_on_directed_shape"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-23T08:49:40+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-23T08:49:24+05:30",
+                "upper": "2026-11-23T08:49:57+05:30",
+                "stop_id": "333",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:49:40+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:49:24+05:30",
+                "upper": "2026-11-23T08:49:57+05:30",
+                "stop_id": "333"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-23T09:14:19+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-23T09:13:57+05:30",
+                "upper": "2026-11-23T09:14:41+05:30",
+                "stop_id": "333",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          },
+          {
+            "route": [
+              "425CLUP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 1,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-23T08:30:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-23T08:30:00+05:30",
+                "upper": "2026-11-23T08:30:00+05:30",
+                "stop_id": "1025"
+              }
+            ]
+          }
+        ]
+      },
+      "browser_result": {
+        "options": 3,
+        "origin_and_destination": "registered pins",
+        "method": "Guest Chromium, public Vercel passenger form, checked rendered line names and arrival."
+      }
+    },
+    "sunday-offpeak": {
+      "query": {
+        "title": "AIIMS to Lajpat Nagar",
+        "stratum": "Sunday off-peak",
+        "origin": [
+          28.568914,
+          77.213693
+        ],
+        "destination": [
+          28.56661,
+          77.246373
+        ],
+        "departure": "2026-11-22T15:00:00+05:30"
+      },
+      "saved": {
+        "atlas": {
+          "saved": "2026-11-22T14:19:42+05:30",
+          "source_sha256": "ffc3fc9f0e806af6f1da20484ea9f320d267b44cbeb754c88305afccd06ec874",
+          "earliest": {
+            "arrival": "2026-11-22T15:24:29+05:30",
+            "legs": [
+              {
+                "route": "623UP",
+                "board": "2828",
+                "alight": "2840",
+                "board_name": "South Extension  2",
+                "alight_name": "South Extension  2"
+              },
+              {
+                "route": "724AUP",
+                "board": "2840",
+                "alight": "2363",
+                "board_name": "South Extension  2",
+                "alight_name": "Lajpat Nagar (Ring Road)"
+              }
+            ],
+            "access_walk_seconds": 402,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 396,
+            "wait_seconds": 131,
+            "ride_seconds": 540
+          },
+          "original_gps_check": {
+            "status": "no_later_witnessed_boarding",
+            "arrival_interval": null,
+            "source_sha256": "83ea65aa6a3af1f41794f08f44c199d668ba5d84936976c95f63b07a075ffcb0",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:06:42+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:06:42+05:30",
+                "upper": "2026-11-22T15:06:42+05:30",
+                "walking_seconds": 402
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T16:56:26+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:55:58+05:30",
+                "upper": "2026-11-22T16:56:53+05:30",
+                "route": "623UP",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-22T16:57:20+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:56:53+05:30",
+                "upper": "2026-11-22T16:57:48+05:30",
+                "route": "623UP",
+                "evidence": "two_outside_fixes_bracket_marker_on_directed_shape"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T16:57:20+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T16:56:53+05:30",
+                "upper": "2026-11-22T16:57:48+05:30",
+                "walking_seconds": 0
+              }
+            ]
+          }
+        },
+        "google": {
+          "saved": "2026-11-22T14:24:19+05:30",
+          "source_sha256": "68cb985e83bb34d52dbd2be10933bc986542513b92c7a335e3caf98ca0046c67",
+          "earliest": {
+            "arrival": "2026-11-22T15:19:00+05:30",
+            "legs": [
+              {
+                "route": "433",
+                "board": "A.I.I.M.S",
+                "alight": "Lajpat Nagar",
+                "headsign": "Badarpur Border"
+              }
+            ],
+            "access_walk_seconds": 300,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 120,
+            "wait_seconds": 0,
+            "ride_seconds": 720,
+            "source_precision": "Google displays minute-rounded clocks. Wait includes time from the requested departure before a later suggested start."
+          },
+          "original_gps_check": {
+            "status": "complete_simulation",
+            "arrival_interval": [
+              "2026-11-22T15:53:02+05:30",
+              "2026-11-22T15:53:35+05:30"
+            ],
+            "source_sha256": "794bab87ee1d836162e3ce74d2e6f9200f2431cdb9de6e40ba448b286e112d92",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:04:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:04:00+05:30",
+                "upper": "2026-11-22T15:04:00+05:30",
+                "walking_seconds": 240
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T15:41:36+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:41:20+05:30",
+                "upper": "2026-11-22T15:41:53+05:30",
+                "route": "433UP",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-22T15:50:46+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:50:30+05:30",
+                "upper": "2026-11-22T15:51:03+05:30",
+                "route": "433UP",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "arrive_destination",
+                "source": "walk_model",
+                "at": "2026-11-22T15:53:18+05:30",
+                "lower": "2026-11-22T15:53:02+05:30",
+                "upper": "2026-11-22T15:53:35+05:30",
+                "walking_seconds": 152
+              }
+            ]
+          }
+        }
+      },
+      "four_day": [
+        {
+          "arrival": "2026-11-22T15:19:16+05:30",
+          "duration_seconds": 1156,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 396,
+          "walk_seconds": 704,
+          "wait_seconds": 30,
+          "ride_seconds": 422,
+          "legs": [
+            {
+              "route": "711UP",
+              "route_id": "2165",
+              "trip_id": "2165_FULL_14_08",
+              "departure": "2026-11-22T15:05:38+05:30",
+              "arrival": "2026-11-22T15:12:40+05:30",
+              "seconds": 422,
+              "board": "2839",
+              "alight": "2363",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Lajpat Nagar (Ring Road)"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:20:51+05:30",
+          "duration_seconds": 1251,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 308,
+          "wait_seconds": 442,
+          "ride_seconds": 501,
+          "legs": [
+            {
+              "route": "711UP",
+              "route_id": "2165",
+              "trip_id": "2165_FULL_14_08",
+              "departure": "2026-11-22T15:05:38+05:30",
+              "arrival": "2026-11-22T15:12:40+05:30",
+              "seconds": 422,
+              "board": "2839",
+              "alight": "2363",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Lajpat Nagar (Ring Road)"
+            },
+            {
+              "route": "D-026STLUP",
+              "route_id": "1333",
+              "trip_id": "1333_FULL_15_05",
+              "departure": "2026-11-22T15:19:32+05:30",
+              "arrival": "2026-11-22T15:20:51+05:30",
+              "seconds": 79,
+              "board": "2363",
+              "alight": "8299",
+              "board_name": "Lajpat Nagar (Ring Road)",
+              "alight_name": "Lajpat Nagar"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:20:51+05:30",
+          "duration_seconds": 1251,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 308,
+          "wait_seconds": 264,
+          "ride_seconds": 679,
+          "legs": [
+            {
+              "route": "442UP",
+              "route_id": "1942",
+              "trip_id": "1942_FULL_13_50",
+              "departure": "2026-11-22T15:06:24+05:30",
+              "arrival": "2026-11-22T15:12:24+05:30",
+              "seconds": 360,
+              "board": "2839",
+              "alight": "2361",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Andrews Ganj"
+            },
+            {
+              "route": "D-026STLUP",
+              "route_id": "1333",
+              "trip_id": "1333_FULL_15_05",
+              "departure": "2026-11-22T15:15:32+05:30",
+              "arrival": "2026-11-22T15:20:51+05:30",
+              "seconds": 319,
+              "board": "2361",
+              "alight": "8299",
+              "board_name": "Andrews Ganj",
+              "alight_name": "Lajpat Nagar"
+            }
+          ]
+        }
+      ],
+      "full_month": [
+        {
+          "arrival": "2026-11-22T15:20:00+05:30",
+          "duration_seconds": 1200,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 396,
+          "walk_seconds": 704,
+          "wait_seconds": 41,
+          "ride_seconds": 455,
+          "legs": [
+            {
+              "route": "323UP",
+              "route_id": "1814",
+              "trip_id": "1814_SHORT_14_45",
+              "departure": "2026-11-22T15:05:49+05:30",
+              "arrival": "2026-11-22T15:13:24+05:30",
+              "seconds": 455,
+              "board": "2839",
+              "alight": "2363",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Lajpat Nagar (Ring Road)"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:21:37+05:30",
+          "duration_seconds": 1297,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 396,
+          "walk_seconds": 704,
+          "wait_seconds": 105,
+          "ride_seconds": 488,
+          "legs": [
+            {
+              "route": "433AUP",
+              "route_id": "1930",
+              "trip_id": "1930_FULL_15_00",
+              "departure": "2026-11-22T15:06:53+05:30",
+              "arrival": "2026-11-22T15:15:01+05:30",
+              "seconds": 488,
+              "board": "2839",
+              "alight": "2363",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Lajpat Nagar (Ring Road)"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:21:44+05:30",
+          "duration_seconds": 1304,
+          "access_walk_seconds": 308,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 396,
+          "walk_seconds": 704,
+          "wait_seconds": 56,
+          "ride_seconds": 544,
+          "legs": [
+            {
+              "route": "433UP",
+              "route_id": "1932",
+              "trip_id": "1932_FULL_14_35",
+              "departure": "2026-11-22T15:06:04+05:30",
+              "arrival": "2026-11-22T15:15:08+05:30",
+              "seconds": 544,
+              "board": "2839",
+              "alight": "2363",
+              "board_name": "AIIMS Ring Road",
+              "alight_name": "Lajpat Nagar (Ring Road)"
+            }
+          ]
+        }
+      ],
+      "gps": {
+        "fresh_snapshots": 346,
+        "receipts": [
+          "2026-11-22T14:30:06+05:30",
+          "2026-11-22T16:59:48+05:30"
+        ],
+        "checks": [
+          {
+            "route": [
+              "323UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:05:08+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:05:08+05:30",
+                "upper": "2026-11-22T15:05:08+05:30",
+                "stop_id": "2839"
+              }
+            ]
+          },
+          {
+            "route": [
+              "433AUP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-22T16:40:27+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:05:08+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:05:08+05:30",
+                "upper": "2026-11-22T15:05:08+05:30",
+                "stop_id": "2839"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T16:40:22+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:40:16+05:30",
+                "upper": "2026-11-22T16:40:27+05:30",
+                "stop_id": "2839",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          },
+          {
+            "route": [
+              "433UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-22T15:01:49+05:30",
+                "alight_first_fix": "2026-11-22T16:19:09+05:30",
+                "trip_identity_candidates": 2,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-22T15:01:16+05:30",
+                      "2026-11-22T15:01:49+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T15:10:13+05:30",
+                      "2026-11-22T15:10:46+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      504,
+                      570
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:14:57+05:30",
+                      "2026-11-22T16:15:19+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:20:38+05:30",
+                      "2026-11-22T16:21:11+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      319,
+                      374
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:16:50+05:30",
+                      "2026-11-22T16:17:22+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:23:58+05:30",
+                      "2026-11-22T16:24:31+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      396,
+                      461
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:05:08+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:05:08+05:30",
+                "upper": "2026-11-22T15:05:08+05:30",
+                "stop_id": "2839"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T15:41:36+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:41:20+05:30",
+                "upper": "2026-11-22T15:41:53+05:30",
+                "stop_id": "2839",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          },
+          {
+            "route": [
+              "711UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-22T16:59:17+05:30",
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:00:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:05:08+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:05:08+05:30",
+                "upper": "2026-11-22T15:05:08+05:30",
+                "stop_id": "2839"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T16:58:50+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:58:22+05:30",
+                "upper": "2026-11-22T16:59:17+05:30",
+                "stop_id": "2839",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          }
+        ]
+      },
+      "browser_result": {
+        "options": 3,
+        "origin_and_destination": "registered pins",
+        "method": "Guest Chromium, public Vercel passenger form, checked rendered line names and arrival."
+      }
+    },
+    "punjabi-bagh": {
+      "query": {
+        "title": "Punjabi Bagh Terminal to Wazirpur Depot",
+        "stratum": "Sunday off-peak, supplemental short corridor",
+        "origin": [
+          28.67548133204641,
+          77.1404635907311
+        ],
+        "destination": [
+          28.691712261319022,
+          77.15343657750829
+        ],
+        "departure": "2026-11-22T15:10:00+05:30"
+      },
+      "saved": {
+        "atlas": {
+          "saved": "2026-11-22T14:41:18+05:30",
+          "source_sha256": "dac35a3c290c82ad2a1ad24ef4b807838944d44ff1963b3a6e6065ae992e3603",
+          "earliest": {
+            "arrival": "2026-11-22T15:18:01+05:30",
+            "legs": [
+              {
+                "route": "159UP",
+                "board": "1234",
+                "alight": "1238",
+                "board_name": "Punjabi Bagh / punjabi bagh terminal",
+                "alight_name": "Wazirpur Depot"
+              }
+            ],
+            "access_walk_seconds": 0,
+            "transfer_walk_seconds": 0,
+            "egress_walk_seconds": 0,
+            "wait_seconds": 63,
+            "ride_seconds": 418
+          },
+          "original_gps_check": {
+            "status": "same_bus_alighting_not_witnessed",
+            "arrival_interval": null,
+            "source_sha256": "956788d05da56daed7f6fd8af4eed0b248140829164bd9eae96cec51a8b61409",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "walking_seconds": 0
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T15:30:22+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:30:06+05:30",
+                "upper": "2026-11-22T15:30:39+05:30",
+                "route": "159UP",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          }
+        },
+        "google": {
+          "saved": "2026-11-22T14:41:31+05:30",
+          "source_sha256": "42f51c6480c672d6c4a3ac3fd7939a523170a2907ff54f035a440bfb6b11388f",
+          "earliest": {
+            "arrival": "2026-11-22T15:18:00+05:30",
+            "legs": [
+              {
+                "route": "938A",
+                "board": "Punjabi Bagh",
+                "alight": "Subhash Palace / Wazirpurlanguage",
+                "headsign": "Azadpur"
+              }
+            ],
+            "source_precision": "minute-rounded public Google display"
+          },
+          "original_gps_check": {
+            "status": "complete_simulation",
+            "arrival_interval": [
+              "2026-11-22T16:34:01+05:30",
+              "2026-11-22T16:34:45+05:30"
+            ],
+            "source_sha256": "bc68afe16ef8faa33789bb0ad7c45fb4c1a182fcfea44e845ebd56c93d9f124c",
+            "events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "walking_seconds": 0
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T16:27:16+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:26:54+05:30",
+                "upper": "2026-11-22T16:27:38+05:30",
+                "route": "938ADOWN",
+                "evidence": "outside_to_inside_gps"
+              },
+              {
+                "kind": "alight",
+                "at": "2026-11-22T16:33:41+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T16:33:19+05:30",
+                "upper": "2026-11-22T16:34:03+05:30",
+                "route": "938ADOWN",
+                "evidence": "two_outside_fixes_bracket_marker_on_directed_shape"
+              },
+              {
+                "kind": "arrive_destination",
+                "at": "2026-11-22T16:34:23+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T16:34:01+05:30",
+                "upper": "2026-11-22T16:34:45+05:30",
+                "walking_seconds": 42
+              }
+            ]
+          }
+        }
+      },
+      "four_day": [
+        {
+          "arrival": "2026-11-22T15:18:01+05:30",
+          "duration_seconds": 481,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 63,
+          "ride_seconds": 418,
+          "legs": [
+            {
+              "route": "159UP",
+              "route_id": "1616",
+              "trip_id": "1616_SHORT_14_44",
+              "departure": "2026-11-22T15:11:03+05:30",
+              "arrival": "2026-11-22T15:18:01+05:30",
+              "seconds": 418,
+              "board": "1234",
+              "alight": "1238",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:18:52+05:30",
+          "duration_seconds": 532,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 141,
+          "ride_seconds": 391,
+          "legs": [
+            {
+              "route": "978DOWN",
+              "route_id": "2543",
+              "trip_id": "2543_SHORT_14_16",
+              "departure": "2026-11-22T15:12:21+05:30",
+              "arrival": "2026-11-22T15:18:52+05:30",
+              "seconds": 391,
+              "board": "1234",
+              "alight": "1238",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:19:49+05:30",
+          "duration_seconds": 589,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 177,
+          "ride_seconds": 412,
+          "legs": [
+            {
+              "route": "159UP",
+              "route_id": "1616",
+              "trip_id": "1616_SHORT_14_44",
+              "departure": "2026-11-22T15:11:03+05:30",
+              "arrival": "2026-11-22T15:12:10+05:30",
+              "seconds": 67,
+              "board": "1234",
+              "alight": "1235",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Shakurpur village/Shiv Mandir"
+            },
+            {
+              "route": "804DOWN",
+              "route_id": "2268",
+              "trip_id": "2268_FULL_13_55",
+              "departure": "2026-11-22T15:14:04+05:30",
+              "arrival": "2026-11-22T15:19:49+05:30",
+              "seconds": 345,
+              "board": "1235",
+              "alight": "1238",
+              "board_name": "Shakurpur village/Shiv Mandir",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        }
+      ],
+      "full_month": [
+        {
+          "arrival": "2026-11-22T15:17:16+05:30",
+          "duration_seconds": 436,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 10,
+          "ride_seconds": 426,
+          "legs": [
+            {
+              "route": "153DOWN",
+              "route_id": "177",
+              "trip_id": "177_FULL_14_00",
+              "departure": "2026-11-22T15:10:10+05:30",
+              "arrival": "2026-11-22T15:17:16+05:30",
+              "seconds": 426,
+              "board": "1234",
+              "alight": "1238",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:17:51+05:30",
+          "duration_seconds": 471,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 65,
+          "ride_seconds": 406,
+          "legs": [
+            {
+              "route": "159UP",
+              "route_id": "1616",
+              "trip_id": "1616_SHORT_14_44",
+              "departure": "2026-11-22T15:11:05+05:30",
+              "arrival": "2026-11-22T15:17:51+05:30",
+              "seconds": 406,
+              "board": "1234",
+              "alight": "1238",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        },
+        {
+          "arrival": "2026-11-22T15:18:21+05:30",
+          "duration_seconds": 501,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 152,
+          "ride_seconds": 349,
+          "legs": [
+            {
+              "route": "153DOWN",
+              "route_id": "177",
+              "trip_id": "177_FULL_14_00",
+              "departure": "2026-11-22T15:10:10+05:30",
+              "arrival": "2026-11-22T15:11:14+05:30",
+              "seconds": 64,
+              "board": "1234",
+              "alight": "1235",
+              "board_name": "Punjabi Bagh / punjabi bagh terminal",
+              "alight_name": "Shakurpur village/Shiv Mandir"
+            },
+            {
+              "route": "78STL-SPDDOWN",
+              "route_id": "3689",
+              "trip_id": "3689_FULL_14_50",
+              "departure": "2026-11-22T15:13:36+05:30",
+              "arrival": "2026-11-22T15:18:21+05:30",
+              "seconds": 285,
+              "board": "1235",
+              "alight": "1238",
+              "board_name": "Shakurpur village/Shiv Mandir",
+              "alight_name": "Wazirpur Depot"
+            }
+          ]
+        }
+      ],
+      "gps": {
+        "fresh_snapshots": 286,
+        "receipts": [
+          "2026-11-22T14:40:06+05:30",
+          "2026-11-22T16:39:47+05:30"
+        ],
+        "checks": [
+          {
+            "route": [
+              "153DOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "stop_id": "1234"
+              }
+            ]
+          },
+          {
+            "route": [
+              "159UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-22T15:30:39+05:30",
+                "alight_first_fix": "2026-11-22T15:59:21+05:30",
+                "trip_identity_candidates": 0,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-22T15:53:29+05:30",
+                      "2026-11-22T15:53:51+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T15:58:26+05:30",
+                      "2026-11-22T15:59:21+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      275,
+                      352
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T15:56:50+05:30",
+                      "2026-11-22T15:57:12+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:02:40+05:30",
+                      "2026-11-22T16:03:02+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      328,
+                      372
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:01:57+05:30",
+                      "2026-11-22T16:02:30+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:08:44+05:30",
+                      "2026-11-22T16:08:55+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      374,
+                      418
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:04:12+05:30",
+                      "2026-11-22T16:04:45+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:10:59+05:30",
+                      "2026-11-22T16:11:32+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      374,
+                      440
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:22:18+05:30",
+                      "2026-11-22T16:23:02+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:30:21+05:30",
+                      "2026-11-22T16:30:54+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      439,
+                      516
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:29:47+05:30",
+                      "2026-11-22T16:30:20+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:36:22+05:30",
+                      "2026-11-22T16:36:55+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      362,
+                      428
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:32:08+05:30",
+                      "2026-11-22T16:32:41+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:36:21+05:30",
+                      "2026-11-22T16:36:54+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      220,
+                      286
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "stop_id": "1234"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T15:30:22+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:30:06+05:30",
+                "upper": "2026-11-22T15:30:39+05:30",
+                "stop_id": "1234",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          },
+          {
+            "route": [
+              "153DOWN",
+              "78STL-SPDDOWN"
+            ],
+            "legs": [
+              {
+                "board_first_fix": null,
+                "alight_first_fix": null,
+                "trip_identity_candidates": 0,
+                "continuous": [],
+                "tracking_gap": []
+              },
+              {
+                "board_first_fix": "2026-11-22T16:10:53+05:30",
+                "alight_first_fix": "2026-11-22T15:37:18+05:30",
+                "trip_identity_candidates": 3,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-22T15:18:15+05:30",
+                      "2026-11-22T15:18:47+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T15:24:28+05:30",
+                      "2026-11-22T15:25:01+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      341,
+                      406
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "no_later_witnessed_boarding",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "stop_id": "1234"
+              }
+            ]
+          },
+          {
+            "route": [
+              "159UP"
+            ],
+            "legs": [
+              {
+                "board_first_fix": "2026-11-22T15:30:39+05:30",
+                "alight_first_fix": "2026-11-22T15:59:21+05:30",
+                "trip_identity_candidates": 0,
+                "continuous": [
+                  {
+                    "board": [
+                      "2026-11-22T15:53:29+05:30",
+                      "2026-11-22T15:53:51+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T15:58:26+05:30",
+                      "2026-11-22T15:59:21+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      275,
+                      352
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T15:56:50+05:30",
+                      "2026-11-22T15:57:12+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:02:40+05:30",
+                      "2026-11-22T16:03:02+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      328,
+                      372
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:01:57+05:30",
+                      "2026-11-22T16:02:30+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:08:44+05:30",
+                      "2026-11-22T16:08:55+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      374,
+                      418
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:04:12+05:30",
+                      "2026-11-22T16:04:45+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:10:59+05:30",
+                      "2026-11-22T16:11:32+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      374,
+                      440
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:22:18+05:30",
+                      "2026-11-22T16:23:02+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:30:21+05:30",
+                      "2026-11-22T16:30:54+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "inside_stop_area"
+                    ],
+                    "ride_seconds_range": [
+                      439,
+                      516
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:29:47+05:30",
+                      "2026-11-22T16:30:20+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:36:22+05:30",
+                      "2026-11-22T16:36:55+05:30"
+                    ],
+                    "source": [
+                      "inside_stop_area",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      362,
+                      428
+                    ],
+                    "scheduled_identity_match": false
+                  },
+                  {
+                    "board": [
+                      "2026-11-22T16:32:08+05:30",
+                      "2026-11-22T16:32:41+05:30"
+                    ],
+                    "exit": [
+                      "2026-11-22T16:36:21+05:30",
+                      "2026-11-22T16:36:54+05:30"
+                    ],
+                    "source": [
+                      "directed_shape_bracket",
+                      "directed_shape_bracket"
+                    ],
+                    "ride_seconds_range": [
+                      220,
+                      286
+                    ],
+                    "scheduled_identity_match": false
+                  }
+                ],
+                "tracking_gap": []
+              }
+            ],
+            "chain_status": "same_bus_alighting_not_witnessed",
+            "chain_events": [
+              {
+                "kind": "depart_origin",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "scenario_clock"
+              },
+              {
+                "kind": "ready_at_stop",
+                "at": "2026-11-22T15:10:00+05:30",
+                "source": "walk_model",
+                "lower": "2026-11-22T15:10:00+05:30",
+                "upper": "2026-11-22T15:10:00+05:30",
+                "stop_id": "1234"
+              },
+              {
+                "kind": "board",
+                "at": "2026-11-22T15:30:22+05:30",
+                "source": "bus_gps",
+                "lower": "2026-11-22T15:30:06+05:30",
+                "upper": "2026-11-22T15:30:39+05:30",
+                "stop_id": "1234",
+                "evidence": "outside_to_inside_gps"
+              }
+            ]
+          }
+        ]
+      },
+      "browser_result": {
+        "options": 3,
+        "origin_and_destination": "registered pins",
+        "method": "Guest Chromium, public Vercel passenger form, checked rendered line names and arrival."
+      }
+    }
+  },
+  "night": [
+    {
+      "issue": "2026-11-21T01:17:00+05:30",
+      "origin": {
+        "id": "285",
+        "name": "Sarai Peepal Thala",
+        "lat": 28.720417,
+        "lon": 77.166983
+      },
+      "destination": {
+        "id": "289",
+        "name": "GTK Depot",
+        "lat": 28.731183,
+        "lon": 77.158617
+      },
+      "observed": {
+        "route": "012(NS)UP",
+        "origin_passage_ist": "2026-11-21T01:17:02+05:30",
+        "destination_passage_ist": "2026-11-21T01:19:36+05:30",
+        "elapsed_from_request_seconds": 156
+      },
+      "google": {
+        "route": "012 NS",
+        "final_arrival_ist": "2026-11-21T01:24:00+05:30",
+        "boarding_ist": "2026-11-21T01:19:00+05:30",
+        "elapsed_from_request_seconds": 420,
+        "url": "https://www.google.com/maps/dir/28.720417,77.166983/28.731183,77.158617/@28.7258116,77.1628055,16z/data=!3m1!4b1!4m6!4m5!2m3!6e0!7e2!8j1795223820!3e3"
+      },
+      "four_day": {
+        "ordinary": {
+          "arrival": "2026-11-21T01:27:39+05:30",
+          "duration_seconds": 639,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 350,
+          "ride_seconds": 289,
+          "legs": [
+            {
+              "route": "012(NS)UP",
+              "route_id": "1459",
+              "trip_id": "1459_FULL_00_05",
+              "departure": "2026-11-21T01:22:50+05:30",
+              "arrival": "2026-11-21T01:27:39+05:30",
+              "seconds": 289,
+              "board": "285",
+              "alight": "289",
+              "board_name": "Sarai Peepal Thala",
+              "alight_name": "GTK Depot"
+            }
+          ]
+        },
+        "conditional": [],
+        "received": 0
+      },
+      "full_month": {
+        "ordinary": {
+          "arrival": "2026-11-21T01:21:01+05:30",
+          "duration_seconds": 241,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 68,
+          "ride_seconds": 173,
+          "legs": [
+            {
+              "route": "012(NS)UP",
+              "route_id": "1459",
+              "trip_id": "1459_FULL_00_05",
+              "departure": "2026-11-21T01:18:08+05:30",
+              "arrival": "2026-11-21T01:21:01+05:30",
+              "seconds": 173,
+              "board": "285",
+              "alight": "289",
+              "board_name": "Sarai Peepal Thala",
+              "alight_name": "GTK Depot"
+            }
+          ]
+        },
+        "conditional": [],
+        "received": 0
+      }
+    },
+    {
+      "issue": "2026-11-21T01:18:00+05:30",
+      "origin": {
+        "id": "2383",
+        "name": "MMTC / Adhchini Village",
+        "lat": 28.534567,
+        "lon": 77.196836
+      },
+      "destination": {
+        "id": "2386",
+        "name": "T.B. Hospital",
+        "lat": 28.5284,
+        "lon": 77.1901
+      },
+      "observed": {
+        "route": "502UP",
+        "origin_passage_ist": "2026-11-21T01:18:23+05:30",
+        "destination_passage_ist": "2026-11-21T01:20:35+05:30",
+        "elapsed_from_request_seconds": 155
+      },
+      "google": {
+        "route": "0502 NS",
+        "final_arrival_ist": "2026-11-21T01:35:00+05:30",
+        "boarding_ist": "2026-11-21T01:32:00+05:30",
+        "elapsed_from_request_seconds": 1020,
+        "url": "https://www.google.com/maps/dir/28.534567,77.196836/28.5284,77.1901/@28.5314847,77.1934426,16z/data=!4m6!4m5!2m3!6e0!7e2!8j1795223880!3e3"
+      },
+      "four_day": {
+        "ordinary": {
+          "arrival": "2026-11-21T02:49:44+05:30",
+          "duration_seconds": 5504,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 5281,
+          "ride_seconds": 223,
+          "legs": [
+            {
+              "route": "502UP",
+              "route_id": "1996",
+              "trip_id": "1996_FULL_01_45",
+              "departure": "2026-11-21T02:46:01+05:30",
+              "arrival": "2026-11-21T02:49:44+05:30",
+              "seconds": 223,
+              "board": "2383",
+              "alight": "2386",
+              "board_name": "MMTC / Adhchini Village",
+              "alight_name": "T.B. Hospital"
+            }
+          ]
+        },
+        "conditional": [
+          {
+            "arrival": "2026-11-21T01:19:42+05:30",
+            "routes": [
+              "502UP"
+            ]
+          }
+        ],
+        "received": 4
+      },
+      "full_month": {
+        "ordinary": {
+          "arrival": "2026-11-21T02:26:36+05:30",
+          "duration_seconds": 4116,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 3981,
+          "ride_seconds": 135,
+          "legs": [
+            {
+              "route": "502UP",
+              "route_id": "1996",
+              "trip_id": "1996_FULL_01_45",
+              "departure": "2026-11-21T02:24:21+05:30",
+              "arrival": "2026-11-21T02:26:36+05:30",
+              "seconds": 135,
+              "board": "2383",
+              "alight": "2386",
+              "board_name": "MMTC / Adhchini Village",
+              "alight_name": "T.B. Hospital"
+            }
+          ]
+        },
+        "conditional": [
+          {
+            "arrival": "2026-11-21T01:19:42+05:30",
+            "routes": [
+              "502UP"
+            ]
+          }
+        ],
+        "received": 4
+      }
+    },
+    {
+      "issue": "2026-11-21T01:20:00+05:30",
+      "origin": {
+        "id": "8065",
+        "name": "Sec B11 Vasant Kunj",
+        "lat": 28.533043,
+        "lon": 77.152021
+      },
+      "destination": {
+        "id": "3472",
+        "name": "Vasant Kunj Sec B 8/9",
+        "lat": 28.528843,
+        "lon": 77.157513
+      },
+      "observed": {
+        "route": "604UP",
+        "origin_passage_ist": "2026-11-21T01:20:55+05:30",
+        "destination_passage_ist": "2026-11-21T01:23:29+05:30",
+        "elapsed_from_request_seconds": 209
+      },
+      "google": {
+        "route": "0604 NS",
+        "final_arrival_ist": "2026-11-21T01:39:00+05:30",
+        "boarding_ist": "2026-11-21T01:36:00+05:30",
+        "elapsed_from_request_seconds": 1140,
+        "url": "https://www.google.com/maps/dir/28.533043,77.152021/28.528843,77.157513/@28.5303975,77.1547569,17z/data=!3m1!4b1!4m6!4m5!2m3!6e0!7e2!8j1795224000!3e3"
+      },
+      "four_day": {
+        "ordinary": {
+          "arrival": "2026-11-21T01:23:31+05:30",
+          "duration_seconds": 211,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 43,
+          "ride_seconds": 168,
+          "legs": [
+            {
+              "route": "604UP",
+              "route_id": "2106",
+              "trip_id": "2106_FULL_00_40",
+              "departure": "2026-11-21T01:20:43+05:30",
+              "arrival": "2026-11-21T01:23:31+05:30",
+              "seconds": 168,
+              "board": "8065",
+              "alight": "3472",
+              "board_name": "Sec B11 Vasant Kunj",
+              "alight_name": "Vasant Kunj Sec B 8/9"
+            }
+          ]
+        },
+        "conditional": [],
+        "received": 12
+      },
+      "full_month": {
+        "ordinary": {
+          "arrival": "2026-11-21T01:23:31+05:30",
+          "duration_seconds": 211,
+          "access_walk_seconds": 0,
+          "transfer_walk_seconds": 0,
+          "egress_walk_seconds": 0,
+          "walk_seconds": 0,
+          "wait_seconds": 43,
+          "ride_seconds": 168,
+          "legs": [
+            {
+              "route": "604UP",
+              "route_id": "2106",
+              "trip_id": "2106_FULL_00_40",
+              "departure": "2026-11-21T01:20:43+05:30",
+              "arrival": "2026-11-21T01:23:31+05:30",
+              "seconds": 168,
+              "board": "8065",
+              "alight": "3472",
+              "board_name": "Sec B11 Vasant Kunj",
+              "alight_name": "Vasant Kunj Sec B 8/9"
+            }
+          ]
+        },
+        "conditional": [],
+        "received": 12
+      }
+    }
+  ],
+  "interpretation": "GPS intervals mark a bus approaching or passing a stop. 'scheduled_identity_match' needs one dated vehicle matching the forecast run. Other paired stops can describe a different bus on the same line. The three full-month options appear first in gps.checks; the fourth entry is the four-day first choice. The chain follows the first eligible witnessed service and stops at missing evidence. Walks use the returned itinerary times. Neither a sighting nor a simulated arrival establishes passenger boarding."
+}

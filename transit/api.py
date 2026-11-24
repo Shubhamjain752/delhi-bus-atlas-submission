@@ -13,7 +13,7 @@ from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from .arrivals import platform_estimate
@@ -245,6 +245,18 @@ def validation(day_type: Literal["weekday", "weekend", "journeys", "matched", "w
 @app.get("/api-guide", include_in_schema=False)
 def api_guide():
     return FileResponse(ROOT / "web" / "api-guide.html", media_type="text/html")
+
+
+@app.get("/submission/{filename}", include_in_schema=False)
+def submission_pdf(filename: str):
+    """Serve the three judge documents included with the submission."""
+    if filename not in {"01-proposal.pdf", "02-technical-note.pdf", "05-validation.pdf"}:
+        raise HTTPException(404, "Unknown submission document.")
+    path = ROOT / "submission" / filename
+    if path.is_file():
+        return FileResponse(path, media_type="application/pdf")
+    # A standalone offline app can be extracted separately from its submission PDFs.
+    return RedirectResponse("https://raw.githubusercontent.com/Shubhamjain752/delhi-bus-atlas-submission/main/submission/" + filename)
 
 
 @app.get("/field-checks", include_in_schema=False)

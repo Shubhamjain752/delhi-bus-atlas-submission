@@ -13,7 +13,7 @@ Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
 For journeys from November onward, Atlas uses bus movements from all 31 days of October. To test the approach, we first trained it on 1–24 October and predicted the next seven days. On 5.94 million rides between neighbouring stops, average error fell from 51 seconds with the original four-day model to 34 seconds. [October results](docs/october-eta-candidate.md) · [Check the running model](https://iitboys-delhi-bus-atlas.vercel.app/status)
 
-On the 5:30 p.m. Rohini to Azadpur check, we tracked a later 114DOWN for 55 minutes between the change stop and Azadpur. The same study follows the 957 and 174 that Google suggested at Budh Vihar. [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#journey-tuesday-transfer)
+For Rohini to Azadpur at 5:30 p.m., the original Atlas forecast was 6:35 p.m. and Google Maps gave 6:28 p.m. Repeating the search with the full-month model gave 6:46 p.m. GPS traced an 808STDOWN to the change stop around 6:30 and a 174DOWN there around 7:13. The passenger’s final arrival is unknown. Across three overnight checks, the new model moved one estimate closer to the observed bus and tied on two. [Read the November comparison](https://iitboys-delhi-bus-atlas.vercel.app/submission/05-validation.pdf) · [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#november-model)
 
 ## How a journey is planned
 
