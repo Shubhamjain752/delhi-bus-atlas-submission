@@ -403,7 +403,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--labels", required=True, type=Path, help="Directory containing all 31 daily .npz/.json pairs")
     parser.add_argument("--output", required=True, type=Path, help="New directory for result and candidate profiles")
-    parser.add_argument("--work", required=True, type=Path, help="Scratch directory with free space for 18 bytes per label")
+    parser.add_argument("--work", required=True, type=Path,
+                        help=f"Scratch directory for {LABEL.itemsize}-byte observation rows and intermediate fit tables")
     parser.add_argument("--gtfs", type=Path, default=ROOT / "delhi_buses_static_gtfs_v1.zip")
     parser.add_argument("--baseline", type=Path, default=ROOT / "data")
     parser.add_argument("--census", type=Path, default=ROOT / "data/october-gps-source-counts.json.gz",

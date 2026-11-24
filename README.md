@@ -11,6 +11,8 @@ Travelling now? Choose **Use my location** beside **From**, allow location acces
 **Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
 Transport Stack Hackathon 2026 · Phase 1, Problem 1
 
+In a seven-day test, a candidate trained on more GPS history cut the average error between two stops from 51 seconds to 34. Both models predicted the same 5.94 million bus movements. The public planner uses the earlier model. [Results and reproduction steps](docs/october-eta-candidate.md)
+
 ## How a journey is planned
 
 ```mermaid
