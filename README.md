@@ -1,53 +1,52 @@
 # Delhi Bus Atlas
 
-Enter two places in Delhi and the time you want to leave. Atlas shows where to walk, which bus to take, where to change and when you could reach your destination. In the 8:45 a.m. Rohini Sector 22 to Azadpur example, Atlas estimates that taking the direct 102DOWN saves 12 minutes of walking and gets you there about three minutes later than changing buses.
+Delhi Bus Atlas plans trips on Delhi’s existing bus routes, including the time you spend walking and waiting. Give it two places and a departure time. Atlas uses the city’s timetable, bus GPS and a street map to show which bus you can reach, whether a change is worth making and when you could arrive.
 
-[Open the journey planner](https://iitboys-delhi-bus-atlas.vercel.app) · [Demo video · 1 min 9 sec (MP4)](submission/03-demo-recut.mp4) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)
+**[Open the public planner](https://iitboys-delhi-bus-atlas.vercel.app/) · [Watch the 69-second demo](submission/03-demo-recut.mp4) · [Try the API](https://iitboys-delhi-bus-atlas.vercel.app/api-guide)**
 
-Travelling now? Choose **Use my location** beside **From**, allow location access, then choose **Now** and **Find journeys**. You can also type a stop or pick a point on the map.
+Built by **Team IITBOYS** for Problem 1 of the Delhi Transport Stack Hackathon 2026. [Proposal](submission/01-proposal.pdf) · [Illustrated technical note](submission/02-technical-note.pdf) · [Validation report](submission/05-validation.pdf)
 
-[Proposal (PDF)](submission/01-proposal.pdf) · [Technical note (PDF)](submission/02-technical-note.pdf) · [Validation report (PDF)](submission/05-validation.pdf) · [How the October GPS was used](docs/october-gps-coverage.md)
+## What a passenger sees
 
-**Team IITBOYS** · Shubham Jain, Akhil Goyal and Keshav Gilra  
-Transport Stack Hackathon 2026 · Phase 1, Problem 1
+For an 8:45 a.m. departure from Rohini Sector 22 to Azadpur on 15 October, Atlas offered these two choices among its results. Both used the timetable for the ride estimates.
 
-For journeys from November onward, Atlas uses bus movements from all 31 days of October. To test the approach, we first trained it on 1–24 October and predicted the next seven days. On 5.94 million rides between neighbouring stops, average error fell from 51 seconds with the original four-day model to 34 seconds. [October results](docs/october-eta-candidate.md) · [Check the running model](https://iitboys-delhi-bus-atlas.vercel.app/status)
+| Journey | Total walking | Estimated arrival |
+| --- | ---: | ---: |
+| Stay on the 102DOWN | 5 min | 9:58 a.m. |
+| Take the 972UP and change to the 761UP at Mangol Pur | 17 min | Just before 9:55 a.m. |
 
-For Rohini to Azadpur at 5:30 p.m., the original Atlas forecast was 6:35 p.m. and Google Maps gave 6:28 p.m. Repeating the search with the full-month model gave 6:46 p.m. GPS traced an 808STDOWN to the change stop around 6:30 and a 174DOWN there around 7:13. The passenger’s final arrival is unknown. Across three overnight checks, the new model moved one estimate closer to the observed bus and tied on two. [Read the November comparison](https://iitboys-delhi-bus-atlas.vercel.app/submission/05-validation.pdf) · [See the buses and times](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html#november-model) · [Why the Rohini recommendation changed](docs/november-departure-audit.md)
+**Recommended** puts the direct bus first. It saves 12 minutes on foot and arrives about three minutes later. A substantially longer walk can rank first if it saves at least 10% of the whole trip. Choose **Earliest arrival** if getting there soonest matters more. The map shows three routes when available and up to two more under **More options**. [How routes are ranked](docs/vivek-vihar-route-check.md)
 
-## How a journey is planned
+[![Atlas map showing the direct 102DOWN from Rohini Sector 22 to Azadpur and an estimated arrival of 9:58 a.m.](docs/rohini-journey.png)](submission/03-demo-recut.mp4)
+
+## How Atlas plans a journey
 
 ```mermaid
 flowchart TD
-    A[Two places and a departure time] --> B[Find a walking path to the stop]
-    B --> C[Search direct buses and routes with one change]
-    D[Delhi bus timetable and service dates] --> C
-    C --> E[Estimate the walk, wait and ride]
-    F[Past travel times between stops and recent bus reports] --> E
-    E --> G[Show route, stops and arrival time on the map]
+    request["Two places and a departure time"] --> walk["Find reachable platforms on the walking map"]
+    walk --> search["Check direct buses and trips with one change"]
+    timetable["Delhi timetable and service dates"] --> search
+    history["Past GPS travel times and recent bus reports"] --> search
+    search --> result["Compare the full walk, wait and ride on the map or through the API"]
 ```
 
-Atlas checks platforms within a 1.1 km mapped walk at each end. Among routes with similar amounts of walking, it favours the shorter walk when the time saved on foot exceeds the extra journey time. For example, walking four minutes less can be worth arriving one minute later. Atlas can also offer up to two longer walks. A longer walk can lead when it saves at least 10% of the whole trip. [How the options are selected](docs/api.md)
+- **Getting to the bus.** An A* search follows OpenStreetMap streets, crossings and stairs to the correct side of the road. Atlas compares platforms within a 1.1 km mapped walk of each end. At a change, it adds the walk between platforms and a 90-second allowance before checking the onward departure. [Walking method](docs/walking.md)
+- **Estimating the ride.** Bus GPS gives typical travel times between consecutive stops in each direction, by two-hour window and weekday or weekend. Recent observations can adjust the estimate. Sparse observations draw on the route’s history or the timetable. November journeys use all 31 days of October history. October replays use only history available at the time. [Model and test dates](docs/october-eta-candidate.md)
+- **Showing uncertainty.** A bus stays available when GPS has yet to confirm its scheduled start. Atlas marks a start as confirmed once it has tracked that run from its first passenger stop to its second. A historical search can recreate an estimate. Checking what happened requires GPS recorded at the time. [Departure example](docs/november-departure-audit.md)
 
-The map shows the first three choices together. Open **More options** for a fourth or fifth when available. If the final street connection is uncertain, Atlas shows when the bus reaches the area and labels any estimate for the remaining walk.
+## What we tested
 
-Under **Show routes by**, choose **Recommended** to balance walking and arrival time, or **Earliest arrival** to see which bus combination could get there soonest. Select a ride to check whether GPS confirmed it left its first stop. On the 24 November Rohini example, the 808STDOWN connection saves an estimated 49 seconds and adds 15 minutes of walking. GPS had yet to confirm that run at 5:30 p.m. [Try the Rohini search](https://iitboys-delhi-bus-atlas.vercel.app/?example=rohini-evening) · [October departure study](https://github.com/Shubhamjain752/delhi-bus-atlas-submission/blob/codex/service-origin-history/docs/service-starts.md#matching-a-scheduled-start-by-name)
-
-On a divided road, Atlas looks for a walking path to the side where the bus stops. If a direct bus is due before the walk is over, Atlas can show its time separately so you can decide whether you can reach it sooner.
-
-For a visit to Rajiv Chowk, you can select **Rajiv Chowk Metro Gate 7** to finish at the entrance on Radial Road 2. The walk from Shivaji Stadium is about five minutes to the gate and nine minutes to the pin inside Central Park. An offline map check reproduced the two Gate 7 approaches and flagged two other gates for review. [Try the entrance](https://iitboys-delhi-bus-atlas.vercel.app/?example=vivek-gate-7) · [Compare the two walks](docs/rajiv-chowk-walk.md) · [How we checked other gates](docs/gate-audit/README.md)
-
-Open a bus leg to see other lines serving the same two stops. **Check next bus at this stop** shows the next arrival estimate and its source. When GPS has tracked two buses approaching the same stop, it also shows how far apart they came. [First-bus test](docs/first-direct-bus.md) · [API fields](docs/api.md)
+| Question | Result |
+| --- | --- |
+| How close was the estimate for the next stop? | Across 5.94 million GPS-timed movements on 25–31 October, the timetable missed by 55 seconds on average. Atlas missed by 34 seconds. We trained it on 1–24 October and kept the seven test dates out of training. [October test](docs/october-eta-candidate.md) |
+| Did we pick the first direct bus? | GPS identified the first line in 655 October cases. Atlas picked it in 114 cases (17.4%) using individual vehicle positions, up from 107. First-bus waits remain harder to predict. [First-bus test](docs/first-direct-bus.md) |
+| How did Atlas compare with Google Maps? | We saved forecasts before departure and checked later bus sightings. GPS verified parts of the journeys. A rider would have to time the walks, boarding and final arrival to establish which forecast was closer door to door. [Journey comparisons](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html) |
 
 ## Run the Delhi planner
 
-1. Install Python **3.12**. Download or clone this repository.
-2. Get **Delhi Buses: GTFS Static Data – DTC / DoT** from the [official Transport Stack catalogue](https://delhi.transportstack.in/data-services). Save the original ZIP as `delhi_buses_static_gtfs_v1.zip` beside `run.py`. This is the only separate data download needed to run the public source.
-3. From this folder, run the commands below. The first run builds a timetable index and can take a few minutes.
+Download or clone this repository and install **Python 3.12**. The only separate data download needed to run the planner is the official **Delhi Buses: GTFS Static Data** timetable (v32, 6,862 stop IDs). Keep it zipped and save it as `delhi_buses_static_gtfs_v1.zip` next to `run.py`. Keep the supplied `data/` folder in place. It contains the prepared walking map and travel-time models. [Official timetable download page](https://delhi.transportstack.in/data-services/datadetails/1)
 
-Keep the supplied `data/` folder together. It includes the walking network, marked crossings, metro entrances and street-level connections, plus the weekday and weekend bus travel times.
-
-The event brief describes about 10,500 stops. Atlas uses version 32 of the supplied timetable. Its stop file contains 6,862 distinct stop IDs, and all 6,862 appear in scheduled trips. The organizer’s data sheet and the supplied timetable give different totals. [Timetable details](docs/technical-note.md)
+From the repository root, run the commands for your system.
 
 **Windows PowerShell**
 
@@ -57,7 +56,7 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe run.py --offline
 ```
 
-**macOS / Linux**
+**macOS or Linux**
 
 ```sh
 python3.12 -m venv .venv
@@ -65,24 +64,34 @@ python3.12 -m venv .venv
 .venv/bin/python run.py --offline
 ```
 
-Open the [local passenger map](http://127.0.0.1:8765/), [local API guide](http://127.0.0.1:8765/api-guide) or [journey comparisons](http://127.0.0.1:8765/field-trials.html). This repository includes the walking map, travel-time estimates for weekdays and weekends, and the results of the GPS checks.
+The first launch builds a local timetable index. Once the server is ready, open the [local map](http://127.0.0.1:8765/) or [local API guide](http://127.0.0.1:8765/api-guide). Offline mode uses the supplied models and needs no API key. Omit `--offline` to enable feed updates. The community feed can supply positions. The optional official feed requires `DELHI_GTFS_RT_KEY`. [Data and setup details](AGENTS.md)
 
-**Try a real query.** [Compare 08:45 and 13:00 on 15 October](http://127.0.0.1:8765/journeys?from=1025&to=2560&depart=2026-10-15T08:45&compare_hour=13). For map pins, enter latitude and longitude. Any full itinerary lists the boarding and exit stops and the seconds spent walking, waiting and riding. API times use Delhi local time.
+## Use the API
 
-## What the evidence tells us
+`GET /journeys` accepts `from` and `to` as stop names, stop IDs or latitude/longitude pairs. `depart` is an ISO date and time. A time without an offset uses Delhi time. The API defaults to earliest arrival. Set `preference=balanced` for the order shown under **Recommended**.
 
-Near AIIMS, the original map sent a passenger on an 11 km detour to the eastbound stop. The revised map uses a mapped pedestrian underpass with stairs and short estimated links to the street. It gives a 369 m walk to the official AIIMS Ring Road platform. For a Sunday 3 p.m. request this changed the first suggestion from two buses in about 24 minutes to a direct bus in about 19 minutes. Both times are estimates. The crossing and the passenger’s actual arrival still need a check on foot. [Results on other Delhi routes](docs/journey-access-check.md)
+```text
+GET /journeys?from=28.71815,77.06380&to=28.70700,77.17890&depart=2026-10-15T08:45&preference=balanced&limit=3
+```
 
-The 19-minute estimate comes from replaying the search with the corrected map. In the 3 p.m. replay, past travel times put the 711UP first. GPS saw it near AIIMS at 3:05, but the operator and timetable disagreed about its stops. We could not verify that it reached the Lajpat Nagar stop. The operator supplied a separate prediction for the 392UP. It was the first direct line GPS saw at both stops, at about 3:12 and 3:22. [Sunday GPS check](data/aiims-observed-order.json)
+Each entry in `journeys` gives `arrival`, the legs and their stops, and walking, waiting and riding times in seconds. For the direct bus above, 317 seconds walking + 816 waiting + 3,256 riding = 4,389 seconds door to door. [Open this JSON response](https://iitboys-delhi-bus-atlas.vercel.app/journeys?from=28.71815,77.06380&to=28.70700,77.17890&depart=2026-10-15T08:45&preference=balanced&limit=3)
 
-We also tested 1,728 departures across six October dates. GPS identified a clear first line at the boarding stop in 655 cases. The previous planner picked it 107 times. With individual bus positions, that rose to 114. Ten picks improved and three regressed. In the hourly checks from 12:10 a.m. through 4:10 a.m., correct picks rose from 17 to 18 out of 63. [Delhi results and limitations](docs/first-direct-bus.md)
+Use `GET /stops?q=AIIMS` to find a platform, `GET /arrivals?stop=2839&route=1882` for a route-specific prediction and `GET /status` for model and feed information. [API reference](docs/api.md) · [OpenAPI schema](docs/openapi.json)
 
-For 304 searches, GPS also showed when both planners' suggested lines passed. For someone already at the stop, the median extra wait compared with the first verified line fell from 3 minutes 32 seconds to about 3 minutes 5 seconds. [Wait comparison](data/passenger-wait-cost.json)
+## Build and maintain
 
-GPS can test when a bus passed a stop. It cannot tell us whether a passenger crossed the road in time or whether a crowded bus let them board. At Punjabi Bagh, Atlas predicted about a minute of waiting. GPS first showed a qualifying route 159 roughly 20 minutes after the requested start. An earlier bus could have been missing from the feed. The report shows which parts of each journey we could check. [Public journey comparisons](https://iitboys-delhi-bus-atlas.vercel.app/field-trials.html)
+| Part | Implementation |
+| --- | --- |
+| Timetable and routing | Python reads the official schedule into SQLite. The router checks stop order, service dates, walks and transfers. [Router](transit/router.py) |
+| Walking and bus times | NumPy and SciPy support the walking network and spatial lookup. Separate weekday and weekend model files supply historical ride times. [Walking search](transit/walking.py) · [Time estimates](transit/eta.py) · [Live GPS](transit/live.py) |
+| Map and API | Leaflet and JavaScript display the journey. FastAPI, Pydantic and Uvicorn serve the local app. Vercel hosts the public planner with its prepared data. [Web client](web/app.js) · [API implementation](transit/api.py) |
 
-Further work should test waits on routes with irregular service, verify road crossings near AIIMS, and repeat after-midnight boarding checks on fresh dates. [Build guide, data and test commands](AGENTS.md) · [Technical note](docs/technical-note.md) · [Credits](CREDITS.md) · [Official challenge](https://delhi.transportstack.in/hackathon/)
+To check the router, run `python -m unittest discover -s tests -p test_router.py -v` with the virtual environment’s Python. For the wider suite and model rebuild, see the [contributor guide](AGENTS.md) and [October rebuild instructions](docs/october-eta-candidate.md#reproduce-the-experiment).
 
-## Licence
+## What to improve
 
-Team IITBOYS licenses its original source code and documentation under the [MIT License](LICENSE). Materials in `data/`, Delhi transit records, OpenStreetMap-derived maps, Google Maps comparison material and third-party software retain their respective terms. [Data sources and credits](CREDITS.md)
+The next field test is to ride peak and off-peak journeys and record the walks, waits and changes. Two engineering priorities are estimating waits when scheduled buses run irregularly and verifying walking connections at station entrances. [Bus departure study](docs/november-departure-audit.md) · [Walking audit](docs/gate-audit/README.md)
+
+## Team and licence
+
+Shubham Jain, Akhil Goyal and Keshav Gilra built Delhi Bus Atlas as **Team IITBOYS**. The team’s original code and documentation use the MIT License. Delhi transport data, map data and bundled libraries retain their own terms. The OpenStreetMap-derived walking network and map layer use ODbL 1.0. [MIT licence](LICENSE) · [Data sources, licences and credits](CREDITS.md)
